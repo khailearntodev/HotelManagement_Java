@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane prefHeight="450.0" prefWidth="800.0" style="-fx-background-radius: 20; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.LoginController">
+   <SplitPane dividerPositions="0.5" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #ffffff; -fx-background-insets: 0; -fx-background-radius: 20;">
+      <items>
+         <!-- Bên trái -->
+         <StackPane fx:id="carouselPane" prefHeight="450.0" prefWidth="400.0" style="-fx-background-color: #2F80ED;">
+            <children>
+               <!-- Tiêu đề overlay -->
+               <VBox alignment="BOTTOM_CENTER" spacing="5" StackPane.alignment="BOTTOM_CENTER">
+                  <padding>
+                     <Insets bottom="20" left="20" right="20" top="20" />
+                  </padding>
+                  <Label style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" text="New Scheduling And Routing Options" />
+                  <Label style="-fx-text-fill: white; -fx-font-size: 12px;" text="We also updated the format of podcasts and rewards." />
+               </VBox>
+               <!-- Ảnh động -->
+               <ImageView fx:id="carouselImage" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
+            </children>
+         </StackPane>
+         <!-- Bên phair -->
+         <VBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="400.0" spacing="10">
+            <children>
+               <ImageView fx:id="closeIcon" fitHeight="26.0" fitWidth="29.0" onMouseClicked="#handleClose" pickOnBounds="true" preserveRatio="true">
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <VBox.margin>
+                     <Insets left="350.0" top="10.0" />
+                  </VBox.margin>
+                  <image>
+                     <Image url="@../../../../Images/Ionic-Ionicons-Close.512.png" />
+                  </image>
+               </ImageView>
+               <ImageView fitHeight="48.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../../../../Images/icon.png" />
+                  </image>
+                  <VBox.margin>
+                     <Insets bottom="15.0" top="20.0" />
+                  </VBox.margin>
+               </ImageView>
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hello Again!">
+                  <font>
+                     <Font name="Arial" size="24.0" />
+                  </font>
+               </Text>
+               <Label prefHeight="16.0" prefWidth="290.0" text="A brand new day is here. It's your day to shape. ">
+                  <font>
+                     <Font name="Arial" size="13.0" />
+                  </font>
+                  <VBox.margin>
+                     <Insets />
+                  </VBox.margin>
+               </Label>
+               <Label prefHeight="18.0" prefWidth="292.0" text="Sign in and get started on your project.">
+                  <VBox.margin>
+                     <Insets top="-8.0" />
+                  </VBox.margin>
+                  <font>
+                     <Font name="Arial" size="13.0" />
+                  </font>
+               </Label>
+               <MFXTextField fx:id="usernameField" floatingText="Username" prefHeight="50.0" prefWidth="260.0">
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin>
+                  <cursor>
+                     <Cursor fx:constant="TEXT" />
+                  </cursor>
+               </MFXTextField>
+               <MFXPasswordField fx:id="passwordField" floatingText="Password" prefHeight="50.0" prefWidth="260.0">
+                  <cursor>
+                     <Cursor fx:constant="TEXT" />
+                  </cursor>
+               </MFXPasswordField>
+               <MFXButton fx:id="loginButton" buttonType="RAISED" prefHeight="35.0" prefWidth="260.0" rippleColor="#2f80ed" style="-fx-background-color: #2F80ED; -fx-text-fill: #000000;" styleClass="mfx-button" text="Login">
+                  <VBox.margin>
+                     <Insets top="15.0" />
+                  </VBox.margin>
+                  <font>
+                     <Font name="Arial Bold" size="13.0" />
+                  </font>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+               </MFXButton>
+            </children>
+         </VBox>
+      </items>
+   </SplitPane>
+</StackPane>

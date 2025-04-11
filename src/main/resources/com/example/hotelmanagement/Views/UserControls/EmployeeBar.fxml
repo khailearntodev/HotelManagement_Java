@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<AnchorPane prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #FFFF;">
+            <children>
+                <fx:define>
+                    <ToggleGroup fx:id="menuGroup"/>
+                </fx:define>
+                <!-- ToggleButton 1 -->
+                <ToggleButton mnemonicParsing="false" prefHeight="62.0" prefWidth="800.0" toggleGroup="$menuGroup" styleClass="toggle-button">
+                    <graphic>
+                        <HBox prefHeight="54.0" prefWidth="800.0">
+                            <children>
+                                <StackedFontIcon iconSize="48">
+                                    <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                                </StackedFontIcon>
+                                <Text fill="#0033ff" text="TRANG CHỦ" wrappingWidth="92.6">
+                                    <HBox.margin>
+                                        <Insets left="10.0" top="20.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </HBox>
+                    </graphic>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </ToggleButton>
+                <ToggleButton mnemonicParsing="false" prefHeight="62.0" prefWidth="800.0" toggleGroup="$menuGroup" styleClass="toggle-button">
+                    <graphic>
+                        <HBox prefHeight="54.0" prefWidth="800.0">
+                            <children>
+                                <StackedFontIcon iconSize="48">
+                                    <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                                </StackedFontIcon>
+                                <Text fill="#0033ff" text="PHÒNG" wrappingWidth="92.6">
+                                    <HBox.margin>
+                                        <Insets left="10.0" top="20.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </HBox>
+                    </graphic>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </ToggleButton>
+                <ToggleButton mnemonicParsing="false" prefHeight="62.0" prefWidth="800.0" toggleGroup="$menuGroup" styleClass="toggle-button">
+                    <graphic>
+                        <HBox prefHeight="54.0" prefWidth="800.0">
+                            <children>
+                                <StackedFontIcon iconSize="48">
+                                    <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                                </StackedFontIcon>
+                                <Text fill="#0033ff" text="ĐẶT PHÒNG" wrappingWidth="92.6">
+                                    <HBox.margin>
+                                        <Insets left="10.0" top="20.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </HBox>
+                    </graphic>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </ToggleButton>
+                <ToggleButton mnemonicParsing="false" prefHeight="62.0" prefWidth="800.0" toggleGroup="$menuGroup" styleClass="toggle-button">
+                    <graphic>
+                        <HBox prefHeight="54.0" prefWidth="800.0">
+                            <children>
+                                <StackedFontIcon iconSize="48">
+                                    <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                                </StackedFontIcon>
+                                <Text fill="#0033ff" text="LỊCH SỬ PHÒNG" wrappingWidth="150.20000610351562">
+                                    <HBox.margin>
+                                        <Insets left="10.0" top="20.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </HBox>
+                    </graphic>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </ToggleButton>
+                <ToggleButton mnemonicParsing="false" prefHeight="62.0" prefWidth="800.0" toggleGroup="$menuGroup" styleClass="toggle-button">
+                    <graphic>
+                        <HBox prefHeight="54.0" prefWidth="800.0">
+                            <children>
+                                <StackedFontIcon iconSize="48">
+                                    <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                                </StackedFontIcon>
+                                <Text fill="#0033ff" text="KHÁCH HÀNG" wrappingWidth="127.79998168945312">
+                                    <HBox.margin>
+                                        <Insets left="10.0" top="20.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </HBox>
+                    </graphic>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                </ToggleButton>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
