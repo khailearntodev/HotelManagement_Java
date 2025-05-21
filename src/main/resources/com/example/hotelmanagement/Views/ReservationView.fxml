@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<?import javafx.scene.control.TextField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.scene.control.Button?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<AnchorPane fx:id="anchorPane" prefHeight="660.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.ReservationController" style="-fx-background-color: white;">
+    <children>
+        <MFXComboBox fx:id="comboBoxRoomType" prefWidth="220"
+                     AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"
+                     floatingText="Loại phòng" floatMode="BORDER" focusTraversable="false">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Phòng cơ bản"/>
+                    <String fx:value="Phòng hạng sang"/>
+                    <String fx:value="Phòng cao cấp"/>
+                </FXCollections>
+            </items>
+        </MFXComboBox>
+
+        <MFXComboBox fx:id="comboBoxStatus" prefWidth="80"
+                     AnchorPane.topAnchor="10" AnchorPane.leftAnchor="240"
+                     floatMode="BORDER" floatingText="Trạng thái" focusTraversable="false">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Item 1"/>
+                    <String fx:value="Item 2"/>
+                    <String fx:value="Item 3"/>
+                </FXCollections>
+            </items>
+        </MFXComboBox>
+        <MFXTextField fx:id="textfieldSearch" prefWidth="350" styleClass="search-text-field"
+                      floatingText="Tìm kiếm theo số phòng" floatMode="BORDER"
+                      AnchorPane.rightAnchor="210" AnchorPane.topAnchor="10" />
+        <MFXButton fx:id="searchButton" text="Tìm kiếm" AnchorPane.topAnchor="15" AnchorPane.rightAnchor="215" styleClass="search-button"/>
+        <MFXButton fx:id="bookingButton" text="Đặt phòng" AnchorPane.topAnchor="15" AnchorPane.rightAnchor="110" styleClass="booking-button"/>
+        <MFXButton fx:id="exportExcelButton" text="Xuất Excel" AnchorPane.topAnchor="15" AnchorPane.rightAnchor="20" styleClass="exportExcel-button"/>
+
+        <TableView fx:id="bookingTable" prefWidth="1040" prefHeight="555"
+                   AnchorPane.topAnchor="55" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10">
+            <columns>
+                <TableColumn fx:id="colRoomNumber" editable="false" prefWidth="80" resizable="false" reorderable="false" sortable="false" text="Số phòng" />
+                <TableColumn fx:id="colRoomType" editable="false" prefWidth="240" resizable="false" reorderable="false" sortable="false" text="Loại phòng" />
+                <TableColumn fx:id="colCheckInOut" editable="false" prefWidth="200" resizable="false" sortable="false" reorderable="false" text="Thời gian thuê" />
+                <TableColumn fx:id="colQuantity" editable="false" prefWidth="80" resizable="false" reorderable="false" sortable="false" text="SL khách" />
+                <TableColumn fx:id="colAmount" editable="false" prefWidth="150" resizable="false" sortable="false" reorderable="false" text="Đơn giá thuê" />
+                <TableColumn fx:id="colStatus" editable="false" prefWidth="140" resizable="false" reorderable="false" sortable="false" text="Trạng thái phòng" />
+                <TableColumn fx:id="colAction" editable="false" prefWidth="145" reorderable="false" resizable="false" sortable="false" text="Hành động" />
+            </columns>
+        </TableView>
+
+        <Pagination fx:id="pagination"
+                    AnchorPane.bottomAnchor="3"
+                    AnchorPane.rightAnchor="10"
+                    prefHeight="40"
+                    prefWidth="300" />
+    </children>
+</AnchorPane>

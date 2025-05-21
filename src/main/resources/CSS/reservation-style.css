@@ -1,0 +1,200 @@
+.table-view {
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.table-view .table-row-cell {
+    -fx-border-color: lightgray;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-insets: 0;
+    -fx-border-style: solid;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #2356eb;
+    -fx-pref-height: 27px;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: #2356eb;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+}
+
+.table-view .column-header {
+    -fx-background-color: #2356eb;
+}
+
+.table-view .cell {
+    -fx-min-height: 35;
+    -fx-font-size: 14;
+}
+
+.table-view .table-cell {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:filled:selected {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell:selected .text {
+    -fx-fill: black;
+}
+
+#colRoomNumber, #colCheckInOut, #colAmount, #colStatus, #colQuantity {
+    -fx-alignment: CENTER;
+}
+
+#colRoomType {
+    -fx-alignment: CENTER-LEFT;
+}
+
+.mfx-combo-box {
+    -fx-pref-height: 35px;
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-alignment: center-left;
+    -fx-font-size: 14;
+    -mfx-main: #2356eb;
+    -fx-cursor: hand;
+}
+
+.mfx-combo-box > .text-field {
+    -fx-padding: 0 0 0 0;
+}
+
+.mfx-combo-box-cell:hover {
+    -fx-background-color: transparent;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.mfx-combo-box-cell:selected, .mfx-combo-box-cell:selected:hover {
+    -fx-background-color: #2356eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.mfx-combo-box-cell:selected .text, .mfx-combo-box-cell:selected:hover .text {
+    -fx-fill: white;
+    -fx-font-weight: bold;
+}
+
+.mfx-combo-box .floating-text {
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+}
+
+.search-text-field {
+    -fx-pref-height: 35px;
+    -fx-min-height: 35px;
+    -fx-max-height: 35px;
+    -fx-alignment: center-left;
+    -fx-font-size: 14;
+    -fx-padding: 0 74 0 10;
+    -mfx-main: #2356eb;
+}
+
+.search-text-field .floating-text {
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+}
+
+.search-button {
+    -fx-background-color: rgba(128, 128, 128, 0.1);
+    -fx-fill: grey;
+    -fx-cursor: hand;
+    -fx-border-radius: 5;
+}
+
+.exportExcel-button {
+    -fx-background-color: white;
+    -fx-border-color: gray;
+    -fx-border-width: 1.5;
+    -fx-pref-height: 27;
+    -fx-padding: 0 5 0 5;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.booking-button {
+    -fx-background-color: #2356eb;
+    -fx-border-color: #2356eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-width: 1.5;
+    -fx-pref-height: 27;
+    -fx-padding: 0 5 0 5;
+    -fx-font-size: 14;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.pagination {
+    -fx-background-color: transparent;
+    -fx-page-information-visible: false;
+    -fx-cursor: hand;
+}
+
+.pagination .control-box {
+    -fx-spacing: 8px;
+}
+
+.pagination .number-button {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-font-weight: normal;
+    -fx-font-size: 12;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-min-height: 30;
+    -fx-min-width: 30;
+}
+
+.pagination .number-button:selected {
+    -fx-background-color: #2356eb;
+    -fx-text-fill: white;
+}
+
+.pagination .button {
+    -fx-background-color: transparent;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.pagination .button:hover {
+    -fx-background-color: lightgray;
+    -fx-text-fill: white;
+    -fx-border-radius: 90;
+}
+
+.popup-button {
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.popup-button .text {
+    -fx-font-family: Inter;
+    -fx-font-size: 13;
+}
+
+.popup-button:hover .text {
+    -fx-font-weight: bold;
+    -fx-font-size: 13;
+    -fx-font-family: Inter;
+}
