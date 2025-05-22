@@ -1,4 +1,5 @@
 package com.example.hotelmanagement.Views;
+import java.io.IOException;
 import java.util.Locale;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
@@ -11,11 +12,14 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import java.net.URL;
@@ -28,7 +32,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Popup;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import static io.github.palexdev.materialfx.utils.RandomUtils.random;
 
@@ -161,11 +168,6 @@ public class ReservationController implements Initializable {
             private final Button subbtn = new Button();
 
             {
-                btn.setOnAction(e -> {
-                    PhongTest p = getTableView().getItems().get(getIndex());
-                    System.out.println("Click phòng: " + p.getTenPhong());
-                });
-
                 subbtn.setOnAction(e -> {
                     PhongTest p = getTableView().getItems().get(getIndex());
                     Popup popup = new Popup();
@@ -227,6 +229,24 @@ public class ReservationController implements Initializable {
                 } else {
                     PhongTest p = getTableView().getItems().get(getIndex());
                     if ("Còn trống".equals(p.getTrangThai())) {
+                        btn.setOnAction(ae -> {
+                            try {
+                                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingView.fxml"));
+                                Parent root = fxmlLoader.load();
+
+                                Scene scene = new Scene(root);
+                                scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
+
+                                Stage stage = new Stage();
+                                stage.initStyle(StageStyle.UNDECORATED);
+                                stage.initModality(Modality.APPLICATION_MODAL);
+                                stage.setScene(scene);
+                                stage.showAndWait();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+
                         btn.setPrefWidth(112);
                         btn.setMinWidth(112);
                         btn.setMaxWidth(112);
@@ -249,6 +269,10 @@ public class ReservationController implements Initializable {
                         -fx-padding: 0;
                     """);
                     } else if ("Đang thuê".equals(p.getTrangThai())) {
+                        btn.setOnAction(e -> {
+                            System.out.println("Click phòng: " + p.getTenPhong());
+                        });
+
                         btn.setPrefWidth(87);
                         btn.setMinWidth(87);
                         btn.setMaxWidth(87);
@@ -285,6 +309,10 @@ public class ReservationController implements Initializable {
                         -fx-cursor: hand;
                    """);
                     } else if ("Được đặt trước".equals(p.getTrangThai())) {
+                        btn.setOnAction(e -> {
+                            System.out.println("Click phòng: " + p.getTenPhong());
+                        });
+
                         btn.setPrefWidth(112);
                         btn.setMinWidth(112);
                         btn.setMaxWidth(112);

@@ -113,6 +113,17 @@
     -fx-font-size: 14px;
 }
 
+.booking-note-text-field, .customer-info-text-field {
+    -fx-pref-height: 27px;
+    -fx-min-height: 27px;
+    -fx-max-height: 27px;
+    -fx-alignment: center-left;
+    -fx-font-size: 14;
+    -fx-padding: 0 5 2 5;
+    -mfx-main: #2356eb;
+}
+
+
 .search-button {
     -fx-background-color: rgba(128, 128, 128, 0.1);
     -fx-fill: grey;
@@ -197,4 +208,103 @@
     -fx-font-weight: bold;
     -fx-font-size: 13;
     -fx-font-family: Inter;
+}
+
+#confirmBtn {
+    -fx-background-color: #2356eb;
+    -fx-border-color: #2356eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-width: 1.5;
+    -fx-padding: 0 5 0 5;
+    -fx-font-size: 14;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+#addCustomerBtn {
+    -fx-background-color: #2356eb;
+    -fx-pref-height: 25;
+    fx-border-color: #2356eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-width: 1.5;
+    -fx-padding: 0 20 0 20;
+    -fx-font-size: 14;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+#clearBtn {
+    -fx-background-color: transparent;
+    -fx-pref-height: 25;
+    fx-border-color: transparent;
+    -fx-text-fill: grey;
+    -fx-font-weight: bold;
+    -fx-border-width: 1.5;
+    -fx-padding: 0 20 0 20;
+    -fx-font-size: 14;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+#openAddCustomerBtn {
+    -fx-background-color: transparent;
+    -fx-border-color: black;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-border-width: 1.5;
+    -fx-padding: 0 5 0 5;
+    -fx-font-size: 14;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.dob-picker {
+    -fx-pref-height: 27px;
+    -fx-min-height: 27px;
+    -fx-max-height: 27px;
+    -fx-cursor: hand;
+    -mfx-main: #2356eb;
+    -fx-font-size: 14;
+}
+
+.dob-picker .date-picker-popup .mfx-date-cell:selected {
+    -fx-background-color: #2356eb;
+    -fx-text-fill: white
+}
+
+.dob-picker .date-picker-popup .mfx-date-cell {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-cursor: hand;
+}
+
+.dob-picker .date-picker-popup .months-combo,
+.dob-picker .date-picker-popup .years-combo {
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+
+    -fx-padding: 4;
+    -fx-background-insets: 0;
+}
+
+.dob-picker .icon {
+    -mfx-color: #2356eb;
+}
+
+#customerTypeCombobox {
+    -fx-pref-height: 27px;
+    -fx-min-height: 27px;
+    -fx-max-height: 27px;
+    -fx-alignment: center-left;
+    -fx-font-size: 14;
+    -mfx-main: #2356eb;
+    -fx-cursor: hand;
+}
+
+#cccdRatio, #namRatio, #hochieuRatio, #nuRatio {
+    -mfx-main: #2356eb;
 }
