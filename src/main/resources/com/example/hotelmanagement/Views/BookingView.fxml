@@ -7,7 +7,8 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import io.github.palexdev.materialfx.font.MFXFontIcon?>
 <VBox fx:id="BookingVBox" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.BookingController">
 <children>
     <AnchorPane prefHeight="30">
@@ -63,7 +64,12 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <DatePicker layoutX="426.0" layoutY="1.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="0.0" />
+            <MFXTextField fx:id="checkoutDateTextfield" prefWidth="150" disable="true" layoutX="426.0" layoutY="1.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="0.0" />
+             <Button fx:id="calendarButton" styleClass="calendar-button" onMouseClicked="#openCalendar" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="0">
+                 <graphic>
+                     <MFXFontIcon description="mfx-calendar-semi-dark" size="16" style="-mfx-color: white;"/>
+                 </graphic>
+             </Button>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="10.0" layoutY="81.0" prefHeight="35.0" prefWidth="900.0">
@@ -103,11 +109,11 @@
          <children>
             <TableView layoutX="52.0" layoutY="28.0" prefHeight="306.0" prefWidth="878.0" styleClass="table-view" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
               <columns>
-                <TableColumn prefWidth="33.60000765323639" text="#" />
-                <TableColumn prefWidth="260.0000228881836" text="Tên khách hàng" />
-                  <TableColumn prefWidth="184.0" text="Số CCCD/ Hộ chiếu" />
-                  <TableColumn prefWidth="156.79998779296875" text="Số điện thoại" />
-                  <TableColumn maxWidth="1.7976931348623157E308" prefWidth="242.4000122070313" text="Địa chỉ" />
+                <TableColumn prefWidth="33.60000765323639" text="#" resizable="false" reorderable="false" sortable="false"/>
+                <TableColumn prefWidth="260.0000228881836" text="Tên khách hàng" resizable="false" reorderable="false" sortable="false"/>
+                  <TableColumn prefWidth="184.0" text="Số CCCD/ Hộ chiếu" resizable="false" reorderable="false" sortable="false"/>
+                  <TableColumn prefWidth="156.79998779296875" text="Số điện thoại" resizable="false" reorderable="false" sortable="false"/>
+                  <TableColumn maxWidth="1.7976931348623157E308" prefWidth="242.4000122070313" text="Địa chỉ" resizable="false" reorderable="false" sortable="false"/>
               </columns>
             </TableView>
          </children>

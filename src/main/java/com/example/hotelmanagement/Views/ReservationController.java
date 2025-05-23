@@ -100,15 +100,7 @@ public class ReservationController implements Initializable {
                         label.setMinHeight(Region.USE_COMPUTED_SIZE);
                         setGraphic(label);
                         setText(null);
-                        label.setStyle("""
-                        -fx-background-color: #e9ffe9;
-                        -fx-text-fill: green;
-                        -fx-font-weight: bold;
-                        -fx-font-size: 14px;
-                        -fx-border-color: transparent;
-                        -fx-border-width: 1;
-                        -fx-background-radius: 10;
-                    """);
+                        label.getStyleClass().setAll("checkout-label-table-view");
                     }
                     else if (item.equals("Còn trống")) {
                         Label label = new Label(item);
@@ -121,15 +113,7 @@ public class ReservationController implements Initializable {
                         label.setMinHeight(Region.USE_COMPUTED_SIZE);
                         setGraphic(label);
                         setText(null);
-                        label.setStyle("""
-                        -fx-background-color: #effaff;
-                        -fx-text-fill: blue;
-                        -fx-font-weight: bold;
-                        -fx-font-size: 14px;
-                        -fx-border-color: transparent;
-                        -fx-border-width: 1;
-                        -fx-background-radius: 10;
-                    """);
+                        label.getStyleClass().setAll("booking-label-table-view");
                     }
                     else if (item.equals("Được đặt trước")) {
                         Label label = new Label(item);
@@ -142,15 +126,7 @@ public class ReservationController implements Initializable {
                         label.setMinHeight(Region.USE_COMPUTED_SIZE);
                         setGraphic(label);
                         setText(null);
-                        label.setStyle("""
-                        -fx-background-color: lightyellow;
-                        -fx-text-fill: #8f8f24;
-                        -fx-font-weight: bold;
-                        -fx-font-size: 14px;
-                        -fx-border-color: transparent;
-                        -fx-border-width: 1;
-                        -fx-background-radius: 10;
-                    """);
+                        label.getStyleClass().setAll("confirm-label-table-view");
                     }
                 }
             }
@@ -182,26 +158,38 @@ public class ReservationController implements Initializable {
                         -fx-cursor: hand;
                     """);
                     MFXButton btn1 = new MFXButton("Đặt dịch vụ");
-                    MFXButton btn2 = new MFXButton("Xem ghi chú");
+                    MFXButton btnXemGhiChu = new MFXButton("Xem ghi chú");
                     MFXButton btn3 = new MFXButton("Xem phiếu thuê");
 
                     btn1.setPrefWidth(120);
-                    btn2.setPrefWidth(120);
+                    btnXemGhiChu.setPrefWidth(120);
                     btn3.setPrefWidth(120);
 
                     btn1.getStyleClass().add("popup-button");
-                    btn2.getStyleClass().add("popup-button");
+                    btnXemGhiChu.getStyleClass().add("popup-button");
                     btn3.getStyleClass().add("popup-button");
 
-                    vbox.getChildren().addAll(btn1, btn2, btn3);
+                    vbox.getChildren().addAll(btn1, btnXemGhiChu, btn3);
 
                     btn1.setOnAction(ev -> {
                         System.out.println("Đặt dịch vụ phòng: " + p.getTenPhong());
                         popup.hide();
                     });
-                    btn2.setOnAction(ev -> {
-                        System.out.println("Xem ghi chú phòng: " + p.getTenPhong());
-                        popup.hide();
+                    btnXemGhiChu.setOnAction(ev -> {
+                        try {
+                            FXMLLoader bookingNotefxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingNoteView.fxml"));
+                            Parent root = bookingNotefxmlLoader.load();
+                            Scene scene = new Scene(root);
+                            scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
+
+                            Stage stage = new Stage();
+                            stage.initStyle(StageStyle.UNDECORATED);
+                            stage.initModality(Modality.APPLICATION_MODAL);
+                            stage.setScene(scene);
+                            stage.showAndWait();
+                        } catch (IOException exception) {
+                            exception.printStackTrace();
+                        }
                     });
                     btn3.setOnAction(ev -> {
                         System.out.println("Xem phiếu thuê phòng: " + p.getTenPhong());
@@ -256,23 +244,11 @@ public class ReservationController implements Initializable {
                         btn.setMaxHeight(25);
                         btn.setAlignment(Pos.CENTER);
                         btn.setText("Đặt phòng");
-                        btn.setStyle("""
-                        -fx-background-color: #2356eb;
-                        -fx-text-fill: white;
-                        -fx-border-color: #2356eb;
-                        -fx-border-width: 1;
-                        -fx-border-radius: 5;
-                        -fx-background-radius: 5;
-                        -fx-cursor: hand;
-                        -fx-box-sizing: border-box;
-                        -fx-background-insets: 0;
-                        -fx-padding: 0;
-                    """);
+                        btn.getStyleClass().setAll("booking-button-table-view");
                     } else if ("Đang thuê".equals(p.getTrangThai())) {
                         btn.setOnAction(e -> {
                             System.out.println("Click phòng: " + p.getTenPhong());
                         });
-
                         btn.setPrefWidth(87);
                         btn.setMinWidth(87);
                         btn.setMaxWidth(87);
@@ -282,14 +258,7 @@ public class ReservationController implements Initializable {
                         btn.setMaxHeight(25);
                         btn.setAlignment(Pos.CENTER);
                         btn.setText("Thanh toán");
-                        btn.setStyle("""
-                        -fx-background-color: white;
-                        -fx-text-fill: green;
-                        -fx-border-color: green;
-                        -fx-border-width: 1;
-                        -fx-border-radius: 5 0 0 5;
-                        -fx-cursor: hand;
-                   """);
+                        btn.getStyleClass().setAll("checkout-button-table-view");
                         MFXFontIcon icon = new MFXFontIcon("mfx-chevron-down", 10);
                         subbtn.setPrefWidth(25);
                         subbtn.setMinWidth(25);
@@ -300,17 +269,23 @@ public class ReservationController implements Initializable {
                         subbtn.setMaxHeight(25);
                         subbtn.setAlignment(Pos.CENTER);
                         subbtn.setGraphic(icon);
-                        subbtn.setStyle("""
-                        -fx-background-color: white;
-                        -fx-text-fill: green;
-                        -fx-border-color: green;
-                        -fx-border-width: 1 1 1 0;
-                        -fx-border-radius: 0 5 5 0;
-                        -fx-cursor: hand;
-                   """);
+                        subbtn.getStyleClass().setAll("checkout-chevron-button-table-view");
                     } else if ("Được đặt trước".equals(p.getTrangThai())) {
                         btn.setOnAction(e -> {
-                            System.out.println("Click phòng: " + p.getTenPhong());
+                            try {
+                                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/ConfirmBookingCodeView.fxml"));
+                                Parent root = fxmlLoader.load();
+                                Scene scene = new Scene(root);
+                                scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
+
+                                Stage stage = new Stage();
+                                stage.initStyle(StageStyle.UNDECORATED);
+                                stage.initModality(Modality.APPLICATION_MODAL);
+                                stage.setScene(scene);
+                                stage.showAndWait();
+                            } catch (IOException exception) {
+                                exception.printStackTrace();
+                            }
                         });
 
                         btn.setPrefWidth(112);
@@ -322,14 +297,7 @@ public class ReservationController implements Initializable {
                         btn.setMaxHeight(25);
                         btn.setAlignment(Pos.CENTER);
                         btn.setText("Nhận phòng");
-                        btn.setStyle("""
-                        -fx-background-color: white;
-                        -fx-text-fill: black;
-                        -fx-border-color: black;
-                        -fx-border-width: 1;
-                        -fx-border-radius: 5;
-                        -fx-cursor: hand;
-                   """);
+                        btn.getStyleClass().setAll("confirm-button-table-view");
                     }
                     if ("Đang thuê".equals(p.getTrangThai())) {
                         HBox box = new HBox(btn, subbtn);

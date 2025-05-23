@@ -113,7 +113,7 @@
     -fx-font-size: 14px;
 }
 
-.booking-note-text-field, .customer-info-text-field {
+.booking-note-text-field, .customer-info-text-field, #confirmCodeTextField, #checkoutDateTextfield {
     -fx-pref-height: 27px;
     -fx-min-height: 27px;
     -fx-max-height: 27px;
@@ -131,9 +131,10 @@
     -fx-border-radius: 5;
 }
 
-.exportExcel-button {
+.cancel-booking-button {
     -fx-background-color: white;
-    -fx-border-color: gray;
+    -fx-border-color: maroon;
+    -fx-text-fill: maroon;
     -fx-border-width: 1.5;
     -fx-pref-height: 27;
     -fx-padding: 0 5 0 5;
@@ -280,6 +281,12 @@
     -fx-cursor: hand;
 }
 
+.dob-picker .date-picker-popup .mfx-date-cell:hover {
+    -fx-background-color: rgba(35, 86, 235, 0.1);
+    -fx-text-fill: black;
+    -fx-cursor: hand;
+}
+
 .dob-picker .date-picker-popup .months-combo,
 .dob-picker .date-picker-popup .years-combo {
     -fx-border-color: transparent;
@@ -307,4 +314,288 @@
 
 #cccdRatio, #namRatio, #hochieuRatio, #nuRatio {
     -mfx-main: #2356eb;
+}
+
+.booking-button-table-view {
+    -fx-background-color: #2356eb !important;
+    -fx-text-fill: white !important;
+    -fx-border-color: #2356eb !important;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-box-sizing: border-box;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.booking-label-table-view {
+    -fx-background-color: #effaff;
+    -fx-text-fill: blue;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+}
+
+.checkout-button-table-view {
+    -fx-background-color: white !important;
+    -fx-text-fill: green !important;
+    -fx-border-color: green !important;
+    -fx-border-width: 1;
+    -fx-border-radius: 5 0 0 5;
+    -fx-cursor: hand;
+}
+
+.checkout-label-table-view {
+    -fx-background-color: #e9ffe9;
+    -fx-text-fill: green;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+}
+
+.checkout-chevron-button-table-view {
+    -fx-background-color: white !important;
+    -fx-text-fill: green !important;
+    -fx-border-color: green !important;
+    -fx-border-width: 1 1 1 0;
+    -fx-border-radius: 0 5 5 0;
+    -fx-cursor: hand;
+}
+
+.confirm-button-table-view {
+    -fx-background-color: white !important;
+    -fx-text-fill: black !important;
+    -fx-border-color: black !important;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.confirm-label-table-view {
+    -fx-background-color: lightyellow;
+    -fx-text-fill: #8f8f24;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+}
+
+#noteTextField {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-insets: 0;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-font-size: 14;
+}
+
+#noteTextField .content {
+    -fx-padding: 10 5 5 5;
+}
+
+#saveNoteBtn, #confirmBtn_confirmBookingCode {
+    -fx-background-color: #2356eb;
+    -fx-border-color: #2356eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-width: 1.5;
+    -fx-padding: 1 15 1 15;
+    -fx-font-size: 14;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.calendar-window {
+    -fx-background-color: transparent;
+}
+
+.main-container {
+    -fx-background-color: white;
+    -fx-border-width: 1;
+    -fx-border-color: black;
+}
+
+.calendar-header {
+    -fx-alignment: center;
+    -fx-min-height: 40px;
+    -fx-max-height: 40px;
+}
+
+.month-year-label {
+    -fx-text-fill: black;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.nav-button-left {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 15px;
+    -fx-min-width: 30px;
+    -fx-max-width: 30px;
+    -fx-min-height: 30px;
+    -fx-max-height: 30px;
+    -fx-padding: 10;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.nav-button-right {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 15px;
+    -fx-min-width: 30px;
+    -fx-max-width: 30px;
+    -fx-min-height: 30px;
+    -fx-max-height: 30px;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.day-headers {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+    -fx-min-height: 40px;
+    -fx-max-height: 40px;
+}
+
+.day-header {
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-padding: 15px 0;
+}
+
+.calendar-grid {
+    -fx-background-color: white;
+    -fx-padding: 0;
+}
+
+.calendar-day-button {
+    -fx-background-color: white;
+    -fx-background-radius: 15px;
+    -fx-border-color: transparent;
+    -fx-border-radius: 15px;
+    -fx-min-width: 60px;
+    -fx-max-width: 60px;
+    -fx-min-height: 50px;
+    -fx-max-height: 50px;
+    -fx-text-fill: black;
+    -fx-font-size: 15px;
+    -fx-font-weight: normal;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+}
+
+.calendar-day-button:hover {
+    -fx-background-color: rgba(59, 243, 185, 0.5);
+}
+
+.calendar-day-button:pressed {
+    -fx-background-color: rgba(59, 243, 185, 0.5);
+}
+
+.calendar-day-button.today {
+    -fx-background-color: #F75A5A;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.calendar-day-button.selected {
+    -fx-background-color: #3BF3B9;
+    -fx-text-fill: black;
+    -fx-opacity: 0.75;
+}
+
+.calendar-day-button.unavailable {
+    -fx-background-color: rgba(32, 36, 99, 0.235);
+    -fx-font-weight: bold;
+}
+
+.calendar-day-button.disabled {
+    -fx-text-fill: #777777;
+    -fx-opacity: 0.35;
+    -fx-cursor: default;
+}
+
+.calendar-day-button.disabled:hover {
+    -fx-background-color: white;
+}
+
+.calendar-day-button.blackout {
+    -fx-opacity: 0.2;
+    -fx-cursor: default;
+}
+
+.calendar-day-button.blackout:hover {
+    -fx-background-color: white;
+}
+
+.button-bar {
+    -fx-background-color: transparent;
+    -fx-alignment: center-right;
+    -fx-min-height: 50px;
+    -fx-max-height: 50px;
+}
+
+.cancel-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: grey;
+    -fx-font-size: 14px;
+    -fx-pref-height: 30;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+}
+
+.confirm-button {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5px;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-padding: 0px 15px;
+    -fx-pref-height: 30;
+    -fx-font-weight: bold;
+}
+
+.calendar-button {
+    -fx-background-color: #2356eb;
+    -fx-cursor: hand;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-height: 25 !important;
+    -fx-min-height: 25 !important;
+    -fx-max-height: 25 !important;
+    -fx-pref-width: 25 !important;
+    -fx-min-width: 25 !important;
+    -fx-max-width: 25 !important;
+}
+
+.calendar-button:pressed, .calendar-button:armed {
+    -fx-background-color: #2356eb;
+    -fx-cursor: hand;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-pref-height: 25 !important;
+    -fx-min-height: 25 !important;
+    -fx-max-height: 25 !important;
+    -fx-pref-width: 25 !important;
+    -fx-min-width: 25 !important;
+    -fx-max-width: 25 !important;
 }
