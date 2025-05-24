@@ -1,13 +1,17 @@
 package com.example.hotelmanagement.Views;
 
+import com.example.hotelmanagement.Main;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.MFXFilterComboBox;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.StringConverter;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,12 +42,29 @@ public class InvoiceController {
     private TableColumn<Invoice, String> invoiceAmountColumn;
     @FXML
     private TableColumn<Invoice, String> statusColumn;
+    public void showInvoiceDetail(Invoice selectedInvoice) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Views/InvoiceDetailView.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 1060, 660);
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setTitle("Chi tiết hóa đơn");
+            stage.setScene(scene);
+            stage.show();
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @FXML
     public void initialize() {
         entriesComboBox.setValue("10");
-
-        // Cấu hình các cột của TableView
+        invoiceTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && invoiceTable.getSelectionModel().getSelectedItem() != null) {
+                Invoice selectedInvoice = invoiceTable.getSelectionModel().getSelectedItem();
+                showInvoiceDetail(selectedInvoice);
+            }
+        });
         invoiceIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getInvoiceId()));
         nameClientColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNameClient()));
         emailColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
@@ -61,13 +82,19 @@ public class InvoiceController {
                     setStyle("");
                 } else {
                     setText(item);
+                    // Đảm bảo ô lấp đầy không gian
+                    setMaxWidth(Double.MAX_VALUE); //
+                    setMaxHeight(Double.MAX_VALUE); //
+                    setAlignment(Pos.CENTER); //
+                    setWrapText(false); //
+
                     switch (item) {
                         case "PAID" ->
-                                setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-padding: 5; -fx-background-radius: 15; -fx-alignment: center;");
-                        case "PENDING" ->
-                                setStyle("-fx-background-color: #cff4fc; -fx-text-fill: #055160; -fx-padding: 5; -fx-background-radius: 15; -fx-alignment: center;");
+                                setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-padding: 5; -fx-background-radius: 15; -fx-alignment: center;"); //
+                        case "PENDING"->
+                                setStyle("-fx-background-color: #cff4fc; -fx-text-fill: #055160; -fx-padding: 5; -fx-background-radius: 15; -fx-alignment: center;"); //
                         case "UNPAID" ->
-                                setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #842029; -fx-padding: 5; -fx-background-radius: 15; -fx-alignment: center;");
+                                setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #842029; -fx-padding: 5; -fx-background-radius: 15; -fx-alignment: center;"); //
                     }
                 }
             }
