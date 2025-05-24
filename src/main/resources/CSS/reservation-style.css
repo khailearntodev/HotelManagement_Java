@@ -113,7 +113,7 @@
     -fx-font-size: 14px;
 }
 
-.booking-note-text-field, .customer-info-text-field, #confirmCodeTextField, #checkoutDateTextfield {
+.booking-note-text-field, .customer-info-text-field, #confirmCodeTextField, #checkoutDateTextfield, #cancelCodeTextField, .quantity-textfield {
     -fx-pref-height: 27px;
     -fx-min-height: 27px;
     -fx-max-height: 27px;
@@ -122,7 +122,6 @@
     -fx-padding: 0 5 2 5;
     -mfx-main: #2356eb;
 }
-
 
 .search-button {
     -fx-background-color: rgba(128, 128, 128, 0.1);
@@ -147,6 +146,19 @@
 .booking-button {
     -fx-background-color: #2356eb;
     -fx-border-color: #2356eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-width: 1.5;
+    -fx-pref-height: 27;
+    -fx-padding: 0 5 0 5;
+    -fx-font-size: 14;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.checkout-button {
+    -fx-background-color: green;
+    -fx-border-color: green;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-border-width: 1.5;
@@ -223,6 +235,18 @@
     -fx-cursor: hand;
 }
 
+#findRoomBtn {
+    -fx-background-color: #2356eb;
+    -fx-border-color: #2356eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-width: 1.5;
+    -fx-padding: 3 7 3 7;
+    -fx-font-size: 14;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
 #addCustomerBtn {
     -fx-background-color: #2356eb;
     -fx-pref-height: 25;
@@ -261,7 +285,7 @@
     -fx-cursor: hand;
 }
 
-.dob-picker {
+.dob-picker, .checkIn-picker, .checkOut-picker {
     -fx-pref-height: 27px;
     -fx-min-height: 27px;
     -fx-max-height: 27px;
@@ -270,25 +294,35 @@
     -fx-font-size: 14;
 }
 
-.dob-picker .date-picker-popup .mfx-date-cell:selected {
+.dob-picker .date-picker-popup .mfx-date-cell:selected,
+.checkIn-picker .date-picker-popup .mfx-date-cell:selected,
+.checkOut-picker .date-picker-popup .mfx-date-cell:selected {
     -fx-background-color: #2356eb;
     -fx-text-fill: white
 }
 
-.dob-picker .date-picker-popup .mfx-date-cell {
+.dob-picker .date-picker-popup .mfx-date-cell,
+.checkIn-picker .date-picker-popup .mfx-date-cell,
+.checkOut-picker .date-picker-popup .mfx-date-cell {
     -fx-background-color: white;
     -fx-text-fill: black;
     -fx-cursor: hand;
 }
 
-.dob-picker .date-picker-popup .mfx-date-cell:hover {
+.dob-picker .date-picker-popup .mfx-date-cell:hover,
+.checkOut-picker .date-picker-popup .mfx-date-cell:hover,
+.checkIn-picker .date-picker-popup .mfx-date-cell:hover {
     -fx-background-color: rgba(35, 86, 235, 0.1);
     -fx-text-fill: black;
     -fx-cursor: hand;
 }
 
 .dob-picker .date-picker-popup .months-combo,
-.dob-picker .date-picker-popup .years-combo {
+.dob-picker .date-picker-popup .years-combo,
+.checkIn-picker .date-picker-popup .months-combo,
+.checkIn-picker .date-picker-popup .years-combo,
+.checkOut-picker .date-picker-popup .months-combo,
+.checkOut-picker .date-picker-popup .years-combo {
     -fx-border-color: transparent;
     -fx-border-radius: 0;
     -fx-background-color: white;
@@ -298,7 +332,9 @@
     -fx-background-insets: 0;
 }
 
-.dob-picker .icon {
+.dob-picker .icon,
+.checkOut-picker .icon,
+.checkIn-picker .icon {
     -mfx-color: #2356eb;
 }
 
@@ -403,13 +439,25 @@
     -fx-padding: 10 5 5 5;
 }
 
-#saveNoteBtn, #confirmBtn_confirmBookingCode {
+#saveNoteBtn, #confirmBtn_confirmBookingCode, #nextBookingInAdvanceBtn, #confirmInvoiceBtn, #checkBtn_cancelBookingCode, .next-button-checkout, #bookingServiceBtn, .OK-button {
     -fx-background-color: #2356eb;
     -fx-border-color: #2356eb;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-border-width: 1.5;
-    -fx-padding: 1 15 1 15;
+    -fx-padding: 2 15 2 15;
+    -fx-font-size: 14;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+#cancelBtn_cancelBookingCode {
+    -fx-background-color: maroon;
+    -fx-border-color: maroon;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-width: 1.5;
+    -fx-padding: 2 15 2 15;
     -fx-font-size: 14;
     -fx-border-radius: 5;
     -fx-cursor: hand;
@@ -598,4 +646,40 @@
     -fx-pref-width: 25 !important;
     -fx-min-width: 25 !important;
     -fx-max-width: 25 !important;
+}
+
+.room-container-booking-in-advance {
+    -fx-background-color: transparent;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.room-container-booking-in-advance:hover {
+    -fx-background-color: rgba(128, 128, 128, 0.1);
+}
+
+.room-container-selected {
+    -fx-background-color: rgba(128, 128, 128, 0.2);
+}
+
+.invoice-text-area {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.invoice-text-area .content {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
+.invoice-text-area .scroll-pane {
+    -fx-padding: 0;
+}
+
+.invoice-text-area .text {
+    -fx-padding: 0;
 }

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.*?>
+<?import io.github.palexdev.materialfx.font.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import io.github.palexdev.materialfx.font.MFXFontIcon?>
+
 <VBox fx:id="BookingVBox" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.BookingController">
 <children>
     <AnchorPane prefHeight="30">
@@ -64,10 +64,10 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <MFXTextField fx:id="checkoutDateTextfield" prefWidth="150" disable="true" layoutX="426.0" layoutY="1.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="0.0" />
-             <Button fx:id="calendarButton" styleClass="calendar-button" onMouseClicked="#openCalendar" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="0">
+            <MFXTextField fx:id="checkoutDateTextfield" disable="true" layoutX="426.0" layoutY="1.0" prefWidth="150" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="0.0" />
+             <Button fx:id="calendarButton" onMouseClicked="#openCalendar" styleClass="calendar-button" AnchorPane.rightAnchor="40" AnchorPane.topAnchor="0">
                  <graphic>
-                     <MFXFontIcon description="mfx-calendar-semi-dark" size="16" style="-mfx-color: white;"/>
+                     <MFXFontIcon description="mfx-calendar-semi-dark" size="16" style="-mfx-color: white;" />
                  </graphic>
              </Button>
          </children>
@@ -88,7 +88,8 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <MFXTextField fx:id="bookingNoteTextField" styleClass="booking-note-text-field" layoutX="126.0" layoutY="46.0" prefHeight="50.0" prefWidth="748.0" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="-1.0" />
+            <MFXTextField fx:id="bookingNoteTextField" layoutX="126.0" layoutY="46.0" prefHeight="50.0" prefWidth="655.0" styleClass="booking-note-text-field" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="-1.0" />
+             <MFXButton fx:id="bookingServiceBtn" text="Đặt dịch vụ" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="0" onMouseClicked="#showServicePopup"/>
          </children>
       </AnchorPane>
       <Separator />
@@ -109,11 +110,11 @@
          <children>
             <TableView layoutX="52.0" layoutY="28.0" prefHeight="306.0" prefWidth="878.0" styleClass="table-view" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
               <columns>
-                <TableColumn prefWidth="33.60000765323639" text="#" resizable="false" reorderable="false" sortable="false"/>
-                <TableColumn prefWidth="260.0000228881836" text="Tên khách hàng" resizable="false" reorderable="false" sortable="false"/>
-                  <TableColumn prefWidth="184.0" text="Số CCCD/ Hộ chiếu" resizable="false" reorderable="false" sortable="false"/>
-                  <TableColumn prefWidth="156.79998779296875" text="Số điện thoại" resizable="false" reorderable="false" sortable="false"/>
-                  <TableColumn maxWidth="1.7976931348623157E308" prefWidth="242.4000122070313" text="Địa chỉ" resizable="false" reorderable="false" sortable="false"/>
+                <TableColumn prefWidth="33.60000765323639" reorderable="false" resizable="false" sortable="false" text="#" />
+                <TableColumn prefWidth="260.0000228881836" reorderable="false" resizable="false" sortable="false" text="Tên khách hàng" />
+                  <TableColumn prefWidth="184.0" reorderable="false" resizable="false" sortable="false" text="Số CCCD/ Hộ chiếu" />
+                  <TableColumn prefWidth="156.79998779296875" reorderable="false" resizable="false" sortable="false" text="Số điện thoại" />
+                  <TableColumn maxWidth="1.7976931348623157E308" prefWidth="242.4000122070313" reorderable="false" resizable="false" sortable="false" text="Địa chỉ" />
               </columns>
             </TableView>
          </children>

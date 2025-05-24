@@ -67,7 +67,6 @@ public class AddCustomerController implements Initializable {
         }
     }
 
-
     public void handleClose(MouseEvent mouseEvent) {
         Stage stage = (Stage) closeIcon.getScene().getWindow();
         stage.close();

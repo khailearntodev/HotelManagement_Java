@@ -39,10 +39,11 @@
         </MFXComboBox>
         <MFXTextField fx:id="textfieldSearch" prefWidth="350" styleClass="search-text-field"
                       floatingText="Tìm kiếm theo số phòng" floatMode="BORDER"
-                      AnchorPane.rightAnchor="235" AnchorPane.topAnchor="10" />
-        <MFXButton fx:id="searchButton" text="Tìm kiếm" AnchorPane.topAnchor="15" AnchorPane.rightAnchor="240" styleClass="search-button"/>
-        <MFXButton fx:id="bookingButton" text="Đặt phòng" AnchorPane.topAnchor="15" AnchorPane.rightAnchor="135" styleClass="booking-button"/>
-        <MFXButton fx:id="cancelBookingButton" text="Hủy đặt phòng" AnchorPane.topAnchor="15" AnchorPane.rightAnchor="15" styleClass="cancel-booking-button"/>
+                      AnchorPane.rightAnchor="320" AnchorPane.topAnchor="10" />
+        <MFXButton fx:id="searchButton" text="Tìm kiếm" AnchorPane.topAnchor="15" AnchorPane.rightAnchor="325" styleClass="search-button"/>
+        <MFXButton fx:id="checkoutButton" text="Thanh toán" AnchorPane.topAnchor="15" AnchorPane.rightAnchor="135" onMouseClicked="#showCheckOutView" styleClass="checkout-button"/>
+        <MFXButton fx:id="bookingButton" text="Đặt phòng" AnchorPane.topAnchor="15" AnchorPane.rightAnchor="230" onMouseClicked="#showBookingInAdvanceView" styleClass="booking-button"/>
+        <MFXButton fx:id="cancelBookingButton" onMouseClicked="#showCancelBookingView" text="Hủy đặt phòng" AnchorPane.topAnchor="15" AnchorPane.rightAnchor="15" styleClass="cancel-booking-button"/>
 
         <TableView fx:id="bookingTable" prefWidth="1040" prefHeight="555"
                    AnchorPane.topAnchor="55" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10">
