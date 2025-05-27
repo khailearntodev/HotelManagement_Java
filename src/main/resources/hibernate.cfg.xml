@@ -7,7 +7,7 @@
     <session-factory>
         <!-- Kết nối SQL Server -->
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-        <property name="hibernate.connection.url">jdbc:sqlserver://KIARH\MSSQLSERVER02;database=UserDB;encrypt=true;trustServerCertificate=true;integratedSecurity=true</property>
+        <property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;databaseName=HotelManagement;encrypt=true;trustServerCertificate=true;integratedSecurity=true</property>
         <!-- Nho sua CSDL -->
 
         <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>

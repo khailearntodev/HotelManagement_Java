@@ -12,3 +12,10 @@
     -fx-background-color: #c4daf7;
     -fx-text-fill: #000000;
 }
+.normal-button{
+    -fx-background-color: #3b63b3;
+    -fx-text-fill: #ffffff;
+}
+.normal-background{
+    -fx-background-color: #ffffff;
+}
