@@ -16,7 +16,8 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane hgap="15" vgap="15" maxHeight="660" maxWidth="1060" minHeight="660" minWidth="1023.0" prefHeight="660" prefWidth="1040.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.ServiceManagementController">
+<GridPane hgap="15" vgap="15" maxHeight="660" maxWidth="1060" minHeight="660" minWidth="1023.0" prefHeight="660" prefWidth="1040.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.ServiceManagementController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="600" minWidth="520" prefWidth="540.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="500" minWidth="460" prefWidth="480.0" />
@@ -39,7 +40,7 @@
             <center>
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label style="-fx-font-size: 20px;" text="🔍" />
-                    <TextField fx:id="filterTextField" prefHeight="35.0" HBox.hgrow="ALWAYS" promptText="SEARCH BY EMAIL" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-background-color: #ffffff; -fx-border-color: #cccccc;" />
+                    <TextField fx:id="filterTextField" prefHeight="35.0" HBox.hgrow="ALWAYS" promptText="Tìm kiếm dịch vụ" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-background-color: #ffffff; -fx-border-color: #cccccc;" />
                 </HBox>
             </center>
         </BorderPane>

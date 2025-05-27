@@ -18,7 +18,7 @@ import lombok.Setter;
 public class InvoiceController {
 
     @FXML
-    private ComboBox<String> entriesComboBox;
+    private MFXComboBox<String> entriesComboBox;
 
     @Setter
     @Getter
@@ -45,7 +45,7 @@ public class InvoiceController {
     public void showInvoiceDetail(Invoice selectedInvoice) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Views/InvoiceDetailView.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 1060, 660);
+            Scene scene = new Scene(fxmlLoader.load(), 800, 800);
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setTitle("Chi tiết hóa đơn");
@@ -89,11 +89,11 @@ public class InvoiceController {
                     setWrapText(false); //
 
                     switch (item) {
-                        case "PAID" ->
+                        case "Đã thanh toán" ->
                                 setStyle("-fx-background-color: #d4edda; -fx-text-fill: #155724; -fx-padding: 5; -fx-background-radius: 15; -fx-alignment: center;"); //
-                        case "PENDING"->
+                        case "Chờ thanh toán"->
                                 setStyle("-fx-background-color: #cff4fc; -fx-text-fill: #055160; -fx-padding: 5; -fx-background-radius: 15; -fx-alignment: center;"); //
-                        case "UNPAID" ->
+                        case "Đã hủy" ->
                                 setStyle("-fx-background-color: #f8d7da; -fx-text-fill: #842029; -fx-padding: 5; -fx-background-radius: 15; -fx-alignment: center;"); //
                     }
                 }
@@ -102,13 +102,13 @@ public class InvoiceController {
 
         // Thêm dữ liệu mẫu vào TableView
         invoiceTable.getItems().addAll(
-                new Invoice("INV-10022024-001", "Kamisato Ayaka", "Ayaka@gmail.com", "Feb 12, 2024", "$95.66", "PAID"),
-                new Invoice("INV-10022024-002", "Kamisato Ayato", "Ayato@gmail.com", "Feb 10, 2024",  "$47.44", "PENDING"),
-                new Invoice("INV-10022024-003", "Raiden Shogun", "Raiden@gmail.com", "Feb 8, 2024",  "$48.44", "PAID"),
-                new Invoice("INV-10022024-004", "Ei Maulina", "Maulina@gmail.com", "Feb 6, 2024",  "$43.44", "UNPAID"),
-                new Invoice("INV-10022024-005", "Falah Maulana", "Falah@gmail.com", "Feb 4, 2024",  "$43.44", "PAID"),
-                new Invoice("INV-10022024-006", "Achmad Van", "Achmad@gmail.com", "Feb 2, 2024",  "$43.44", "PENDING"),
-                new Invoice("INV-10022024-007", "Xiaoli", "Xiaoli@gmail.com", "Jan 31, 2024",  "$43.44", "UNPAID")
+                new Invoice("INV-10022024-001", "Kamisato Ayaka", "Ayaka@gmail.com", "Feb 12, 2024", "$95.66", "Đã thanh toán"),
+                new Invoice("INV-10022024-002", "Kamisato Ayato", "Ayato@gmail.com", "Feb 10, 2024",  "$47.44", "Chờ thanh toán"),
+                new Invoice("INV-10022024-003", "Raiden Shogun", "Raiden@gmail.com", "Feb 8, 2024",  "$48.44", "Đã thanh toán"),
+                new Invoice("INV-10022024-004", "Ei Maulina", "Maulina@gmail.com", "Feb 6, 2024",  "$43.44", "Đã hủy"),
+                new Invoice("INV-10022024-005", "Falah Maulana", "Falah@gmail.com", "Feb 4, 2024",  "$43.44", "Đã thanh toán"),
+                new Invoice("INV-10022024-006", "Achmad Van", "Achmad@gmail.com", "Feb 2, 2024",  "$43.44", "Chờ thanh toán"),
+                new Invoice("INV-10022024-007", "Xiaoli", "Xiaoli@gmail.com", "Jan 31, 2024",  "$43.44", "Đã hủy")
         );
     }
 
