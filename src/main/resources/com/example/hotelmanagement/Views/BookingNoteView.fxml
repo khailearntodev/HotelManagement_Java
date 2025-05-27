@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<VBox fx:id="bookingNoteVBox" prefHeight="340.0" prefWidth="384.0" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.BookingNoteController">
+    <children>
+    <AnchorPane prefHeight="30">
+        <Label alignment="CENTER" style="-fx-font-size: 24; -fx-font-weight: bold" text="Ghi chú phiếu thuê" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="5" />
+        <ImageView fx:id="closeIcon" fitHeight="26.0" fitWidth="29.0" onMouseClicked="#handleClose" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+            <image>
+                <Image url="@../../../../Images/Ionic-Ionicons-Close.512.png" />
+            </image>
+        </ImageView>
+    </AnchorPane>
+      <TextArea fx:id="noteTextField" prefHeight="256.0" prefWidth="384.0" wrapText="true">
+          <padding>
+              <Insets top="-5.0" />
+          </padding>
+      </TextArea>
+      <AnchorPane prefHeight="42.0" prefWidth="384.0">
+         <children>
+            <MFXButton fx:id="saveNoteBtn" layoutX="213.0" layoutY="9.0" mnemonicParsing="false" text="Lưu" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="7.0" />
+         </children>
+      </AnchorPane>
+    </children>
+</VBox>

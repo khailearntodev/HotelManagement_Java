@@ -23,5 +23,6 @@ module com.example.hotelmanagement {
     requires java.naming;
     requires MaterialFX;
     requires org.kordamp.ikonli.fontawesome;
+    requires fontawesomefx;
 
 }

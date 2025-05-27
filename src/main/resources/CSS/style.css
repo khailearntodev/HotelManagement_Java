@@ -19,3 +19,29 @@
 .normal-background{
     -fx-background-color: #ffffff;
 }
+
+.blue-btn {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: white;
+    -fx-background-radius: 15;
+    -fx-padding: 4 16;
+    -fx-font-size: 14px;
+    -fx-font-family: Arial;
+}
+
+.stats-card {
+    -fx-background-color: #F3F3F3;
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    -fx-background-radius: 15;
+}
+
+.stats-title {
+    -fx-font-family: Arial;
+    -fx-font-size: 14px;
+}
+
+.stats-value {
+    -fx-font-family: Arial;
+    -fx-font-size: 30px;
+}
