@@ -49,7 +49,6 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Bắt đầu trình chiếu ảnh
         carouselImage.setImage(imageList.get(currentIndex));
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(6), e -> {
             currentIndex = (currentIndex + 1) % imageList.size();
@@ -57,8 +56,6 @@ public class LoginController implements Initializable {
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
-
-        // Gán sự kiện cho nút login
         loginButton.setOnAction(e -> handleLogin());
     }
 

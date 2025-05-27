@@ -19,7 +19,7 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (!isAdmin) {
+        if (isAdmin) {
             loadBarView("/com/example/hotelmanagement/Views/UserControls/AdminBar.fxml");
         } else {
             loadBarView("/com/example/hotelmanagement/Views/UserControls/EmployeeBar.fxml");
