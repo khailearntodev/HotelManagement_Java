@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<VBox fx:id="confirmBookingCodeVBox" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black" prefHeight="155.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.ConfirmBookingCodeController">
+    <children>
+        <AnchorPane prefHeight="30">
+            <Label alignment="CENTER" style="-fx-font-size: 24; -fx-font-weight: bold" text="Xác nhận mã đặt phòng" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0.0" />
+            <ImageView fx:id="closeIcon" fitHeight="26.0" fitWidth="29.0" onMouseClicked="#handleClose" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="5.0">
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+                <image>
+                    <Image url="@../../../../Images/Ionic-Ionicons-Close.512.png" />
+                </image>
+            </ImageView>
+        </AnchorPane>
+      <Separator prefWidth="200.0">
+         <opaqueInsets>
+            <Insets bottom="5.0" top="5.0" />
+         </opaqueInsets>
+         <VBox.margin>
+            <Insets top="2.0" />
+         </VBox.margin>
+      </Separator>
+      <AnchorPane prefHeight="48.0" prefWidth="450.0">
+         <children>
+            <Label layoutX="38.0" layoutY="6.0" style="-fx-font-weight: bold;" text="Nhập mã đặt phòng:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <MFXTextField fx:id="confirmCodeTextField" layoutX="186.0" layoutY="22.0" AnchorPane.bottomAnchor="0.3999999999999986" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="17.0" prefWidth="450.0">
+         <children>
+            <Label alignment="CENTER" layoutX="31.0" layoutY="35.0" text="Mã đặt phòng không chính xác" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="36.0" prefWidth="450.0">
+         <children>
+            <MFXButton fx:id="confirmBtn_confirmBookingCode" layoutX="218.0" layoutY="10.0" mnemonicParsing="false" text="Xác nhận" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0" />
+         </children>
+      </AnchorPane>
+    </children>
+</VBox>

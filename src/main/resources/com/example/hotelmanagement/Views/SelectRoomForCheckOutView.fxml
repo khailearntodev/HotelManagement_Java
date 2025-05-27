@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="selectRoomForCheckOutVBox" prefHeight="520.0" prefWidth="800.0" style="-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.SelectRoomForCheckOutViewModel">
+    <children>
+        <AnchorPane prefHeight="30">
+            <Label alignment="CENTER" style="-fx-font-size: 24; -fx-font-weight: bold" text="Thanh toán phiếu thuê" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0.0" />
+            <ImageView fx:id="closeIcon" fitHeight="26.0" fitWidth="29.0" onMouseClicked="#handleClose" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="5.0">
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+                <image>
+                    <Image url="@../../../../Images/Ionic-Ionicons-Close.512.png" />
+                </image>
+            </ImageView>
+        </AnchorPane>
+        <Separator prefWidth="200.0">
+            <opaqueInsets>
+                <Insets bottom="5.0" top="5.0" />
+            </opaqueInsets>
+            <VBox.margin>
+                <Insets top="2.0" />
+            </VBox.margin>
+        </Separator>
+        <AnchorPane>
+            <Text style="-fx-font-weight: bold; -fx-font-size: 17" text="Chọn (các) phòng cần thanh toán:" AnchorPane.bottomAnchor="5" AnchorPane.leftAnchor="20" AnchorPane.topAnchor="0" />
+        </AnchorPane>
+    <MFXScrollPane hbarPolicy="NEVER" layoutX="10" layoutY="10" pannable="true" prefHeight="410.0" prefWidth="780.0" style="-fx-background-color: transparent">
+        <content>
+            <StackPane alignment="CENTER">
+                <TilePane fx:id="tilePane" hgap="15" prefColumns="3" style="-fx-padding: 10; -fx-background-color: white" vgap="15">
+                    <StackPane.margin>
+                        <Insets left="10.0" right="10.0" top="0.0" />
+                    </StackPane.margin></TilePane>
+            </StackPane>
+        </content>
+    </MFXScrollPane>
+      <AnchorPane>
+          <MFXButton styleClass="next-button-checkout" text="Tiếp tục" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="0" onMouseClicked="#nextCheckout"/>
+      </AnchorPane>
+    </children>
+</VBox>

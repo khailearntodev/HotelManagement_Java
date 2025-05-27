@@ -12,11 +12,11 @@ import java.io.IOException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-//        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Views/LoginView.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(), 800, 450);
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Views/LoginView.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 800, 450);
 
 //        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Views/MainWindow.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(), 1360, 820);
+//        Scene scene = new Scene(fxmlLoader.load(), 10360, 820);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/CustomerManagementView.fxml"));
         Parent root = loader.load();
