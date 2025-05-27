@@ -7,7 +7,7 @@
     <session-factory>
         <!-- Kết nối SQL Server -->
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-        <property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;databaseName=HotelManagement;encrypt=true;trustServerCertificate=true;integratedSecurity=true</property>
+        <property name="hibernate.connection.url">jdbc:sqlserver://KIARH\MSSQLSERVER02:49926;database=JavaHotelManagement;encrypt=true;trustServerCertificate=true;integratedSecurity=true</property>
         <!-- Nho sua CSDL -->
 
         <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
@@ -18,6 +18,22 @@
         <property name="hibernate.current_session_context_class">thread</property>
 
         <!-- Mention annotated class -->
-        <mapping class="com.example.hotelmanagement.Models."/> <!--Moi model 1 mapping, sau nay se them model sau-->
+        <mapping class="com.example.hotelmanagement.Models.Amenity"/>
+        <mapping class="com.example.hotelmanagement.Models.Customer"/>
+        <mapping class="com.example.hotelmanagement.Models.Employee"/>
+        <mapping class="com.example.hotelmanagement.Models.Customertype"/>
+        <mapping class="com.example.hotelmanagement.Models.Invoice"/>
+        <mapping class="com.example.hotelmanagement.Models.Prebooking"/>
+        <mapping class="com.example.hotelmanagement.Models.Reservation"/>
+        <mapping class="com.example.hotelmanagement.Models.Reservationguest"/>
+        <mapping class="com.example.hotelmanagement.Models.RevenueReport"/>
+        <mapping class="com.example.hotelmanagement.Models.RevenueReportDetail"/>
+        <mapping class="com.example.hotelmanagement.Models.Role"/>
+        <mapping class="com.example.hotelmanagement.Models.Room"/>
+        <mapping class="com.example.hotelmanagement.Models.Roomtype"/>
+        <mapping class="com.example.hotelmanagement.Models.Roomtypeamenity"/>
+        <mapping class="com.example.hotelmanagement.Models.Service"/>
+        <mapping class="com.example.hotelmanagement.Models.Servicebooking"/>
+        <mapping class="com.example.hotelmanagement.Models.Useraccount"/>
     </session-factory>
 </hibernate-configuration>

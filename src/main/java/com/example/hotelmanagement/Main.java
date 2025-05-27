@@ -21,7 +21,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/CustomerManagementView.fxml"));
         Parent root = loader.load();
 
-        Scene scene = new Scene(root, 1060, 660);
+        //Scene scene = new Scene(root, 1060, 660);
         scene.getStylesheets().add(getClass().getResource("/CSS/style.css").toExternalForm());
         System.out.println(getClass().getResource("/CSS/style.css"));
         stage.initStyle(StageStyle.UNDECORATED);
