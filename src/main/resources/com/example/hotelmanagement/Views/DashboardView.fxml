@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="660" minWidth="1060" prefHeight="660" prefWidth="1060" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.DashboardController">
+    <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <center>
+            <VBox spacing="10">
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <VBox spacing="5">
+                        <HBox spacing="5">
+                            <Label style="-fx-font-size: 18px; -fx-font-family: Arial;" text="Xin chào">
+                        <HBox.margin>
+                           <Insets left="15.0" top="10.0" />
+                        </HBox.margin></Label>
+                            <Label fx:id="greetingLabel" style="-fx-font-size: 18px; -fx-font-family: Arial;" />
+                        </HBox>
+                        <Label fx:id="realTimeClock" style="-fx-font-size: 14px; -fx-font-family: Arial;" />
+                    </VBox>
+
+                    <Region fx:id="spacer" HBox.hgrow="ALWAYS" />
+
+                    <HBox spacing="10">
+                        <MFXButton maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="35" prefWidth="120" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-border-color: gray; -fx-border-radius: 5;" text="Export">
+                            <graphic>
+                                <StackedFontIcon iconSize="22">
+                                    <FontIcon iconLiteral="fa-print" StackedFontIcon.iconSize="0.7" />
+                                </StackedFontIcon>
+                            </graphic>
+                        </MFXButton>
+                        <MFXButton maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="35" prefWidth="120" style="-fx-background-color: #2563EB; -fx-text-fill: white;" text="Refresh">
+                            <graphic>
+                                <StackedFontIcon iconSize="22">
+                                    <FontIcon iconLiteral="fa-rotate-right" StackedFontIcon.iconSize="0.7" />
+                                </StackedFontIcon>
+                            </graphic>
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                        </MFXButton>
+                  <padding>
+                     <Insets top="10.0" />
+                  </padding>
+                    </HBox>
+                </HBox>
+
+                <!-- Statistics Cards -->
+                <HBox alignment="CENTER_LEFT" prefHeight="120.0" spacing="20">
+                    <!-- Each card -->
+                    <VBox prefWidth="245" spacing="5.0" style="-fx-background-color: #2563EB; -fx-border-radius: 15; -fx-background-radius: 15;">
+                        <Label style="-fx-font-size: 14px; -fx-font-family: Arial;" text="Đặt Trước Mới">
+                     <VBox.margin>
+                        <Insets left="20.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding></Label>
+                        <Label fx:id="totalNewBookingToday" prefHeight="36.0" prefWidth="200.0" style="-fx-font-size: 30px; -fx-font-family: Arial;">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin></Label>
+                    </VBox>
+                    <VBox prefWidth="245" spacing="5" style="-fx-background-color: #F3F3F3; -fx-border-radius: 15; -fx-background-radius: 15;">
+                        <Label style="-fx-font-size: 14px; -fx-font-family: Arial;" text="Check-In">
+                     <padding>
+                        <Insets left="20.0" top="5.0" />
+                     </padding></Label>
+                        <Label fx:id="totalCheckInToday" prefHeight="36.0" prefWidth="200.0" style="-fx-font-size: 30px; -fx-font-family: Arial;">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin></Label>
+                    </VBox>
+                    <VBox prefWidth="245" spacing="5" style="-fx-background-color: #F3F3F3; -fx-border-radius: 15; -fx-background-radius: 15;">
+                        <Label style="-fx-font-size: 14px; -fx-font-family: Arial;" text="Check-Out">
+                     <padding>
+                        <Insets left="20.0" top="5.0" />
+                     </padding></Label>
+                        <Label fx:id="totalCheckOutToday" prefHeight="36.0" prefWidth="200.0" style="-fx-font-size: 30px; -fx-font-family: Arial;">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin></Label>
+                    </VBox>
+                    <VBox prefWidth="245" spacing="5" style="-fx-background-color: #F3F3F3; -fx-border-radius: 15; -fx-background-radius: 15;">
+                        <Label style="-fx-font-size: 14px; -fx-font-family: Arial;" text="Số Phòng Đang Sử Dụng">
+                     <VBox.margin>
+                        <Insets left="20.0" top="5.0" />
+                     </VBox.margin></Label>
+                        <Label fx:id="totalRoomInUse" prefHeight="36.0" prefWidth="200.0" style="-fx-font-size: 30px; -fx-font-family: Arial;">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin></Label>
+                    </VBox>
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+                </HBox>
+
+                <!-- Middle Section -->
+                <HBox spacing="20">
+                    <!-- Booking List -->
+                    <VBox prefWidth="697.0" spacing="10" style="-fx-border-color: black; -fx-border-radius: 5;">
+                        <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" spacing="10">
+                            <Label style="-fx-font-size: 17px; -fx-font-family: Arial; -fx-font-weight: bold;" text="Danh sách đặt phòng">
+                        <padding>
+                           <Insets left="5.0" />
+                        </padding></Label>
+                            <MFXTextField fx:id="searchBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="250.0" promptText="Tìm kiếm khách, phòng,..." style="-fx-border-color: gray;">
+                        <HBox.margin>
+                           <Insets left="50.0" />
+                        </HBox.margin></MFXTextField>
+                            <MFXComboBox fx:id="statusComboBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="110.0" style="-fx-border-color: gray;">
+                        <HBox.margin>
+                           <Insets left="70.0" />
+                        </HBox.margin></MFXComboBox>
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                        </HBox>
+                        <TableView fx:id="bookingTable" prefHeight="485.0" prefWidth="675.0" style="-fx-background-color: Light;">
+                            <columns>
+                                <TableColumn prefWidth="90" text="Mã đặt" />
+                                <TableColumn prefWidth="120" text="Tên khách hàng" />
+                                <TableColumn prefWidth="120" sortable="false" text="Loại phòng" />
+                                <TableColumn prefWidth="85" text="Số phòng" />
+                                <TableColumn prefWidth="90" text="CheckIn" />
+                                <TableColumn prefWidth="90" text="CheckOut" />
+                                <TableColumn prefWidth="200" sortable="false" text="Trạng thái" />
+                            </columns>
+                     <VBox.margin>
+                        <Insets left="5.0" />
+                     </VBox.margin>
+                        </TableView>
+                  <HBox.margin>
+                     <Insets left="5.0" />
+                  </HBox.margin>
+                    </VBox>
+
+                    <!-- Right Panel: Chart + Activity -->
+                    <VBox prefWidth="345" spacing="15.0" style="-fx-border-color: black; -fx-border-radius: 5;">
+                        <Label style="-fx-font-size: 17px; -fx-font-family: Arial; -fx-font-weight: bold;" text="Tình trạng phòng">
+                     <VBox.margin>
+                        <Insets left="5.0" top="10.0" />
+                     </VBox.margin></Label>
+                        <BarChart fx:id="roomChart" prefHeight="200.0" prefWidth="320.0">
+                            <xAxis>
+                                <CategoryAxis fx:id="roomTypeAxis" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis fx:id="roomValueAxis" />
+                            </yAxis>
+                        </BarChart>
+
+                        <Label style="-fx-font-size: 17px; -fx-font-family: Arial; -fx-font-weight: bold;" text="Hoạt động gần đây">
+                     <VBox.margin>
+                        <Insets left="5.0" />
+                     </VBox.margin></Label>
+                        <ListView fx:id="recentActivitiesList" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="201.0" prefWidth="320.0">
+                     <VBox.margin>
+                        <Insets left="15.0" />
+                     </VBox.margin></ListView>
+                  <HBox.margin>
+                     <Insets right="5.0" />
+                  </HBox.margin>
+                    </VBox>
+               <padding>
+                  <Insets bottom="5.0" />
+               </padding>
+                </HBox>
+            </VBox>
+        </center>
+    </BorderPane>
+</AnchorPane>
