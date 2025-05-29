@@ -1,5 +1,7 @@
 package com.example.hotelmanagement.Views;
 
+import com.example.hotelmanagement.ViewModels.BookingCalendarViewModel;
+import com.example.hotelmanagement.ViewModels.BookingViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,10 +26,15 @@ public class BookingCalendarController implements Initializable {
 
     private YearMonth currentYearMonth;
     @Getter
-    private LocalDate selectedDate;
-    @Getter
     private Set<LocalDate> unavailableDates;
     private List<Button> dayButtons;
+
+    BookingCalendarViewModel viewModel;
+
+    public void setViewModel(BookingCalendarViewModel viewModel) {
+        this.viewModel = viewModel;
+        buildCalendar();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -55,6 +62,7 @@ public class BookingCalendarController implements Initializable {
         int firstDayOfWeek = firstDayOfMonth.getDayOfWeek().getValue() % 7;
         int dayCounter = 1;
         LocalDate today = LocalDate.now();
+
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 7; col++) {
                 Button dayButton = new Button();
@@ -90,11 +98,12 @@ public class BookingCalendarController implements Initializable {
                         dayButton.getStyleClass().add("unavailable");
                     }
 
-                    if (buttonDate.equals(selectedDate)) {
+                    if (viewModel != null && viewModel.getCheckOutDate().get() != null &&
+                            buttonDate.equals(viewModel.getCheckOutDate().get())) {
                         dayButton.getStyleClass().add("selected");
                     }
 
-                    if (buttonDate.isBefore(today) || buttonDate.isAfter(Collections.min(unavailableDates))) {
+                    if (buttonDate.isBefore(today) || (!unavailableDates.isEmpty() && buttonDate.isAfter(Collections.min(unavailableDates)))) {
                         dayButton.getStyleClass().add("disabled");
                         dayButton.setDisable(true);
                     } else {
@@ -135,10 +144,10 @@ public class BookingCalendarController implements Initializable {
 
         if (clickedDate != null && !unavailableDates.contains(clickedDate)) {
             dayButtons.forEach(btn -> btn.getStyleClass().remove("selected"));
-            selectedDate = clickedDate;
+            if (viewModel != null) {
+                viewModel.setCheckOutDate(clickedDate);
+            }
             clickedButton.getStyleClass().add("selected");
-
-            System.out.println("Selected date: " + selectedDate);
         }
     }
 
@@ -149,22 +158,15 @@ public class BookingCalendarController implements Initializable {
 
     @FXML
     private void onConfirm(ActionEvent event) {
-        if (selectedDate != null) {
-            System.out.println("Confirmed booking for date: " + selectedDate);
+        if (viewModel != null && viewModel.getCheckOutDate().get() != null) {
+            viewModel.setCheckOutDate(viewModel.getCheckOutDate().get());
             closeWindow();
-        } else {
-            System.out.println("No date selected");
         }
     }
 
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
-    }
-
-    public void setSelectedDate(LocalDate selectedDate) {
-        this.selectedDate = selectedDate;
-        buildCalendar();
     }
 
     public void setUnavailableDates(Set<LocalDate> unavailableDates) {

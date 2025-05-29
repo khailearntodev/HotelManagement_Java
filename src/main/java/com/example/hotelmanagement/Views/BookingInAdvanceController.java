@@ -45,18 +45,18 @@ public class BookingInAdvanceController implements Initializable {
     VBox selectedItem = null;
 
     private void chonItem(VBox item) {
-        if (selectedItem != null) {
+        /*if (selectedItem != null) {
             selectedItem.getStyleClass().remove("room-container-selected");
         }
         selectedItem = item;
         selectedItem.getStyleClass().add("room-container-selected");
         var p = (ReservationController.PhongTest) selectedItem.getUserData();
-        System.out.println(p.getSoPhong());
+        System.out.println(p.getSoPhong());*/
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ObservableList<ReservationController.PhongTest> danhSachPhong = FXCollections.observableArrayList(
+        /*ObservableList<ReservationController.PhongTest> danhSachPhong = FXCollections.observableArrayList(
                 new ReservationController.PhongTest("101", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 800000, "Trống", 1),
                 new ReservationController.PhongTest("102", "Standard", LocalDateTime.now(), LocalDateTime.now(), 500000, "Trống", 1),
                 new ReservationController.PhongTest("103", "Suite", LocalDateTime.now(), LocalDateTime.now(), 1200000, "Trống", 1),
@@ -87,7 +87,7 @@ public class BookingInAdvanceController implements Initializable {
                 new ReservationController.PhongTest("103", "Suite", LocalDateTime.now(), LocalDateTime.now(), 1200000, "Trống", 1),
                 new ReservationController.PhongTest("104", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 750000, "Trống", 1),
                 new ReservationController.PhongTest("105", "Standard", LocalDateTime.now(), LocalDateTime.now(), 480000, "Trống", 1)
-        );
+        );*/
 
         Locale vietnameseLocale = new Locale("vi", "VN");
         Locale.setDefault(vietnameseLocale);
@@ -97,7 +97,7 @@ public class BookingInAdvanceController implements Initializable {
         setupMFXDatePicker(checkOutPicker);
         setupMFXDatePicker(checkInPicker);
 
-        for (ReservationController.PhongTest phong : danhSachPhong) {
+        /*for (ReservationController.PhongTest phong : danhSachPhong) {
             VBox container = new VBox();
             container.setCursor(Cursor.HAND);
             container.setPrefSize(235, 85);
@@ -127,7 +127,7 @@ public class BookingInAdvanceController implements Initializable {
             container.setOnMouseClicked(event -> chonItem(container));
             container.setUserData(phong);
             tilePane.getChildren().add(container);
-        }
+        }*/
     }
 
     public void handleClose(MouseEvent mouseEvent) {

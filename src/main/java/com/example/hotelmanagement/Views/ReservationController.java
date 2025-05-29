@@ -1,14 +1,14 @@
 package com.example.hotelmanagement.Views;
 import java.io.IOException;
 import java.util.Locale;
+
+import com.example.hotelmanagement.DTO.ReservationRoomDisplay;
+import com.example.hotelmanagement.ViewModels.BookingViewModel;
+import com.example.hotelmanagement.ViewModels.ReservationViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,7 +24,6 @@ import javafx.scene.control.*;
 
 import java.net.URL;
 import java.text.NumberFormat;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
@@ -37,33 +36,38 @@ import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import static io.github.palexdev.materialfx.utils.RandomUtils.random;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ReservationController implements Initializable {
     @FXML private MFXButton searchButton;
     @FXML private AnchorPane anchorPane;
-    @FXML private TableView<PhongTest> bookingTable;
-    @FXML private TableColumn<PhongTest, String> colRoomNumber;
-    @FXML private TableColumn<PhongTest, String> colRoomType;
+    @FXML private TableView<ReservationRoomDisplay> bookingTable;
+    @FXML private TableColumn<ReservationRoomDisplay, Integer> colRoomNumber;
+    @FXML private TableColumn<ReservationRoomDisplay, String> colRoomType;
     @FXML private Pagination pagination;
-    @FXML private TableColumn<PhongTest, String> colCheckInOut;
-    @FXML private TableColumn<PhongTest, String> colAmount;
-    @FXML private TableColumn<PhongTest, String> colStatus;
-    @FXML private TableColumn<PhongTest, Void> colAction;
-    @FXML private TableColumn<PhongTest, String> colQuantity;
+    @FXML private TableColumn<ReservationRoomDisplay, String> colCheckInOut;
+    @FXML private TableColumn<ReservationRoomDisplay, String> colAmount;
+    @FXML private TableColumn<ReservationRoomDisplay, Integer> colStatus;
+    @FXML private TableColumn<ReservationRoomDisplay, Void> colAction;
+    @FXML private TableColumn<ReservationRoomDisplay, String> colQuantity;
 
     private final static int ROWS_PER_PAGE = 15;
-    private ObservableList<PhongTest> allData = FXCollections.observableArrayList();
+    private ObservableList<ReservationRoomDisplay> rooms = FXCollections.observableArrayList();
+    @Setter
+    @Getter
+    private ReservationViewModel viewModel = new ReservationViewModel();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        viewModel.loadFromModel();
+        this.rooms = viewModel.getRooms();
         Platform.runLater(() -> anchorPane.requestFocus());
-        colRoomNumber.setCellValueFactory(cell -> cell.getValue().tenPhongProperty());
-        colRoomType.setCellValueFactory(cell -> cell.getValue().loaiPhongProperty());
+        colRoomNumber.setCellValueFactory(cellData -> cellData.getValue().roomNumberProperty().asObject());
+        colRoomType.setCellValueFactory(cell -> cell.getValue().roomTypeNameProperty());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        colCheckInOut.setCellValueFactory(cell ->
+        /*colCheckInOut.setCellValueFactory(cell ->
                 Bindings.createStringBinding(() -> {
                             LocalDateTime checkInDate = cell.getValue().thoigianCheckInProperty().get();
                             LocalDateTime checkOutDate = cell.getValue().thoigianCheckOutProperty().get();
@@ -71,27 +75,27 @@ public class ReservationController implements Initializable {
                             },
                         cell.getValue().thoigianCheckInProperty()
                 )
-        );
+        );*/
 
         NumberFormat Numformatter = NumberFormat.getInstance(new Locale("vi", "VN"));
         colAmount.setCellValueFactory(cell ->
                 Bindings.createStringBinding(
-                        () -> Numformatter.format(cell.getValue().giaThueProperty().get())  + " VNĐ/đêm",
-                        cell.getValue().giaThueProperty()
+                        () -> Numformatter.format(cell.getValue().roomTypePriceProperty().get())  + " VNĐ/đêm",
+                        cell.getValue().roomTypePriceProperty()
                 )
         );
 
-        colStatus.setCellValueFactory(cell -> cell.getValue().trangThaiProperty());
-        colStatus.setCellFactory(cell -> new TableCell<PhongTest, String>() {
+        colStatus.setCellValueFactory(cell -> cell.getValue().statusProperty().asObject());
+        colStatus.setCellFactory(cell -> new TableCell<ReservationRoomDisplay, Integer>() {
             private final Label label = new Label();
             @Override
-            protected void updateItem(String item, boolean empty) {
+            protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setGraphic(null);
                 } else {
-                    if (item.equals("Đang thuê")) {
-                        Label label = new Label(item);
+                    if (item.equals(2)) {
+                        Label label = new Label("Đang thuê");
                         label.setPadding(new Insets(1,6,1,6));
                         label.setWrapText(false);
                         label.setAlignment(Pos.CENTER);
@@ -103,8 +107,8 @@ public class ReservationController implements Initializable {
                         setText(null);
                         label.getStyleClass().setAll("checkout-label-table-view");
                     }
-                    else if (item.equals("Còn trống")) {
-                        Label label = new Label(item);
+                    else if (item.equals(1)) {
+                        Label label = new Label("Còn trống");
                         label.setPadding(new Insets(1,6,1,6));
                         label.setWrapText(false);
                         label.setAlignment(Pos.CENTER);
@@ -116,8 +120,8 @@ public class ReservationController implements Initializable {
                         setText(null);
                         label.getStyleClass().setAll("booking-label-table-view");
                     }
-                    else if (item.equals("Được đặt trước")) {
-                        Label label = new Label(item);
+                    else if (item.equals(3)) {
+                        Label label = new Label("Được đặt trước");
                         label.setPadding(new Insets(1,6,1,6));
                         label.setWrapText(false);
                         label.setAlignment(Pos.CENTER);
@@ -133,31 +137,142 @@ public class ReservationController implements Initializable {
             }
         });
 
-        colQuantity.setCellValueFactory(cell ->
+        /*colQuantity.setCellValueFactory(cell ->
                 Bindings.createStringBinding(
                         () -> Numformatter.format(cell.getValue().slProperty().get()),
                         cell.getValue().slProperty()
                 )
-        );
+        );*/
 
-        colAction.setCellFactory(col -> new TableCell<PhongTest, Void>() {
-            private final Button btn = new Button();
-            private final Button subbtn = new Button();
+        colAction.setCellFactory(col -> new TableCell<ReservationRoomDisplay, Void>() {
+            private Button btn;
+            private Button subbtn;
+            private HBox buttonContainer;
 
-            {
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(null);
+                setText(null);
+                if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
+                    return;
+                }
+                ReservationRoomDisplay p = getTableView().getItems().get(getIndex());
+                if (p == null) {
+                    return;
+                }
+
+                btn = new Button();
+                subbtn = new Button();
+                buttonContainer = new HBox();
+
+                buttonContainer.setAlignment(Pos.CENTER);
+                buttonContainer.setPrefWidth(Double.MAX_VALUE);
+
+                switch (p.getStatus()) {
+                    case 1:
+                        setupBookingButton(p);
+                        buttonContainer.getChildren().add(btn);
+                        break;
+
+                    case 2:
+                        setupCheckoutButton(p);
+                        setupSubButton(p);
+                        buttonContainer.getChildren().addAll(btn, subbtn);
+                        break;
+
+                    case 3:
+                        setupConfirmButton(p);
+                        buttonContainer.getChildren().add(btn);
+                        break;
+                }
+
+                setGraphic(buttonContainer);
+                setAlignment(Pos.CENTER);
+            }
+
+            private void setupBookingButton(ReservationRoomDisplay p) {
+                btn.setOnAction(ae -> {
+                    try {
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingView.fxml"));
+                        Parent root = fxmlLoader.load();
+                        Scene scene = new Scene(root);
+                        scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
+                        BookingViewModel vm = new BookingViewModel(p);
+                        vm.setParent(viewModel);
+                        BookingController controller = fxmlLoader.getController();
+                        controller.setViewModel(vm);
+                        Stage stage = new Stage();
+                        stage.initStyle(StageStyle.UNDECORATED);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.setScene(scene);
+                        stage.showAndWait();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+                configureButton(btn, 112, "Đặt phòng");
+                btn.getStyleClass().add("booking-button-table-view");
+            }
+
+            private void setupCheckoutButton(ReservationRoomDisplay p) {
+                btn.setOnAction(e -> {
+                    System.out.println("Click phòng: " + p.getRoomNumber());
+                });
+
+                configureButton(btn, 87, "Thanh toán");
+                btn.getStyleClass().add("checkout-button-table-view");
+            }
+
+            private void setupConfirmButton(ReservationRoomDisplay p) {
+                btn.setOnAction(e -> {
+                    try {
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/ConfirmBookingCodeView.fxml"));
+                        Parent root = fxmlLoader.load();
+                        Scene scene = new Scene(root);
+                        scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
+
+                        Stage stage = new Stage();
+                        stage.initStyle(StageStyle.UNDECORATED);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.setScene(scene);
+                        stage.showAndWait();
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+                });
+
+                configureButton(btn, 112, "Nhận phòng");
+                btn.getStyleClass().add("confirm-button-table-view");
+            }
+
+            private void setupSubButton(ReservationRoomDisplay p) {
+                MFXFontIcon icon = new MFXFontIcon("mfx-chevron-down", 10);
+                subbtn.setPrefWidth(25);
+                subbtn.setMinWidth(25);
+                subbtn.setMaxWidth(25);
+                subbtn.setPadding(Insets.EMPTY);
+                subbtn.setPrefHeight(25);
+                subbtn.setMinHeight(25);
+                subbtn.setMaxHeight(25);
+                subbtn.setAlignment(Pos.CENTER);
+                subbtn.setGraphic(icon);
+                subbtn.getStyleClass().add("checkout-chevron-button-table-view");
+
                 subbtn.setOnAction(e -> {
-                    PhongTest p = getTableView().getItems().get(getIndex());
                     Popup popup = new Popup();
                     popup.setAutoHide(true);
                     VBox vbox = new VBox(10);
                     vbox.setStyle("""
-                        -fx-background-color: white;
-                        -fx-border-color: gray;
-                        -fx-border-radius: 5;
-                        -fx-background-radius: 5;
-                        -fx-border-width: 1;
-                        -fx-cursor: hand;
-                    """);
+                -fx-background-color: white;
+                -fx-border-color: gray;
+                -fx-border-radius: 5;
+                -fx-background-radius: 5;
+                -fx-border-width: 1;
+                -fx-cursor: hand;
+            """);
+
                     MFXButton btn1 = new MFXButton("Đặt dịch vụ");
                     MFXButton btnXemGhiChu = new MFXButton("Xem ghi chú");
                     MFXButton btn3 = new MFXButton("Xem phiếu thuê");
@@ -173,9 +288,10 @@ public class ReservationController implements Initializable {
                     vbox.getChildren().addAll(btn1, btnXemGhiChu, btn3);
 
                     btn1.setOnAction(ev -> {
-                        System.out.println("Đặt dịch vụ phòng: " + p.getTenPhong());
+                        System.out.println("Đặt dịch vụ phòng: " + p.getRoomNumber());
                         popup.hide();
                     });
+
                     btnXemGhiChu.setOnAction(ev -> {
                         try {
                             FXMLLoader bookingNotefxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingNoteView.fxml"));
@@ -191,9 +307,11 @@ public class ReservationController implements Initializable {
                         } catch (IOException exception) {
                             exception.printStackTrace();
                         }
+                        popup.hide();
                     });
+
                     btn3.setOnAction(ev -> {
-                        System.out.println("Xem phiếu thuê phòng: " + p.getTenPhong());
+                        System.out.println("Xem phiếu thuê phòng: " + p.getRoomNumber());
                         popup.hide();
                     });
 
@@ -201,129 +319,26 @@ public class ReservationController implements Initializable {
 
                     Node source = (Node) e.getSource();
                     Bounds bounds = source.localToScreen(source.getBoundsInLocal());
-
-                    double x = bounds.getMinX();
-                    double y = bounds.getMaxY();
-
-                    popup.show(source, x, y);
+                    popup.show(source, bounds.getMinX(), bounds.getMaxY());
                 });
-
             }
 
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    PhongTest p = getTableView().getItems().get(getIndex());
-                    if ("Còn trống".equals(p.getTrangThai())) {
-                        btn.setOnAction(ae -> {
-                            try {
-                                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingView.fxml"));
-                                Parent root = fxmlLoader.load();
-
-                                Scene scene = new Scene(root);
-                                scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
-
-                                Stage stage = new Stage();
-                                stage.initStyle(StageStyle.UNDECORATED);
-                                stage.initModality(Modality.APPLICATION_MODAL);
-                                stage.setScene(scene);
-                                stage.showAndWait();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        });
-
-                        btn.setPrefWidth(112);
-                        btn.setMinWidth(112);
-                        btn.setMaxWidth(112);
-                        btn.setPadding(Insets.EMPTY);
-                        btn.setPrefHeight(25);
-                        btn.setMinHeight(25);
-                        btn.setMaxHeight(25);
-                        btn.setAlignment(Pos.CENTER);
-                        btn.setText("Đặt phòng");
-                        btn.getStyleClass().setAll("booking-button-table-view");
-                    } else if ("Đang thuê".equals(p.getTrangThai())) {
-                        btn.setOnAction(e -> {
-                            System.out.println("Click phòng: " + p.getTenPhong());
-                        });
-                        btn.setPrefWidth(87);
-                        btn.setMinWidth(87);
-                        btn.setMaxWidth(87);
-                        btn.setPadding(Insets.EMPTY);
-                        btn.setPrefHeight(25);
-                        btn.setMinHeight(25);
-                        btn.setMaxHeight(25);
-                        btn.setAlignment(Pos.CENTER);
-                        btn.setText("Thanh toán");
-                        btn.getStyleClass().setAll("checkout-button-table-view");
-                        MFXFontIcon icon = new MFXFontIcon("mfx-chevron-down", 10);
-                        subbtn.setPrefWidth(25);
-                        subbtn.setMinWidth(25);
-                        subbtn.setMaxWidth(25);
-                        subbtn.setPadding(Insets.EMPTY);
-                        subbtn.setPrefHeight(25);
-                        subbtn.setMinHeight(25);
-                        subbtn.setMaxHeight(25);
-                        subbtn.setAlignment(Pos.CENTER);
-                        subbtn.setGraphic(icon);
-                        subbtn.getStyleClass().setAll("checkout-chevron-button-table-view");
-                    } else if ("Được đặt trước".equals(p.getTrangThai())) {
-                        btn.setOnAction(e -> {
-                            try {
-                                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/ConfirmBookingCodeView.fxml"));
-                                Parent root = fxmlLoader.load();
-                                Scene scene = new Scene(root);
-                                scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
-
-                                Stage stage = new Stage();
-                                stage.initStyle(StageStyle.UNDECORATED);
-                                stage.initModality(Modality.APPLICATION_MODAL);
-                                stage.setScene(scene);
-                                stage.showAndWait();
-                            } catch (IOException exception) {
-                                exception.printStackTrace();
-                            }
-                        });
-
-                        btn.setPrefWidth(112);
-                        btn.setMinWidth(112);
-                        btn.setMaxWidth(112);
-                        btn.setPadding(Insets.EMPTY);
-                        btn.setPrefHeight(25);
-                        btn.setMinHeight(25);
-                        btn.setMaxHeight(25);
-                        btn.setAlignment(Pos.CENTER);
-                        btn.setText("Nhận phòng");
-                        btn.getStyleClass().setAll("confirm-button-table-view");
-                    }
-                    if ("Đang thuê".equals(p.getTrangThai())) {
-                        HBox box = new HBox(btn, subbtn);
-                        box.setAlignment(Pos.CENTER);
-                        box.setPrefWidth(Double.MAX_VALUE);
-                        setGraphic(box);
-                        setAlignment(Pos.CENTER);
-                    } else {
-                        HBox box = new HBox(btn);
-                        box.setAlignment(Pos.CENTER);
-                        box.setPrefWidth(Double.MAX_VALUE);
-                        setGraphic(box);
-                        setAlignment(Pos.CENTER);
-                    }
-                }
+            private void configureButton(Button button, int width, String text) {
+                button.setPrefWidth(width);
+                button.setMinWidth(width);
+                button.setMaxWidth(width);
+                button.setPadding(Insets.EMPTY);
+                button.setPrefHeight(25);
+                button.setMinHeight(25);
+                button.setMaxHeight(25);
+                button.setAlignment(Pos.CENTER);
+                button.setText(text);
             }
         });
 
         String[] statusOptions = {"Còn trống", "Đang thuê", "Được đặt trước"};
 
-        for (int i = 1; i <= 100; i++) {
-            allData.add(new PhongTest(String.valueOf(i), "Phòng cơ bản VIP đặc biệt", LocalDateTime.now(), LocalDateTime.now().plusDays(i), 150000*i, statusOptions[random.nextInt(statusOptions.length)], random.nextInt(4) + 1));
-        }
-
-        int pageCount = (int) Math.ceil(allData.size() * 1.0 / ROWS_PER_PAGE);
+        int pageCount = (int) Math.ceil(rooms.size() * 1.0 / ROWS_PER_PAGE);
         pagination.setPageCount(pageCount);
         pagination.setPageFactory(pageIndex -> {
             updateTableView(pageIndex);
@@ -335,8 +350,11 @@ public class ReservationController implements Initializable {
 
     private void updateTableView(int pageIndex) {
         int fromIndex = pageIndex * ROWS_PER_PAGE;
-        int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, allData.size());
-        bookingTable.setItems(FXCollections.observableArrayList(allData.subList(fromIndex, toIndex)));
+        int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, rooms.size());
+        ObservableList<ReservationRoomDisplay> pageData = FXCollections.observableArrayList();
+        pageData.addAll(rooms.subList(fromIndex, toIndex));
+        bookingTable.setItems(pageData);
+        bookingTable.refresh();
     }
 
     public void showBookingInAdvanceView(MouseEvent mouseEvent) {
@@ -394,71 +412,4 @@ public class ReservationController implements Initializable {
         }
     }
 
-    public static class PhongTest {
-        private final StringProperty tenPhong;
-        private final StringProperty loaiPhong;
-        private final ObjectProperty<LocalDateTime> thoigianCheckIn;
-        private final ObjectProperty<LocalDateTime> thoigianCheckOut;
-        private final ObjectProperty<Integer> giaThue;
-        private final StringProperty trangThai;
-        private final ObjectProperty<Integer> sl;
-
-        public PhongTest(String ten, String loai, LocalDateTime thoigianCheckIn, LocalDateTime thoigianCheckOut, Integer giaThue, String trangThai, Integer sl) {
-            this.tenPhong = new SimpleStringProperty(ten);
-            this.loaiPhong = new SimpleStringProperty(loai);
-            this.thoigianCheckIn = new SimpleObjectProperty<>(thoigianCheckIn);
-            this.thoigianCheckOut = new SimpleObjectProperty<>(thoigianCheckOut);
-            this.giaThue = new SimpleObjectProperty<>(giaThue);
-            this.trangThai = new SimpleStringProperty(trangThai);
-            this.sl = new SimpleObjectProperty<>(sl);
-        }
-
-        public StringProperty tenPhongProperty() {
-            return tenPhong;
-        }
-
-        public StringProperty loaiPhongProperty() {
-            return loaiPhong;
-        }
-
-        public ObjectProperty<LocalDateTime> thoigianCheckInProperty() {
-            return thoigianCheckIn;
-        }
-
-        public ObjectProperty<LocalDateTime> thoigianCheckOutProperty() {
-            return thoigianCheckOut;
-        }
-
-        public ObjectProperty<Integer> giaThueProperty() {
-            return giaThue;
-        }
-
-        public StringProperty trangThaiProperty() {
-            return trangThai;
-        }
-
-        public String getTenPhong() {
-            return tenPhong.get();
-        }
-
-        public String getTrangThai() {
-            return trangThai.get();
-        }
-
-        public ObjectProperty<Integer> slProperty() {
-            return sl;
-        }
-
-        public String getSoPhong() {
-            return tenPhong.get();
-        }
-
-        public String getLoaiPhong() {
-            return loaiPhong.get();
-        }
-
-        public double getDonGia() {
-            return giaThue.get();
-        }
-    }
 }

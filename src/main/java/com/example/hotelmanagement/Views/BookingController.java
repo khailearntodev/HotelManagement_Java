@@ -1,5 +1,9 @@
 package com.example.hotelmanagement.Views;
 
+import com.example.hotelmanagement.Models.Customer;
+import com.example.hotelmanagement.ViewModels.AddCustomerViewModel;
+import com.example.hotelmanagement.ViewModels.BookingCalendarViewModel;
+import com.example.hotelmanagement.ViewModels.BookingViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -27,11 +31,18 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import javafx.util.converter.LocalDateStringConverter;
+import javafx.util.converter.LocalDateTimeStringConverter;
 import javafx.util.converter.NumberStringConverter;
+import lombok.Setter;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -39,13 +50,50 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class BookingController implements Initializable {
-
+    @FXML private MFXButton openAddCustomerBtn;
+    @FXML private MFXButton bookingServiceBtn;
+    @FXML private MFXTextField bookingNoteTextField;
+    @FXML private Label priceLabel;
+    @FXML private Button calendarButton;
+    @Setter
+    @FXML private MFXTextField checkoutDateTextfield;
+    @FXML private Label checkInDateLabel;
+    @FXML private Label roomTypeLabel;
+    @FXML private Label roomNumberLabel;
     @FXML private VBox BookingVBox;
     @FXML private MFXButton addCustomerBtn;
     @FXML private ImageView closeIcon;
 
+    private BookingViewModel viewModel;
     private ObservableList<ServiceItem> serviceItems;
     private List<ServiceItem> selectedServices = new ArrayList<>();
+
+    public void setViewModel(BookingViewModel viewModel) {
+        this.viewModel = viewModel;
+        bindData();
+    }
+
+    private void bindData() {
+        roomNumberLabel.textProperty().bindBidirectional(viewModel.getRoom().roomNumberProperty(), new NumberStringConverter());
+        roomTypeLabel.textProperty().bindBidirectional(viewModel.getRoom().roomTypeNameProperty());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDateTimeStringConverter converter = new LocalDateTimeStringConverter(formatter, null);
+        ObjectProperty<LocalDateTime> dateProperty = new SimpleObjectProperty<>(LocalDateTime.now());
+        checkInDateLabel.textProperty().bindBidirectional(dateProperty, converter);
+        NumberFormat currencyFormat = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
+        currencyFormat.setMaximumFractionDigits(0);
+        priceLabel.textProperty().bind(
+                Bindings.createStringBinding(
+                        () -> {
+                            BigDecimal price = viewModel.getRoom().roomTypePriceProperty().get();
+                            return price != null
+                                    ? currencyFormat.format(price) + " VNĐ/đêm"
+                                    : "";
+                        },
+                        viewModel.getRoom().roomTypePriceProperty()
+                )
+        );
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -247,7 +295,10 @@ public class BookingController implements Initializable {
 
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
-
+            AddCustomerViewModel vm = new AddCustomerViewModel();
+            vm.setParent(viewModel);
+            AddCustomerController controller = loader.getController();
+            controller.setViewModel(vm);
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -265,12 +316,17 @@ public class BookingController implements Initializable {
 
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
-
+            BookingCalendarViewModel vm = new BookingCalendarViewModel();
+            vm.setParent(viewModel);
+            BookingCalendarController controller = loader.getController();
+            controller.setViewModel(vm);
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.showAndWait();
+            LocalDateStringConverter dateConverter = new LocalDateStringConverter(DateTimeFormatter.ofPattern("dd/MM/yyyy"), null);
+            Bindings.bindBidirectional(checkoutDateTextfield.textProperty(), viewModel.getCheckOutDate(), dateConverter);
         } catch (IOException e) {
             e.printStackTrace();
         }

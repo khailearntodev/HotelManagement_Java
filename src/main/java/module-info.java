@@ -11,6 +11,7 @@ module com.example.hotelmanagement {
     requires java.persistence;
 
     opens com.example.hotelmanagement to javafx.fxml, org.hibernate.orm.core;
+    opens com.example.hotelmanagement.Models to org.hibernate.orm.core;
 
     exports com.example.hotelmanagement;
     exports com.example.hotelmanagement.Views;

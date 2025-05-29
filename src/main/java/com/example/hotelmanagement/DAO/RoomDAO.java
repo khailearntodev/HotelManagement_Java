@@ -12,7 +12,7 @@ public class RoomDAO {
     // Lấy danh sách tất cả phòng chưa xóa
     public List<Room> getAll() {
         try (Session session = HibernateUtils.getSession()) {
-            return session.createQuery("FROM Room WHERE isDeleted = false", Room.class).list();
+            return session.createQuery("SELECT r FROM Room r JOIN FETCH r.roomTypeID WHERE r.isDeleted = false", Room.class).list();
         }
     }
 

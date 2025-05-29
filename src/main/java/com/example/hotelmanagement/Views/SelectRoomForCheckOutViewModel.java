@@ -31,9 +31,9 @@ public class SelectRoomForCheckOutViewModel implements Initializable {
     @FXML private TilePane tilePane;
     @FXML private VBox selectRoomForCheckOutVBox;
 
-    List<ReservationController.PhongTest> selectedRooms = new ArrayList<>();
-    List<VBox> selectedContainers = new ArrayList<>();
-
+/*    List<ReservationController.PhongTest> selectedRooms = new ArrayList<>();
+    List<VBox> selectedContainers = new ArrayList<>();*/
+/*
     private void seletectItem(VBox item) {
         if (!selectedContainers.contains(item)) {
             selectedContainers.add(item);
@@ -44,10 +44,10 @@ public class SelectRoomForCheckOutViewModel implements Initializable {
             selectedRooms.remove((ReservationController.PhongTest) item.getUserData());
             item.getStyleClass().remove("room-container-selected");
         }
-    }
+    }*/
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ObservableList<ReservationController.PhongTest> danhSachPhong = FXCollections.observableArrayList(
+       /* ObservableList<ReservationController.PhongTest> danhSachPhong = FXCollections.observableArrayList(
                 new ReservationController.PhongTest("101", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 800000, "Trống", 1),
                 new ReservationController.PhongTest("102", "Standard", LocalDateTime.now(), LocalDateTime.now(), 500000, "Trống", 1),
                 new ReservationController.PhongTest("103", "Suite", LocalDateTime.now(), LocalDateTime.now(), 1200000, "Trống", 1),
@@ -81,11 +81,11 @@ public class SelectRoomForCheckOutViewModel implements Initializable {
         );
 
         Locale vietnameseLocale = new Locale("vi", "VN");
-        Locale.setDefault(vietnameseLocale);
+        Locale.setDefault(vietnameseLocale);*/
 
         Platform.runLater(() -> selectRoomForCheckOutVBox.requestFocus());
 
-        for (ReservationController.PhongTest phong : danhSachPhong) {
+        /*for (ReservationController.PhongTest phong : danhSachPhong) {
             VBox container = new VBox();
             container.setCursor(Cursor.HAND);
             container.setPrefSize(235, 85);
@@ -115,7 +115,7 @@ public class SelectRoomForCheckOutViewModel implements Initializable {
             container.setUserData(phong);
             container.setOnMouseClicked(mouseEvent -> seletectItem(container));
             tilePane.getChildren().add(container);
-        }
+        }*/
     }
 
     public void handleClose(MouseEvent mouseEvent) {
@@ -123,7 +123,7 @@ public class SelectRoomForCheckOutViewModel implements Initializable {
         stage.close();
     }
 
-    public void nextCheckout(MouseEvent mouseEvent) {
+    /*public void nextCheckout(MouseEvent mouseEvent) {
         System.out.println(selectedRooms.stream().map(ReservationController.PhongTest::getSoPhong).collect(Collectors.toList()));
-    }
+    }*/
 }
