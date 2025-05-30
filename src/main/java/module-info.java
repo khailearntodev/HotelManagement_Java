@@ -25,5 +25,6 @@ module com.example.hotelmanagement {
     requires MaterialFX;
     requires org.kordamp.ikonli.fontawesome;
     requires fontawesomefx;
+    requires VirtualizedFX;
 
 }

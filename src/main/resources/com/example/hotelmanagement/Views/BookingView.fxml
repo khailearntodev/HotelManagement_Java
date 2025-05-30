@@ -131,20 +131,20 @@
       </AnchorPane>
       <AnchorPane prefHeight="283.0" prefWidth="898.0">
          <children>
-            <TableView layoutX="52.0" layoutY="28.0" prefHeight="306.0" prefWidth="878.0" styleClass="table-view" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+            <TableView fx:id="customerTableView" layoutX="52.0" layoutY="28.0" prefHeight="306.0" prefWidth="878.0" styleClass="table-view" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
               <columns>
-                <TableColumn prefWidth="33.60000765323639" reorderable="false" resizable="false" sortable="false" text="#" />
-                <TableColumn prefWidth="260.0000228881836" reorderable="false" resizable="false" sortable="false" text="Tên khách hàng" />
-                  <TableColumn prefWidth="184.0" reorderable="false" resizable="false" sortable="false" text="Số CCCD/ Hộ chiếu" />
-                  <TableColumn prefWidth="156.79998779296875" reorderable="false" resizable="false" sortable="false" text="Số điện thoại" />
-                  <TableColumn maxWidth="1.7976931348623157E308" prefWidth="242.4000122070313" reorderable="false" resizable="false" sortable="false" text="Địa chỉ" />
+                <TableColumn fx:id="colNum" prefWidth="33.60000765323639" reorderable="false" resizable="false" sortable="false" text="#" />
+                <TableColumn fx:id="colName" prefWidth="260.0000228881836" reorderable="false" resizable="false" sortable="false" text="Tên khách hàng" />
+                <TableColumn fx:id="colIDNumber" prefWidth="184.0" reorderable="false" resizable="false" sortable="false" text="Số CCCD/ Hộ chiếu" />
+                <TableColumn fx:id="colPhoneNumber" prefWidth="156.79998779296875" reorderable="false" resizable="false" sortable="false" text="Số điện thoại" />
+                <TableColumn fx:id="colAddress" prefWidth="239.4000122070313" reorderable="false" resizable="false" sortable="false" text="Địa chỉ" />
               </columns>
             </TableView>
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="34.0" prefWidth="900.0">
          <children>
-            <MFXButton fx:id="confirmBtn" layoutX="156.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="95.0" text="Xác nhận" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+            <MFXButton fx:id="confirmBtn" onMouseClicked="#saveBooking" layoutX="156.0" layoutY="5.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="95.0" text="Xác nhận" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
             <MFXButton layoutX="166.0" layoutY="15.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="69.0" style="-fx-font-weight: bold; -fx-cursor: hand; -fx-text-fill: grey" text="Hủy" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="10.0" />
          </children>
       </AnchorPane>

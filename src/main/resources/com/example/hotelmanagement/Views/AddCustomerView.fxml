@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.*?>
-<?import java.lang.*?>
-<?import javafx.collections.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
@@ -36,12 +34,12 @@
                </font>
             </Label>
             <MFXTextField fx:id="cccdTextField" layoutX="161.0" layoutY="8.0" prefHeight="26.0" prefWidth="327.0" styleClass="customer-info-text-field" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="0.0" />
-            <MFXButton layoutX="418.0" layoutY="2.0" mnemonicParsing="false" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: grey; -fx-cursor: hand" text="Kiểm tra" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="-1">
+            <MFXButton onMouseClicked="#checkCustomerInfo" layoutX="418.0" layoutY="2.0" mnemonicParsing="false" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: grey; -fx-cursor: hand" text="Kiểm tra" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="-1">
                <font>
                   <Font size="14.0" />
                </font>
             </MFXButton>
-            <MFXRadioButton fx:id="cccdRatio" userData="CCCD" layoutX="170.0" layoutY="36.0" mnemonicParsing="false" text="CCCD" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="30.0">
+            <MFXRadioButton fx:id="cccdRadio" layoutX="170.0" layoutY="36.0" mnemonicParsing="false" text="CCCD" userData="CCCD" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="30.0">
                <font>
                   <Font size="13.0" />
                </font>
@@ -49,7 +47,7 @@
                   <ToggleGroup fx:id="IDGroup" />
                </toggleGroup>
             </MFXRadioButton>
-            <MFXRadioButton fx:id="hochieuRatio" userData="Hộ chiếu" layoutX="264.0" layoutY="36.0" mnemonicParsing="false" text="Hộ chiếu" toggleGroup="$IDGroup" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="30.0">
+            <MFXRadioButton fx:id="hochieuRadio" layoutX="264.0" layoutY="36.0" mnemonicParsing="false" text="Hộ chiếu" toggleGroup="$IDGroup" userData="Hộ chiếu" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="30.0">
                <font>
                   <Font size="13.0" />
                </font>
@@ -58,7 +56,7 @@
       </AnchorPane>
       <AnchorPane layoutX="11.0" layoutY="64.0" prefHeight="32.0" prefWidth="498.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="31.0" layoutY="9.0" prefWidth="498.0" text="Không tìm thấy không tin khách hàng" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="31.0" layoutY="9.0" prefWidth="498.0" text="Không tìm thấy không tin khách hàng" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="14.0" />
                </font>
@@ -73,7 +71,7 @@
                </font>
             </Label>
             <MFXTextField fx:id="customerNameTextField" layoutX="161.0" layoutY="8.0" prefHeight="26.0" prefWidth="284.0" styleClass="customer-info-text-field" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="0.0" />
-            <MFXRadioButton fx:id="maleRatio" layoutX="390.0" userData="true" layoutY="4.0" mnemonicParsing="false" text="Nam" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="2.0">
+            <MFXRadioButton fx:id="maleRadio" layoutX="390.0" layoutY="4.0" mnemonicParsing="false" text="Nam" userData="true" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="2.0">
                <font>
                   <Font size="13.0" />
                </font>
@@ -81,7 +79,7 @@
                   <ToggleGroup fx:id="genderGroup" />
                </toggleGroup>
             </MFXRadioButton>
-            <MFXRadioButton fx:id="femaleRatio" userData="false" layoutX="456.0" layoutY="3.0" mnemonicParsing="false" text="Nữ" toggleGroup="$genderGroup" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="2.0">
+            <MFXRadioButton fx:id="femaleRadio" layoutX="456.0" layoutY="3.0" mnemonicParsing="false" text="Nữ" toggleGroup="$genderGroup" userData="false" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="2.0">
                <font>
                   <Font size="13.0" />
                </font>
@@ -127,12 +125,12 @@
       </AnchorPane>
       <AnchorPane prefHeight="42.0" prefWidth="601.0">
          <children>
-            <MFXButton fx:id="addCustomerBtn" layoutX="424.0" onMouseClicked="#handleAddCustomer" layoutY="7.0" mnemonicParsing="false" text="Thêm" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
+            <MFXButton fx:id="addCustomerBtn" layoutX="424.0" layoutY="7.0" mnemonicParsing="false" onMouseClicked="#handleAddCustomer" text="Thêm" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="14.0" />
                </font>
             </MFXButton>
-            <MFXButton fx:id="clearBtn" onMouseClicked="#handleClear" layoutX="452.0" mnemonicParsing="false" text="Xóa" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="0.0">
+            <MFXButton fx:id="clearBtn" layoutX="452.0" mnemonicParsing="false" onMouseClicked="#handleClear" text="Xóa" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="14.0" />
                </font>

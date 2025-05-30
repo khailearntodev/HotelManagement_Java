@@ -1,18 +1,15 @@
 package com.example.hotelmanagement.ViewModels;
 
 import com.example.hotelmanagement.DAO.RoomDAO;
-import com.example.hotelmanagement.DTO.ReservationRoomDisplay;
+import com.example.hotelmanagement.DTO.RoomReservationDisplay;
 import com.example.hotelmanagement.Models.Room;
-import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.math.BigDecimal;
-
 public class ReservationViewModel {
-    private final ObservableList<ReservationRoomDisplay> rooms = FXCollections.observableArrayList();
+    private final ObservableList<RoomReservationDisplay> rooms = FXCollections.observableArrayList();
 
-    public ObservableList<ReservationRoomDisplay> getRooms() {
+    public ObservableList<RoomReservationDisplay> getRooms() {
         return rooms;
     }
 
@@ -21,9 +18,7 @@ public class ReservationViewModel {
         var dao = new RoomDAO();
         var roomList = dao.getAll();
         for (Room room : roomList) {
-            rooms.add(new ReservationRoomDisplay(room));
+            rooms.add(new RoomReservationDisplay(room));
         }
     }
-
-
 }

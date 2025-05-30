@@ -1,6 +1,8 @@
 package com.example.hotelmanagement.Views;
 
-import com.example.hotelmanagement.Models.Customer;
+import com.example.hotelmanagement.DAO.EmployeeDAO;
+import com.example.hotelmanagement.DTO.CustomerBookingDisplay;
+import com.example.hotelmanagement.Models.Employee;
 import com.example.hotelmanagement.ViewModels.AddCustomerViewModel;
 import com.example.hotelmanagement.ViewModels.BookingCalendarViewModel;
 import com.example.hotelmanagement.ViewModels.BookingViewModel;
@@ -26,6 +28,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -42,14 +45,20 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class BookingController implements Initializable {
+    @FXML private TableView<CustomerBookingDisplay> customerTableView;
+    @FXML private TableColumn<CustomerBookingDisplay, Integer> colNum;
+    @FXML private TableColumn<CustomerBookingDisplay, String> colPhoneNumber;
+    @FXML private TableColumn<CustomerBookingDisplay, String> colIDNumber;
+    @FXML private TableColumn<CustomerBookingDisplay, String> colName;
+    @FXML private TableColumn<CustomerBookingDisplay, String> colAddress;
     @FXML private MFXButton openAddCustomerBtn;
     @FXML private MFXButton bookingServiceBtn;
     @FXML private MFXTextField bookingNoteTextField;
@@ -67,6 +76,7 @@ public class BookingController implements Initializable {
     private BookingViewModel viewModel;
     private ObservableList<ServiceItem> serviceItems;
     private List<ServiceItem> selectedServices = new ArrayList<>();
+    private ObservableList<CustomerBookingDisplay> customerBookingDisplays = FXCollections.observableArrayList();
 
     public void setViewModel(BookingViewModel viewModel) {
         this.viewModel = viewModel;
@@ -74,8 +84,8 @@ public class BookingController implements Initializable {
     }
 
     private void bindData() {
-        roomNumberLabel.textProperty().bindBidirectional(viewModel.getRoom().roomNumberProperty(), new NumberStringConverter());
-        roomTypeLabel.textProperty().bindBidirectional(viewModel.getRoom().roomTypeNameProperty());
+        roomNumberLabel.textProperty().bindBidirectional(viewModel.getRoomDisplay().roomNumberProperty(), new NumberStringConverter());
+        roomTypeLabel.textProperty().bindBidirectional(viewModel.getRoomDisplay().roomTypeNameProperty());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDateTimeStringConverter converter = new LocalDateTimeStringConverter(formatter, null);
         ObjectProperty<LocalDateTime> dateProperty = new SimpleObjectProperty<>(LocalDateTime.now());
@@ -85,18 +95,19 @@ public class BookingController implements Initializable {
         priceLabel.textProperty().bind(
                 Bindings.createStringBinding(
                         () -> {
-                            BigDecimal price = viewModel.getRoom().roomTypePriceProperty().get();
+                            BigDecimal price = viewModel.getRoomDisplay().roomTypePriceProperty().get();
                             return price != null
                                     ? currencyFormat.format(price) + " VNĐ/đêm"
                                     : "";
                         },
-                        viewModel.getRoom().roomTypePriceProperty()
+                        viewModel.getRoomDisplay().roomTypePriceProperty()
                 )
         );
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        customerTableView.setFixedCellSize(Region.USE_COMPUTED_SIZE);
         serviceItems = FXCollections.observableArrayList(
                 new ServiceItem(new Service("Massage toàn thân", 500000)),
                 new ServiceItem(new Service("Chăm sóc da mặt", 300000)),
@@ -119,6 +130,104 @@ public class BookingController implements Initializable {
                 new ServiceItem(new Service("Trông trẻ", 300000)),
                 new ServiceItem(new Service("Huấn luyện viên cá nhân tại phòng gym", 500000))
         );
+
+        colNum.setCellValueFactory(cell -> cell.getValue().ordinalNumberProperty().asObject());
+        colNum.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    setAlignment(Pos.CENTER);
+                }
+            }
+        });
+
+        colName.setCellValueFactory(cell -> cell.getValue().fullNameProperty());
+        colName.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    setAlignment(Pos.CENTER_LEFT);
+                }
+            }
+        });
+
+        colIDNumber.setCellValueFactory(cell -> cell.getValue().identityNumberProperty());
+        colIDNumber.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    setAlignment(Pos.CENTER);
+                }
+            }
+        });
+
+        colPhoneNumber.setCellValueFactory(cell -> cell.getValue().phoneNumberProperty());
+        colPhoneNumber.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    setAlignment(Pos.CENTER);
+                }
+            }
+        });
+
+        colAddress.setCellValueFactory(cell -> cell.getValue().customerAddressProperty());
+
+        colAddress.setCellFactory(tc -> new TableCell<>() {
+            private final Label label = new Label();
+            {
+                label.setWrapText(true);
+                label.setAlignment(Pos.CENTER_LEFT);
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+                    setPrefHeight(35);
+                } else {
+                    label.setText(item);
+                    double columnWidth = getTableColumn().getWidth();
+                    label.setMaxWidth(columnWidth);
+                    label.setPrefWidth(columnWidth);
+                    setGraphic(label);
+                    setText(null);
+                    setAlignment(Pos.CENTER_LEFT);
+
+                    Platform.runLater(() -> {
+                        Text textNode = new Text(item);
+                        textNode.setFont(label.getFont());
+                        textNode.setWrappingWidth(columnWidth);
+
+                        double textHeight = textNode.getBoundsInLocal().getHeight();
+                        double cellHeight = Math.max(30, textHeight);
+
+                        setPrefHeight(cellHeight);
+                        setMinHeight(cellHeight);
+                        setMaxHeight(cellHeight);
+                    });
+                }
+            }
+        });
 
         Platform.runLater(() -> BookingVBox.requestFocus());
     }
@@ -173,6 +282,27 @@ public class BookingController implements Initializable {
         Node source = (Node) event.getSource();
         Bounds bounds = source.localToScreen(source.getBoundsInLocal());
         popup.show(source, bounds.getMinX(), bounds.getMaxY() + 5);
+    }
+
+    public void saveBooking(MouseEvent mouseEvent) {
+        //
+        Employee employee = new Employee();
+        EmployeeDAO employeeDAO = new EmployeeDAO();
+        employee = employeeDAO.findById(2);
+        //
+        viewModel.getReservation().setRoomID(viewModel.getRoom());
+        viewModel.getReservation().setBasePrice(viewModel.getRoom().getRoomTypeID().getBasePrice());
+        viewModel.getReservation().setEmployeeID(employee);
+        viewModel.getReservation().setCheckInDate(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        viewModel.getReservation().setCheckOutDate(viewModel.getCheckOutDate().get().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        //
+        viewModel.getReservation().setPrice(viewModel.getRoom().getRoomTypeID().getBasePrice());
+        viewModel.getReservation().setTotal(viewModel.getRoom().getRoomTypeID().getBasePrice());
+        //
+        viewModel.getReservation().setNote(bookingNoteTextField.getText());
+        viewModel.addReservation();
+        Stage stage = (Stage) closeIcon.getScene().getWindow();
+        stage.close();
     }
 
     public static class Service {
@@ -304,6 +434,12 @@ public class BookingController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.showAndWait();
+            customerBookingDisplays.clear();
+            for (int i = 0; i < viewModel.getCustomerList().size(); i++) {
+                customerBookingDisplays.add(new CustomerBookingDisplay(viewModel.getCustomerList().get(i), i + 1));
+            }
+            customerTableView.setItems(customerBookingDisplays);
+            customerTableView.refresh();
         } catch (IOException e) {
             e.printStackTrace();
         }

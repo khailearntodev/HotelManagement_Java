@@ -2,7 +2,9 @@ package com.example.hotelmanagement.Views;
 import java.io.IOException;
 import java.util.Locale;
 
-import com.example.hotelmanagement.DTO.ReservationRoomDisplay;
+import com.example.hotelmanagement.DAO.RoomDAO;
+import com.example.hotelmanagement.DTO.RoomReservationDisplay;
+import com.example.hotelmanagement.Models.Room;
 import com.example.hotelmanagement.ViewModels.BookingViewModel;
 import com.example.hotelmanagement.ViewModels.ReservationViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -42,18 +44,18 @@ import lombok.Setter;
 public class ReservationController implements Initializable {
     @FXML private MFXButton searchButton;
     @FXML private AnchorPane anchorPane;
-    @FXML private TableView<ReservationRoomDisplay> bookingTable;
-    @FXML private TableColumn<ReservationRoomDisplay, Integer> colRoomNumber;
-    @FXML private TableColumn<ReservationRoomDisplay, String> colRoomType;
+    @FXML private TableView<RoomReservationDisplay> bookingTable;
+    @FXML private TableColumn<RoomReservationDisplay, Integer> colRoomNumber;
+    @FXML private TableColumn<RoomReservationDisplay, String> colRoomType;
     @FXML private Pagination pagination;
-    @FXML private TableColumn<ReservationRoomDisplay, String> colCheckInOut;
-    @FXML private TableColumn<ReservationRoomDisplay, String> colAmount;
-    @FXML private TableColumn<ReservationRoomDisplay, Integer> colStatus;
-    @FXML private TableColumn<ReservationRoomDisplay, Void> colAction;
-    @FXML private TableColumn<ReservationRoomDisplay, String> colQuantity;
+    @FXML private TableColumn<RoomReservationDisplay, String> colCheckInOut;
+    @FXML private TableColumn<RoomReservationDisplay, String> colAmount;
+    @FXML private TableColumn<RoomReservationDisplay, Integer> colStatus;
+    @FXML private TableColumn<RoomReservationDisplay, Void> colAction;
+    @FXML private TableColumn<RoomReservationDisplay, String> colQuantity;
 
     private final static int ROWS_PER_PAGE = 15;
-    private ObservableList<ReservationRoomDisplay> rooms = FXCollections.observableArrayList();
+    private ObservableList<RoomReservationDisplay> rooms = FXCollections.observableArrayList();
     @Setter
     @Getter
     private ReservationViewModel viewModel = new ReservationViewModel();
@@ -86,7 +88,7 @@ public class ReservationController implements Initializable {
         );
 
         colStatus.setCellValueFactory(cell -> cell.getValue().statusProperty().asObject());
-        colStatus.setCellFactory(cell -> new TableCell<ReservationRoomDisplay, Integer>() {
+        colStatus.setCellFactory(cell -> new TableCell<RoomReservationDisplay, Integer>() {
             private final Label label = new Label();
             @Override
             protected void updateItem(Integer item, boolean empty) {
@@ -144,7 +146,7 @@ public class ReservationController implements Initializable {
                 )
         );*/
 
-        colAction.setCellFactory(col -> new TableCell<ReservationRoomDisplay, Void>() {
+        colAction.setCellFactory(col -> new TableCell<RoomReservationDisplay, Void>() {
             private Button btn;
             private Button subbtn;
             private HBox buttonContainer;
@@ -157,10 +159,8 @@ public class ReservationController implements Initializable {
                 if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
                     return;
                 }
-                ReservationRoomDisplay p = getTableView().getItems().get(getIndex());
-                if (p == null) {
-                    return;
-                }
+                RoomReservationDisplay p = getTableView().getItems().get(getIndex());
+                Room r = new RoomDAO().findById(p.getId());
 
                 btn = new Button();
                 subbtn = new Button();
@@ -171,7 +171,7 @@ public class ReservationController implements Initializable {
 
                 switch (p.getStatus()) {
                     case 1:
-                        setupBookingButton(p);
+                        setupBookingButton(r);
                         buttonContainer.getChildren().add(btn);
                         break;
 
@@ -191,7 +191,7 @@ public class ReservationController implements Initializable {
                 setAlignment(Pos.CENTER);
             }
 
-            private void setupBookingButton(ReservationRoomDisplay p) {
+            private void setupBookingButton(Room p) {
                 btn.setOnAction(ae -> {
                     try {
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingView.fxml"));
@@ -216,7 +216,7 @@ public class ReservationController implements Initializable {
                 btn.getStyleClass().add("booking-button-table-view");
             }
 
-            private void setupCheckoutButton(ReservationRoomDisplay p) {
+            private void setupCheckoutButton(RoomReservationDisplay p) {
                 btn.setOnAction(e -> {
                     System.out.println("Click phòng: " + p.getRoomNumber());
                 });
@@ -225,7 +225,7 @@ public class ReservationController implements Initializable {
                 btn.getStyleClass().add("checkout-button-table-view");
             }
 
-            private void setupConfirmButton(ReservationRoomDisplay p) {
+            private void setupConfirmButton(RoomReservationDisplay p) {
                 btn.setOnAction(e -> {
                     try {
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/ConfirmBookingCodeView.fxml"));
@@ -247,7 +247,7 @@ public class ReservationController implements Initializable {
                 btn.getStyleClass().add("confirm-button-table-view");
             }
 
-            private void setupSubButton(ReservationRoomDisplay p) {
+            private void setupSubButton(RoomReservationDisplay p) {
                 MFXFontIcon icon = new MFXFontIcon("mfx-chevron-down", 10);
                 subbtn.setPrefWidth(25);
                 subbtn.setMinWidth(25);
@@ -351,7 +351,7 @@ public class ReservationController implements Initializable {
     private void updateTableView(int pageIndex) {
         int fromIndex = pageIndex * ROWS_PER_PAGE;
         int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, rooms.size());
-        ObservableList<ReservationRoomDisplay> pageData = FXCollections.observableArrayList();
+        ObservableList<RoomReservationDisplay> pageData = FXCollections.observableArrayList();
         pageData.addAll(rooms.subList(fromIndex, toIndex));
         bookingTable.setItems(pageData);
         bookingTable.refresh();

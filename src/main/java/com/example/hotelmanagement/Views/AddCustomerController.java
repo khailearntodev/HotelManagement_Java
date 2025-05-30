@@ -1,6 +1,5 @@
 package com.example.hotelmanagement.Views;
 
-import com.example.hotelmanagement.DAO.CustomerDAO;
 import com.example.hotelmanagement.Models.Customer;
 import com.example.hotelmanagement.Models.Customertype;
 import com.example.hotelmanagement.ViewModels.AddCustomerViewModel;
@@ -8,21 +7,16 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXRadioButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import io.github.palexdev.virtualizedfx.cell.Cell;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListCell;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import javafx.util.converter.LocalDateStringConverter;
-import javafx.util.converter.LocalDateTimeStringConverter;
-import lombok.Setter;
 
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -33,11 +27,12 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class AddCustomerController implements Initializable {
+    @FXML private Label messageLabel;
     @FXML private ToggleGroup IDGroup;
-    @FXML private MFXRadioButton hochieuRatio;
-    @FXML private MFXRadioButton cccdRatio;
-    @FXML private MFXRadioButton maleRatio;
-    @FXML private MFXRadioButton femaleRatio;
+    @FXML private MFXRadioButton hochieuRadio;
+    @FXML private MFXRadioButton cccdRadio;
+    @FXML private MFXRadioButton maleRadio;
+    @FXML private MFXRadioButton femaleRadio;
     @FXML private ToggleGroup genderGroup;
     @FXML private MFXTextField addressTextField;
     @FXML private MFXComboBox<Customertype> customerTypeCombobox;
@@ -60,7 +55,7 @@ public class AddCustomerController implements Initializable {
     private void bindViewModel() {
         viewModel.getCustomerItem().genderProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                genderGroup.selectToggle(newVal ? maleRatio : femaleRatio);
+                genderGroup.selectToggle(newVal ? maleRadio : femaleRadio);
             }
         });
 
@@ -72,7 +67,7 @@ public class AddCustomerController implements Initializable {
 
         viewModel.getCustomerItem().identityTypeProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
-                IDGroup.selectToggle(newVal.equals("CCCD") ? cccdRatio : hochieuRatio);
+                IDGroup.selectToggle(newVal.equals("CCCD") ? cccdRadio : hochieuRadio);
             }
         });
 
@@ -81,8 +76,8 @@ public class AddCustomerController implements Initializable {
                 viewModel.getCustomerItem().setIdentityType(stringVal);
             }
         });
-        IDGroup.selectToggle(viewModel.getCustomerItem().getIdentityType().equals("CCCD") ? cccdRatio : hochieuRatio);
-        genderGroup.selectToggle(viewModel.getCustomerItem().getGender() ? maleRatio : femaleRatio);
+        IDGroup.selectToggle(viewModel.getCustomerItem().getIdentityType().equals("CCCD") ? cccdRadio : hochieuRadio);
+        genderGroup.selectToggle(viewModel.getCustomerItem().getGender() ? maleRadio : femaleRadio);
         cccdTextField.textProperty().bindBidirectional(viewModel.getCustomerItem().identityNumberProperty());
         customerNameTextField.textProperty().bindBidirectional(viewModel.getCustomerItem().fullNameProperty());
         phoneNumberTextField.textProperty().bindBidirectional(viewModel.getCustomerItem().phoneNumberProperty());
@@ -124,6 +119,21 @@ public class AddCustomerController implements Initializable {
         Locale.setDefault(vietnameseLocale);
         setupMFXDatePicker();
         Platform.runLater(() -> AddCustomerVBox.requestFocus());
+        messageLabel.setVisible(false);
+        setInfoTextFieldDisable(true);
+    }
+
+    public void setInfoTextFieldDisable(boolean disable) {
+        cccdTextField.setDisable(!disable);
+        customerNameTextField.setDisable(disable);
+        phoneNumberTextField.setDisable(disable);
+        addressTextField.setDisable(disable);
+        dobDatepicker.setDisable(disable);
+        customerTypeCombobox.setDisable(disable);
+        femaleRadio.setDisable(disable);
+        hochieuRadio.setDisable(!disable);
+        maleRadio.setDisable(disable);
+        cccdRadio.setDisable(!disable);
     }
 
     private void setupMFXDatePicker() {
@@ -166,11 +176,6 @@ public class AddCustomerController implements Initializable {
     }
 
     public void handleAddCustomer(MouseEvent mouseEvent) {
-        System.out.println(cccdTextField.getText());
-        System.out.println(customerNameTextField.getText());
-        System.out.println(dobDatepicker.getValue());
-        System.out.println("Customer Type: " + customerTypeCombobox.getValue().getId());
-
         Customer customer = new Customer();
         customer.setIdentityNumber(cccdTextField.getText());
         customer.setFullName(customerNameTextField.getText());
@@ -181,12 +186,33 @@ public class AddCustomerController implements Initializable {
         customer.setCustomerTypeID(customerTypeCombobox.getValue());
         customer.setDateOfBirth(dobDatepicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
+        setInfoTextFieldDisable(true);
+        messageLabel.setVisible(false);
         viewModel.getParent().getCustomerList().add(customer);
-        System.out.println(viewModel.getParent().getCustomerList().size());
+        viewModel.resetCustomer();
+        bindViewModel();
+        setupCustomerTypeComboBox();
     }
 
     public void handleClear(MouseEvent mouseEvent) {
         viewModel.resetCustomer();
+        bindViewModel();
+        setupCustomerTypeComboBox();
+        setInfoTextFieldDisable(true);
+        messageLabel.setVisible(false);
+    }
+
+    public void checkCustomerInfo(MouseEvent mouseEvent) {
+        setInfoTextFieldDisable(false);
+        boolean found = viewModel.isCustomerExist(cccdTextField.getText(), IDGroup.getSelectedToggle().getUserData().toString());
+        messageLabel.setVisible(true);
+        if (found) {
+            messageLabel.setText("Tồn tại thông tin khách hàng");
+            messageLabel.setStyle("-fx-text-fill: green;");
+        } else {
+            messageLabel.setText("Không tồn tại thông tin khách hàng");
+            messageLabel.setStyle("-fx-text-fill: black;");
+        }
         bindViewModel();
         setupCustomerTypeComboBox();
     }

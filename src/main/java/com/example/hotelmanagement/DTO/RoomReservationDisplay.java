@@ -5,7 +5,7 @@ import javafx.beans.property.*;
 
 import java.math.BigDecimal;
 
-public class ReservationRoomDisplay {
+public class RoomReservationDisplay {
     private final IntegerProperty id;
     private final IntegerProperty roomNumber;
     private final StringProperty note;
@@ -15,7 +15,7 @@ public class ReservationRoomDisplay {
     private final StringProperty roomTypeName;
     private final ObjectProperty<BigDecimal> roomTypePrice;
 
-    public ReservationRoomDisplay(Room room) {
+    public RoomReservationDisplay(Room room) {
         this.id = new SimpleIntegerProperty(room.getId());
         this.roomNumber = new SimpleIntegerProperty(room.getRoomNumber());
         this.note = new SimpleStringProperty(room.getNote());

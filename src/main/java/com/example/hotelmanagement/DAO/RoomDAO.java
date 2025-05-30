@@ -19,9 +19,17 @@ public class RoomDAO {
     // Tìm phòng theo ID
     public Room findById(int id) {
         try (Session session = HibernateUtils.getSession()) {
-            return session.get(Room.class, id);
+            return session.createQuery("""
+            SELECT r FROM Room r
+            JOIN FETCH r.roomTypeID
+            WHERE r.id = :id
+        """, Room.class)
+                    .setParameter("id", id)
+                    .uniqueResult();
         }
     }
+
+
 
     // Thêm phòng mới
     public boolean save(Room room) {
