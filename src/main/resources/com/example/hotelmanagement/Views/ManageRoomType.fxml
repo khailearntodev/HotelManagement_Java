@@ -120,7 +120,7 @@
                                           <Font name="Arial Bold" size="23.0" />
                                        </font>
                                     </Label>
-                                    <MFXButton prefHeight="25.0" prefWidth="85.0" rippleColor="#1a2ab9" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" text="Chỉnh sửa" />
+                                    <MFXButton prefHeight="25.0" prefWidth="85.0" rippleColor="#1a2ab9" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Chỉnh sửa" />
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -172,15 +172,18 @@
                      <children>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <HBox prefHeight="55.0" prefWidth="314.0">
+                              <HBox prefHeight="55.0" prefWidth="314.0" style="-fx-background-color: #fff;">
                                  <children>
                                     <MFXButton text="Phòng" />
-                                    <MFXButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" onAction="#handleAddRoomType" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" text="Thêm phòng">
+                                    <MFXButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" onAction="#handleAddRoomType" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Thêm phòng">
                                        <HBox.margin>
                                           <Insets left="130.0" />
                                        </HBox.margin>
                                     </MFXButton>
                                  </children>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
                               </HBox>
                               <MFXTableView prefHeight="266.0" prefWidth="314.0" />
                            </children>
