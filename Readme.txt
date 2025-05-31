@@ -8,6 +8,5 @@ Cấu trúc package MVVM:
 - Folder CSS chứa các file CSS nếu dùng
 - Phần hibernate.cfg.xml nhớ thay đổi CSDL, mỗi mapping sẽ là 1 Models (tạm thời giai đoạn này chưa cần quan tâm)
 - Có cập nhật gì ở file pom hay hệ thong nhớ báo laại vào nhóm
-- Chưa làm phần Icon, sau này sẽ tìm hiểu thêm
 - Kich thuoc:
 + UserControl: Height="660" Width="1060"
