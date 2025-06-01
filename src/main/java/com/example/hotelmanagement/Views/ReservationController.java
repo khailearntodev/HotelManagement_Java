@@ -1,16 +1,20 @@
 package com.example.hotelmanagement.Views;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 import com.example.hotelmanagement.DAO.RoomDAO;
 import com.example.hotelmanagement.DTO.RoomReservationDisplay;
 import com.example.hotelmanagement.Models.Room;
+import com.example.hotelmanagement.Models.Roomtype;
 import com.example.hotelmanagement.ViewModels.BookingViewModel;
 import com.example.hotelmanagement.ViewModels.ReservationViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -38,10 +42,12 @@ import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.Setter;
 
 public class ReservationController implements Initializable {
+    @FXML private MFXComboBox<Roomtype> comboBoxRoomType;
     @FXML private MFXButton searchButton;
     @FXML private AnchorPane anchorPane;
     @FXML private TableView<RoomReservationDisplay> bookingTable;
@@ -65,19 +71,25 @@ public class ReservationController implements Initializable {
         viewModel.loadFromModel();
         this.rooms = viewModel.getRooms();
         Platform.runLater(() -> anchorPane.requestFocus());
+
+        comboBoxRoomType.setItems(viewModel.getRoomTypes());
+        comboBoxRoomType.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Roomtype roomtype) {
+                return roomtype != null ? roomtype.getTypeName() : "";
+            }
+
+            @Override
+            public Roomtype fromString(String string) {
+                return null;
+            }
+        });
+
         colRoomNumber.setCellValueFactory(cellData -> cellData.getValue().roomNumberProperty().asObject());
         colRoomType.setCellValueFactory(cell -> cell.getValue().roomTypeNameProperty());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        /*colCheckInOut.setCellValueFactory(cell ->
-                Bindings.createStringBinding(() -> {
-                            LocalDateTime checkInDate = cell.getValue().thoigianCheckInProperty().get();
-                            LocalDateTime checkOutDate = cell.getValue().thoigianCheckOutProperty().get();
-                            return (checkInDate != null && checkOutDate != null) ? checkInDate.format(formatter) + " - " + checkOutDate.format(formatter) : "";
-                            },
-                        cell.getValue().thoigianCheckInProperty()
-                )
-        );*/
+        colCheckInOut.setCellValueFactory(cell -> cell.getValue().checkInOutDateProperty());
 
         NumberFormat Numformatter = NumberFormat.getInstance(new Locale("vi", "VN"));
         colAmount.setCellValueFactory(cell ->
@@ -139,12 +151,22 @@ public class ReservationController implements Initializable {
             }
         });
 
-        /*colQuantity.setCellValueFactory(cell ->
-                Bindings.createStringBinding(
-                        () -> Numformatter.format(cell.getValue().slProperty().get()),
-                        cell.getValue().slProperty()
-                )
-        );*/
+        colQuantity.setCellValueFactory(cell -> {
+            var item = cell.getValue();
+            var quantityProp = item.quantityProperty();
+
+            if (quantityProp.getValue() == 0) {
+                return new SimpleStringProperty("");
+            }
+
+            return Bindings.createStringBinding(
+                    () -> {
+                        Integer sl = quantityProp.getValue();
+                        return (sl == null) ? "" : Numformatter.format(sl);
+                    },
+                    quantityProp
+            );
+        });
 
         colAction.setCellFactory(col -> new TableCell<RoomReservationDisplay, Void>() {
             private Button btn;
@@ -160,6 +182,10 @@ public class ReservationController implements Initializable {
                     return;
                 }
                 RoomReservationDisplay p = getTableView().getItems().get(getIndex());
+                p.statusProperty().addListener((obs, oldVal, newVal) -> {
+                    bookingTable.refresh();
+                });
+
                 Room r = new RoomDAO().findById(p.getId());
 
                 btn = new Button();
@@ -341,14 +367,14 @@ public class ReservationController implements Initializable {
         int pageCount = (int) Math.ceil(rooms.size() * 1.0 / ROWS_PER_PAGE);
         pagination.setPageCount(pageCount);
         pagination.setPageFactory(pageIndex -> {
-            updateTableView(pageIndex);
+            myUpdateTableView(pageIndex);
             return new AnchorPane();
         });
 
-        updateTableView(0);
+        myUpdateTableView(0);
     }
 
-    private void updateTableView(int pageIndex) {
+    private void myUpdateTableView(int pageIndex) {
         int fromIndex = pageIndex * ROWS_PER_PAGE;
         int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, rooms.size());
         ObservableList<RoomReservationDisplay> pageData = FXCollections.observableArrayList();

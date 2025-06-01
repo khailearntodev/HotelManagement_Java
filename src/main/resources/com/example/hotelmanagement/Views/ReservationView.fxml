@@ -17,13 +17,6 @@
         <MFXComboBox fx:id="comboBoxRoomType" prefWidth="220"
                      AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"
                      floatingText="Loại phòng" floatMode="BORDER" focusTraversable="false">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Phòng cơ bản"/>
-                    <String fx:value="Phòng hạng sang"/>
-                    <String fx:value="Phòng cao cấp"/>
-                </FXCollections>
-            </items>
         </MFXComboBox>
 
         <MFXComboBox fx:id="comboBoxStatus" prefWidth="80"

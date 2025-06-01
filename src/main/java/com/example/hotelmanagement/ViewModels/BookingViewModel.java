@@ -3,6 +3,7 @@ package com.example.hotelmanagement.ViewModels;
 import com.example.hotelmanagement.DAO.CustomerDAO;
 import com.example.hotelmanagement.DAO.ReservationDAO;
 import com.example.hotelmanagement.DAO.ReservationGuestDAO;
+import com.example.hotelmanagement.DAO.RoomDAO;
 import com.example.hotelmanagement.DTO.RoomReservationDisplay;
 import com.example.hotelmanagement.Models.Customer;
 import com.example.hotelmanagement.Models.Reservation;
@@ -16,6 +17,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 
 public class BookingViewModel {
     @Getter
@@ -58,6 +61,16 @@ public class BookingViewModel {
             guestReservation.setReservationID(reservation);
             guestReservation.setCustomerID(guest);
             reservationGuestDAO.save(guestReservation);
+        }
+        room.setStatus(2);
+        RoomDAO roomDAO = new RoomDAO();
+        roomDAO.update(room);
+        RoomReservationDisplay roomReservationDisplay = parent.getRooms().stream().filter(e -> e.getId() == room.getId()).findFirst().orElse(null);
+        if (roomReservationDisplay != null) {
+            roomReservationDisplay.setStatus(2);
+            roomReservationDisplay.setQuantity(customerList.size());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            roomReservationDisplay.setCheckInOutDate(LocalDate.now().format(formatter)  + " - " + checkOutDate.get().format(formatter));
         }
     }
 }
