@@ -1,9 +1,13 @@
 package com.example.hotelmanagement.Views;
 
+import com.example.hotelmanagement.DAO.RoomDAO;
+import com.example.hotelmanagement.DTO.RoomReservationDisplay;
+import com.example.hotelmanagement.Models.Room;
+import com.example.hotelmanagement.ViewModels.BookingInAdvanceInvoiceViewModel;
+import com.example.hotelmanagement.ViewModels.BookingInAdvanceViewModel;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,8 +15,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
@@ -25,70 +27,40 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class BookingInAdvanceController implements Initializable {
+    @FXML private MFXTextField addressTextField;
+    @FXML private MFXTextField phoneNumberTextField;
+    @FXML private MFXTextField customerNameTextField;
     @FXML private MFXDatePicker checkOutPicker;
     @FXML private MFXDatePicker checkInPicker;
     @FXML private TilePane tilePane;
-    @FXML private VBox BookingInAdvanceVBox;
+    @FXML
+    private VBox BookingInAdvanceVBox;
 
-    VBox selectedItem = null;
+    @Setter
+    BookingInAdvanceViewModel viewModel;
 
     private void chonItem(VBox item) {
-        /*if (selectedItem != null) {
-            selectedItem.getStyleClass().remove("room-container-selected");
+        if (viewModel.getSelectedItem() != null) {
+            viewModel.getSelectedItem().getStyleClass().remove("room-container-selected");
         }
-        selectedItem = item;
-        selectedItem.getStyleClass().add("room-container-selected");
-        var p = (ReservationController.PhongTest) selectedItem.getUserData();
-        System.out.println(p.getSoPhong());*/
+        viewModel.setSelectedItem(item);
+        viewModel.getSelectedItem().getStyleClass().add("room-container-selected");
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        /*ObservableList<ReservationController.PhongTest> danhSachPhong = FXCollections.observableArrayList(
-                new ReservationController.PhongTest("101", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 800000, "Trống", 1),
-                new ReservationController.PhongTest("102", "Standard", LocalDateTime.now(), LocalDateTime.now(), 500000, "Trống", 1),
-                new ReservationController.PhongTest("103", "Suite", LocalDateTime.now(), LocalDateTime.now(), 1200000, "Trống", 1),
-                new ReservationController.PhongTest("104", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 750000, "Trống", 1),
-                new ReservationController.PhongTest("105", "Standard", LocalDateTime.now(), LocalDateTime.now(), 480000, "Trống", 1),
-                new ReservationController.PhongTest("101", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 800000, "Trống", 1),
-                new ReservationController.PhongTest("102", "Standard", LocalDateTime.now(), LocalDateTime.now(), 500000, "Trống", 1),
-                new ReservationController.PhongTest("103", "Suite", LocalDateTime.now(), LocalDateTime.now(), 1200000, "Trống", 1),
-                new ReservationController.PhongTest("104", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 750000, "Trống", 1),
-                new ReservationController.PhongTest("105", "Standard", LocalDateTime.now(), LocalDateTime.now(), 480000, "Trống", 1),
-                new ReservationController.PhongTest("101", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 800000, "Trống", 1),
-                new ReservationController.PhongTest("102", "Standard", LocalDateTime.now(), LocalDateTime.now(), 500000, "Trống", 1),
-                new ReservationController.PhongTest("103", "Suite", LocalDateTime.now(), LocalDateTime.now(), 1200000, "Trống", 1),
-                new ReservationController.PhongTest("104", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 750000, "Trống", 1),
-                new ReservationController.PhongTest("105", "Standard", LocalDateTime.now(), LocalDateTime.now(), 480000, "Trống", 1),
-                new ReservationController.PhongTest("101", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 800000, "Trống", 1),
-                new ReservationController.PhongTest("102", "Standard", LocalDateTime.now(), LocalDateTime.now(), 500000, "Trống", 1),
-                new ReservationController.PhongTest("103", "Suite", LocalDateTime.now(), LocalDateTime.now(), 1200000, "Trống", 1),
-                new ReservationController.PhongTest("104", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 750000, "Trống", 1),
-                new ReservationController.PhongTest("105", "Standard", LocalDateTime.now(), LocalDateTime.now(), 480000, "Trống", 1),
-                new ReservationController.PhongTest("101", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 800000, "Trống", 1),
-                new ReservationController.PhongTest("102", "Standard", LocalDateTime.now(), LocalDateTime.now(), 500000, "Trống", 1),
-                new ReservationController.PhongTest("103", "Suite", LocalDateTime.now(), LocalDateTime.now(), 1200000, "Trống", 1),
-                new ReservationController.PhongTest("104", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 750000, "Trống", 1),
-                new ReservationController.PhongTest("105", "Standard", LocalDateTime.now(), LocalDateTime.now(), 480000, "Trống", 1),
-                new ReservationController.PhongTest("101", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 800000, "Trống", 1),
-                new ReservationController.PhongTest("102", "Standard", LocalDateTime.now(), LocalDateTime.now(), 500000, "Trống", 1),
-                new ReservationController.PhongTest("103", "Suite", LocalDateTime.now(), LocalDateTime.now(), 1200000, "Trống", 1),
-                new ReservationController.PhongTest("104", "Deluxe", LocalDateTime.now(), LocalDateTime.now(), 750000, "Trống", 1),
-                new ReservationController.PhongTest("105", "Standard", LocalDateTime.now(), LocalDateTime.now(), 480000, "Trống", 1)
-        );*/
-
         Locale vietnameseLocale = new Locale("vi", "VN");
         Locale.setDefault(vietnameseLocale);
 
@@ -96,8 +68,12 @@ public class BookingInAdvanceController implements Initializable {
 
         setupMFXDatePicker(checkOutPicker);
         setupMFXDatePicker(checkInPicker);
+    }
 
-        /*for (ReservationController.PhongTest phong : danhSachPhong) {
+    public void initializeRoomDisplays() {
+        tilePane.getChildren().clear();
+
+        for (RoomReservationDisplay phong : viewModel.getRoomReservationDisplays()) {
             VBox container = new VBox();
             container.setCursor(Cursor.HAND);
             container.setPrefSize(235, 85);
@@ -106,18 +82,18 @@ public class BookingInAdvanceController implements Initializable {
             HBox header = new HBox();
             header.setStyle("-fx-background-color: #2356eb; -fx-background-radius: 5 5 0 0;");
             header.setMinHeight(25);
-            Text headerText = new Text("Phòng " + phong.getSoPhong());
+            Text headerText = new Text("Phòng " + phong.getRoomNumber());
             headerText.setFill(Color.WHITE);
             headerText.setFont(Font.font(null, FontWeight.MEDIUM, 17));
             header.setAlignment(Pos.CENTER);
             header.getChildren().add(headerText);
 
             VBox info = new VBox(2);
-            Text loaiPhong = new Text("Loại phòng: " + phong.getLoaiPhong());
+            Text loaiPhong = new Text("Loại phòng: " + phong.getRoomType().getTypeName());
             loaiPhong.setFont(Font.font(null, FontWeight.MEDIUM, 15));
 
             NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
-            Text gia = new Text("Giá: " + formatter.format(phong.getDonGia()) + " đồng/đêm");
+            Text gia = new Text("Giá: " + formatter.format(phong.getRoomType().getBasePrice()) + " đồng/đêm");
             gia.setFont(Font.font(15));
 
             info.getChildren().addAll(loaiPhong, gia);
@@ -127,7 +103,12 @@ public class BookingInAdvanceController implements Initializable {
             container.setOnMouseClicked(event -> chonItem(container));
             container.setUserData(phong);
             tilePane.getChildren().add(container);
-        }*/
+        }
+    }
+
+    public void setViewModel(BookingInAdvanceViewModel viewModel) {
+        this.viewModel = viewModel;
+        Platform.runLater(this::initializeRoomDisplays);
     }
 
     public void handleClose(MouseEvent mouseEvent) {
@@ -175,14 +156,31 @@ public class BookingInAdvanceController implements Initializable {
             Parent root = bookingNotefxmlLoader.load();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
-
-            Stage stage = new Stage();
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(scene);
-            stage.showAndWait();
+            if (viewModel.getSelectedItem().getUserData() instanceof RoomReservationDisplay roomReservationDisplay) {
+                Room room = new RoomDAO().findById(roomReservationDisplay.getId());
+                BookingInAdvanceInvoiceViewModel vm = new BookingInAdvanceInvoiceViewModel(room, viewModel.getCheckInDate(), viewModel.getCheckOutDate(), customerNameTextField.getText(), addressTextField.getText(), phoneNumberTextField.getText());
+                vm.setParent(viewModel);
+                BookingInAdvanceInvoiceController controller = bookingNotefxmlLoader.getController();
+                controller.setViewModel(vm);
+                Stage stage = new Stage();
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);
+                stage.showAndWait();
+                viewModel.findRoom();
+                initializeRoomDisplays();
+            }
         } catch (IOException exception) {
             exception.printStackTrace();
+        }
+    }
+
+    public void handleFindRooms(MouseEvent mouseEvent) {
+        if (viewModel != null) {
+            viewModel.setCheckInDate(checkInPicker.getValue());
+            viewModel.setCheckOutDate(checkOutPicker.getValue());
+            viewModel.findRoom();
+            initializeRoomDisplays();
         }
     }
 }

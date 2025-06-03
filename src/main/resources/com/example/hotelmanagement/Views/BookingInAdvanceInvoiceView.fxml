@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="bookingInAdvanceInvoiceVBox" prefHeight="532.0" prefWidth="639.0" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.BookingInAdvanceInvoiceController">
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<VBox fx:id="bookingInAdvanceInvoiceVBox" prefHeight="559.0" prefWidth="639.0" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.BookingInAdvanceInvoiceController">
     <children>
         <AnchorPane prefHeight="30">
             <Label alignment="CENTER" style="-fx-font-size: 24; -fx-font-weight: bold" text="Hóa đơn đặt trước" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="5" />
@@ -43,7 +49,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="122.0" layoutY="6.0" text="109" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="0.0">
+            <Label fx:id="roomNumberLabel" layoutX="122.0" layoutY="6.0" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="16.0" />
                </font>
@@ -53,7 +59,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="132.0" layoutY="16.0" text="Phòng VIP đặc biệt mới giá rẻ" AnchorPane.leftAnchor="365.0" AnchorPane.topAnchor="0.0">
+            <Label fx:id="roomTypeName" layoutX="132.0" layoutY="16.0" AnchorPane.leftAnchor="365.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="16.0" />
                </font>
@@ -67,7 +73,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="122.0" layoutY="6.0" text="23/05/2025" AnchorPane.leftAnchor="165.0" AnchorPane.topAnchor="0.0">
+            <Label fx:id="invoiceDateLabel" layoutX="122.0" layoutY="6.0" AnchorPane.leftAnchor="165.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="16.0" />
                </font>
@@ -81,14 +87,36 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="122.0" layoutY="6.0" text="520.000 VNĐ" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="0.0">
+            <Label fx:id="priceLabel" layoutX="122.0" layoutY="6.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="11.0" layoutY="170.0" prefHeight="32.0" prefWidth="598.0" />
+      <AnchorPane layoutX="11.0" layoutY="170.0" prefHeight="69.0" prefWidth="638.0">
+         <children>
+            <Label alignment="CENTER" layoutX="22.0" layoutY="-1.0" style="-fx-font-weight: bold;" text="Ngày bắt đầu thuê:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="32.0" layoutY="9.0" style="-fx-font-weight: bold;" text="Ngày kết thúc thuê:" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="32.0" layoutY="9.0" fx:id="checkinDateLabel" AnchorPane.leftAnchor="170.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="42.0" layoutY="19.0" fx:id="checkoutDateLabel" AnchorPane.leftAnchor="475.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+         </children></AnchorPane>
       <HBox prefHeight="302.0" prefWidth="638.0">
          <children>
             <VBox prefHeight="287.0" prefWidth="287.0">
@@ -125,7 +153,7 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <TextArea editable="false" focusTraversable="false" mouseTransparent="true" prefHeight="186.0" prefWidth="295.0" styleClass="invoice-text-area" text="Nguyễn Văn A&#10;Đ/c: Khu phố 6, tp. Thủ Đức, tp. Hồ Chí Minh&#10;SDT: 0985656231" wrapText="true">
+                  <TextArea editable="false" focusTraversable="false" mouseTransparent="true" prefHeight="186.0" prefWidth="295.0" styleClass="invoice-text-area" fx:id="customerInfoTextArea" wrapText="true">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -140,7 +168,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Label layoutX="142.0" layoutY="11.0" text="520.000 VNĐ" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                        <Label layoutX="142.0" layoutY="11.0" fx:id="totalLabel" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <font>
                               <Font size="17.0" />
                            </font>
@@ -149,7 +177,7 @@
                   </AnchorPane>
                   <AnchorPane prefHeight="46.0" prefWidth="283.0">
                      <children>
-                        <MFXButton fx:id="confirmInvoiceBtn" layoutX="77.0" layoutY="11.0" mnemonicParsing="false" style="-fx-font-weight: bold;" text="Hoàn tất" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
+                        <MFXButton fx:id="confirmInvoiceBtn" onMouseClicked="#handleConfirmInvoice" layoutX="77.0" layoutY="11.0" mnemonicParsing="false" style="-fx-font-weight: bold;" text="Hoàn tất" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                            <font>
                               <Font size="14.0" />
                            </font>

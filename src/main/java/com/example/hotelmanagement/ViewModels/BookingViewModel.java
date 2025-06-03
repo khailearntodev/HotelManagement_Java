@@ -51,8 +51,24 @@ public class BookingViewModel {
         }
     }
 
-    public void addReservation()
+    public void addReservation(String note)
     {
+        //
+        Employee employee = new Employee();
+        EmployeeDAO employeeDAO = new EmployeeDAO();
+        employee = employeeDAO.findById(2);
+        //
+        reservation.setRoomID(room);
+        reservation.setBasePrice(room.getRoomTypeID().getBasePrice());
+        reservation.setEmployeeID(employee);
+        reservation.setCheckInDate(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        reservation.setCheckOutDate(checkOutDate.get().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        //
+        reservation.setPrice(room.getRoomTypeID().getBasePrice());
+        reservation.setTotal(room.getRoomTypeID().getBasePrice());
+        //
+        reservation.setNote(note);
+
         ReservationDAO reservationDAO = new ReservationDAO();
         reservationDAO.save(reservation);
         CustomerDAO customerDAO = new CustomerDAO();

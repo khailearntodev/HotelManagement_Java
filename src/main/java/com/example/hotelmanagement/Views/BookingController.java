@@ -264,22 +264,7 @@ public class BookingController implements Initializable {
     }
 
     public void saveBooking(MouseEvent mouseEvent) {
-        //
-        Employee employee = new Employee();
-        EmployeeDAO employeeDAO = new EmployeeDAO();
-        employee = employeeDAO.findById(2);
-        //
-        viewModel.getReservation().setRoomID(viewModel.getRoom());
-        viewModel.getReservation().setBasePrice(viewModel.getRoom().getRoomTypeID().getBasePrice());
-        viewModel.getReservation().setEmployeeID(employee);
-        viewModel.getReservation().setCheckInDate(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        viewModel.getReservation().setCheckOutDate(viewModel.getCheckOutDate().get().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        //
-        viewModel.getReservation().setPrice(viewModel.getRoom().getRoomTypeID().getBasePrice());
-        viewModel.getReservation().setTotal(viewModel.getRoom().getRoomTypeID().getBasePrice());
-        //
-        viewModel.getReservation().setNote(bookingNoteTextField.getText());
-        viewModel.addReservation();
+        viewModel.addReservation(bookingNoteTextField.getText());
         Stage stage = (Stage) closeIcon.getScene().getWindow();
         stage.close();
     }
@@ -400,7 +385,7 @@ public class BookingController implements Initializable {
 
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
-            BookingCalendarViewModel vm = new BookingCalendarViewModel();
+            BookingCalendarViewModel vm = new BookingCalendarViewModel(viewModel.getRoom());
             vm.setParent(viewModel);
             BookingCalendarController controller = loader.getController();
             controller.setViewModel(vm);

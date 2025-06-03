@@ -25,8 +25,6 @@ public class BookingCalendarController implements Initializable {
     @FXML private Button confirmButton;
 
     private YearMonth currentYearMonth;
-    @Getter
-    private Set<LocalDate> unavailableDates;
     private List<Button> dayButtons;
 
     BookingCalendarViewModel viewModel;
@@ -39,18 +37,7 @@ public class BookingCalendarController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         currentYearMonth = YearMonth.now();
-        unavailableDates = new HashSet<>();
         dayButtons = new ArrayList<>();
-        initializeSampleUnavailableDates();
-        buildCalendar();
-    }
-
-    private void initializeSampleUnavailableDates() {
-        LocalDate today = LocalDate.now();
-        unavailableDates.add(today.plusDays(2));
-        unavailableDates.add(today.plusDays(5));
-        unavailableDates.add(today.plusDays(8));
-        unavailableDates.add(today.plusDays(12));
     }
 
     private void buildCalendar() {
@@ -94,7 +81,7 @@ public class BookingCalendarController implements Initializable {
                         dayButton.getStyleClass().add("today");
                     }
 
-                    if (unavailableDates.contains(buttonDate)) {
+                    if (viewModel.getUnavailableDates().contains(buttonDate)) {
                         dayButton.getStyleClass().add("unavailable");
                     }
 
@@ -103,7 +90,7 @@ public class BookingCalendarController implements Initializable {
                         dayButton.getStyleClass().add("selected");
                     }
 
-                    if (buttonDate.isBefore(today) || (!unavailableDates.isEmpty() && buttonDate.isAfter(Collections.min(unavailableDates)))) {
+                    if (buttonDate.isBefore(today) || (!Objects.requireNonNull(viewModel).getUnavailableDates().isEmpty() && buttonDate.isAfter(Collections.min(viewModel.getUnavailableDates())))) {
                         dayButton.getStyleClass().add("disabled");
                         dayButton.setDisable(true);
                     } else {
@@ -142,7 +129,7 @@ public class BookingCalendarController implements Initializable {
         Button clickedButton = (Button) event.getSource();
         LocalDate clickedDate = (LocalDate) clickedButton.getUserData();
 
-        if (clickedDate != null && !unavailableDates.contains(clickedDate)) {
+        if (clickedDate != null && !viewModel.getUnavailableDates().contains(clickedDate)) {
             dayButtons.forEach(btn -> btn.getStyleClass().remove("selected"));
             if (viewModel != null) {
                 viewModel.setCheckOutDate(clickedDate);
@@ -167,20 +154,5 @@ public class BookingCalendarController implements Initializable {
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
-    }
-
-    public void setUnavailableDates(Set<LocalDate> unavailableDates) {
-        this.unavailableDates = unavailableDates != null ? unavailableDates : new HashSet<>();
-        buildCalendar();
-    }
-
-    public void addUnavailableDate(LocalDate date) {
-        unavailableDates.add(date);
-        buildCalendar();
-    }
-
-    public void removeUnavailableDate(LocalDate date) {
-        unavailableDates.remove(date);
-        buildCalendar();
     }
 }

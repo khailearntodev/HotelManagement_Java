@@ -7,6 +7,8 @@ import com.example.hotelmanagement.DAO.RoomDAO;
 import com.example.hotelmanagement.DTO.RoomReservationDisplay;
 import com.example.hotelmanagement.Models.Room;
 import com.example.hotelmanagement.Models.Roomtype;
+import com.example.hotelmanagement.ViewModels.BookingInAdvanceViewModel;
+import com.example.hotelmanagement.ViewModels.BookingNoteViewModel;
 import com.example.hotelmanagement.ViewModels.BookingViewModel;
 import com.example.hotelmanagement.ViewModels.ReservationViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -348,6 +350,10 @@ public class ReservationController implements Initializable {
                         try {
                             FXMLLoader bookingNotefxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingNoteView.fxml"));
                             Parent root = bookingNotefxmlLoader.load();
+                            BookingNoteViewModel vm = new BookingNoteViewModel(new RoomDAO().findById(p.getId()));
+                            vm.setParent(viewModel);
+                            BookingNoteController controller = bookingNotefxmlLoader.getController();
+                            controller.setViewModel(vm);
                             Scene scene = new Scene(root);
                             scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
 
@@ -449,6 +455,11 @@ public class ReservationController implements Initializable {
 
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
+            BookingInAdvanceViewModel vm = new BookingInAdvanceViewModel();
+            vm.setParent(viewModel);
+            BookingInAdvanceController controller = fxmlLoader.getController();
+            controller.setViewModel(vm);
+            controller.initializeRoomDisplays();
 
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
