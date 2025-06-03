@@ -49,7 +49,7 @@
                 <TableColumn fx:id="colMaDichVu" prefWidth="120" text="Mã dịch vụ" />
                 <TableColumn fx:id="colTenDichVu" prefWidth="220" text="Tên dịch vụ" />
                 <TableColumn fx:id="colGiaDichVu" prefWidth="130" text="Giá dịch vụ" />
-                <TableColumn fx:id="colAction" prefWidth="70" text="Xóa" /> </columns>
+            </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
@@ -91,7 +91,7 @@
                                     <Label style="-fx-text-fill: #555555; -fx-font-size: 15;" text="Giá dịch vụ" />
                                     <TextField fx:id="giaDichVuEditTextField" style="-fx-background-color: #F8F8F8; -fx-border-color: #D0D0D0; -fx-background-radius: 5; -fx-border-radius: 5; -fx-font-size: 15;" />
                                 </VBox>
-                                <Button fx:id="updateServiceButton" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;" text="Cập nhật">
+                                <Button fx:id="updateServiceButton" onAction="#updateService" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;" text="Cập nhật">
                                     <VBox.margin>
                                         <Insets top="10" />
                                     </VBox.margin>
@@ -116,7 +116,7 @@
                                     <Label style="-fx-text-fill: #555555; -fx-font-size: 15;" text="Giá dịch vụ" />
                                     <TextField fx:id="giaDichVuAddTextField" style="-fx-background-color: #F8F8F8; -fx-border-color: #D0D0D0; -fx-background-radius: 5; -fx-border-radius: 5; -fx-font-size: 15;" />
                                 </VBox>
-                                <Button fx:id="addServiceButton" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;" text="Thêm dịch vụ">
+                                <Button fx:id="addServiceButton" onAction="#onAddService" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;" text="Thêm dịch vụ">
                                     <VBox.margin>
                                         <Insets top="10" />
                                     </VBox.margin>

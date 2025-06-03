@@ -51,8 +51,7 @@
             </VBox>
             <VBox HBox.hgrow="ALWAYS" spacing="5.0">
                 <Label text="Địa chỉ:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                <Label fx:id="customerAddressLine1Label" text="74 RUE ANATOLE FRANCENATOLE FRANCE" style="-fx-font-size: 12px;" />
-                <Label fx:id="customerAddressLine2Label" text="LEVALLOIS-PERRET, 92300, France." style="-fx-font-size: 12px;" />
+                <Label fx:id="customerAddress" text="74 RUE ANATOLE FRANCENATOLE FRANCE" style="-fx-font-size: 12px;" />
             </VBox>
         </HBox>
 
@@ -60,14 +59,14 @@
 
         <VBox spacing="5.0">
             <Label text="Chi tiết thuê" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-            <TableView fx:id="roomDetailsTableView" prefHeight="600.0" maxHeight="1000.0" VBox.vgrow="ALWAYS" style="-fx-border-color: #cccccc;">
+            <TableView fx:id="detailTable" prefHeight="600.0" maxHeight="1000.0" VBox.vgrow="ALWAYS" style="-fx-border-color: #cccccc;">
                 <columns>
-                    <TableColumn fx:id="sttColumn" prefWidth="30.0" text="STT" />
-                    <TableColumn fx:id="roomNoColumn" prefWidth="70.0" text="Số phòng" />
-                    <TableColumn fx:id="rentalDaysColumn" prefWidth="70.0" text="Số ngày thuê" />
-                    <TableColumn fx:id="serviceFeeColumn" prefWidth="70.0" text="Tiền dịch vụ" />
-                    <TableColumn fx:id="roomPriceColumn" prefWidth="80.0" text="Đơn giá phòng" />
-                    <TableColumn fx:id="subtotalColumn" prefWidth="100.0" text="Thành tiền" />
+                    <TableColumn fx:id="soThuTuColumn" prefWidth="30.0" text="STT" />
+                    <TableColumn fx:id="soPhongColumn" prefWidth="70.0" text="Số phòng" />
+                    <TableColumn fx:id="soNgayThueColumn" prefWidth="70.0" text="Số ngày thuê" />
+                    <TableColumn fx:id="phiDichVuColumn" prefWidth="70.0" text="Tiền dịch vụ" />
+                    <TableColumn fx:id="donGiaPhongColumn" prefWidth="80.0" text="Đơn giá phòng" />
+                    <TableColumn fx:id="thanhTienColumn" prefWidth="100.0" text="Thành tiền" />
                     <TableColumn fx:id="viewServicesColumn" prefWidth="100.0" text="Xem Dịch vụ" />
                 </columns>
                 <columnResizePolicy>
@@ -84,19 +83,7 @@
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
-            <Label text="Tổng tiền trước thuế:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <Label fx:id="totalHtLabel" text="7036.99" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-            <Label text="Giảm giá:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-            <Label fx:id="discountLabel" text="140" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-            <Label text="Tổng VAT:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-            <Label fx:id="totalVatLabel" text="1457.32" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-
-            <Label text="Thuế (20%):" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-            <Label fx:id="vatAmountLabel" text="1,379.40" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-
-            <Label text="Tổng cộng:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <Label text="Tổng tiền :" GridPane.columnIndex="0" GridPane.rowIndex="0" />
             <Label fx:id="totalDueLabel" text="8276.78" style="-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: orange;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
         </GridPane>
 
