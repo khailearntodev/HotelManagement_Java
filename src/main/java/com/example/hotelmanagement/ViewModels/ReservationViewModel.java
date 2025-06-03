@@ -10,6 +10,11 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ReservationViewModel {
     @Getter
     private final ObservableList<RoomReservationDisplay> masterRooms = FXCollections.observableArrayList();
@@ -17,6 +22,8 @@ public class ReservationViewModel {
     private final FilteredList<RoomReservationDisplay> rooms = new FilteredList<>(masterRooms, p -> true);
     @Getter
     private final ObservableList<Roomtype> roomTypes = FXCollections.observableArrayList();
+    @Getter
+    private final ObservableList<Integer> roomStatus = FXCollections.observableArrayList();
 
     public void loadFromModel() {
         masterRooms.clear();
@@ -26,6 +33,16 @@ public class ReservationViewModel {
             masterRooms.add(new RoomReservationDisplay(room));
         }
         var roomtypeList = new RoomTypeDAO().getAll();
+        Roomtype allRoomType = new Roomtype();
+        allRoomType.setId(-1);
+        allRoomType.setTypeName("Tất cả");
+        allRoomType.setBasePrice(BigDecimal.ZERO);
+        allRoomType.setMaxOccupancy(0);
+        allRoomType.setIsDeleted(false);
+
+        roomTypes.add(allRoomType);
         roomTypes.addAll(roomtypeList);
+
+        roomStatus.addAll(Arrays.asList(0, 1, 2, 3));
     }
 }

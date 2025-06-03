@@ -2,12 +2,12 @@ package com.example.hotelmanagement.DTO;
 
 import com.example.hotelmanagement.Models.Reservation;
 import com.example.hotelmanagement.Models.Room;
+import com.example.hotelmanagement.Models.Roomtype;
 import javafx.beans.property.*;
 
 import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
 
 public class RoomReservationDisplay {
     private final IntegerProperty id;
@@ -17,6 +17,7 @@ public class RoomReservationDisplay {
     private final IntegerProperty quantity;
     private final BooleanProperty isDeleted;
     private final IntegerProperty cleaningStatus;
+    private final ObjectProperty<Roomtype> roomType;
     private final StringProperty roomTypeName;
     private final ObjectProperty<BigDecimal> roomTypePrice;
     private final StringProperty checkInOutDate;
@@ -28,8 +29,9 @@ public class RoomReservationDisplay {
         this.status = new SimpleIntegerProperty(room.getStatus());
         this.isDeleted = new SimpleBooleanProperty(room.getIsDeleted());
         this.cleaningStatus = new SimpleIntegerProperty(room.getCleaningStatus());
-        this.roomTypeName = new SimpleStringProperty(room.getRoomTypeID().getTypeName());
+        this.roomType = new SimpleObjectProperty<>(room.getRoomTypeID());
         this.roomTypePrice = new SimpleObjectProperty<>(room.getRoomTypeID().getBasePrice());
+        this.roomTypeName = new SimpleStringProperty(room.getRoomTypeID().getTypeName());
 
         Reservation reservation = room.getReservations().stream().filter(e -> e.getInvoiceID() == null).findFirst().orElse(null);
         if (reservation == null) {
@@ -50,18 +52,20 @@ public class RoomReservationDisplay {
     public IntegerProperty quantityProperty() { return quantity; }
     public BooleanProperty isDeletedProperty() { return isDeleted; }
     public IntegerProperty cleaningStatusProperty() { return cleaningStatus; }
-    public StringProperty roomTypeNameProperty() { return roomTypeName; }
+    public ObjectProperty<Roomtype> roomTypeProperty() { return roomType; }
     public ObjectProperty<BigDecimal> roomTypePriceProperty() { return roomTypePrice; }
     public StringProperty checkInOutDateProperty() { return checkInOutDate; }
+    public StringProperty roomTypeNameProperty() { return roomTypeName; }
 
     public int getId() { return id.get(); }
     public int getRoomNumber() { return roomNumber.get(); }
     public String getNote() { return note.get(); }
     public int getStatus() { return status.get(); }
+
     public int getQuantity() { return quantity.get(); }
     public boolean getIsDeleted() { return isDeleted.get(); }
     public int getCleaningStatus() { return cleaningStatus.get(); }
-    public String getRoomTypeName() { return roomTypeName.get(); }
+    public Roomtype getRoomType() { return roomType.get(); }
     public BigDecimal getPrice() {return roomTypePrice.get(); }
     public String getCheckInOutDate() { return checkInOutDate.get(); }
 

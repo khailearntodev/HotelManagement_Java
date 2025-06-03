@@ -2,6 +2,7 @@ package com.example.hotelmanagement.Views;
 
 import com.example.hotelmanagement.DAO.EmployeeDAO;
 import com.example.hotelmanagement.DTO.CustomerBookingDisplay;
+import com.example.hotelmanagement.DTO.ServiceBookingReservationDisplay;
 import com.example.hotelmanagement.Models.Employee;
 import com.example.hotelmanagement.ViewModels.AddCustomerViewModel;
 import com.example.hotelmanagement.ViewModels.BookingCalendarViewModel;
@@ -74,12 +75,11 @@ public class BookingController implements Initializable {
     @FXML private ImageView closeIcon;
 
     private BookingViewModel viewModel;
-    private ObservableList<ServiceItem> serviceItems;
-    private List<ServiceItem> selectedServices = new ArrayList<>();
     private ObservableList<CustomerBookingDisplay> customerBookingDisplays = FXCollections.observableArrayList();
 
     public void setViewModel(BookingViewModel viewModel) {
         this.viewModel = viewModel;
+        viewModel.loadService();
         bindData();
     }
 
@@ -108,28 +108,7 @@ public class BookingController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         customerTableView.setFixedCellSize(Region.USE_COMPUTED_SIZE);
-        serviceItems = FXCollections.observableArrayList(
-                new ServiceItem(new Service("Massage toàn thân", 500000)),
-                new ServiceItem(new Service("Chăm sóc da mặt", 300000)),
-                new ServiceItem(new Service("Cắt tóc nam", 150000)),
-                new ServiceItem(new Service("Nhuộm tóc", 400000)),
-                new ServiceItem(new Service("Làm nail", 200000)),
-                new ServiceItem(new Service("Tắm trắng", 800000)),
-                new ServiceItem(new Service("Giặt ủi quần áo", 100000)),
-                new ServiceItem(new Service("Bữa sáng tại phòng", 250000)),
-                new ServiceItem(new Service("Thuê xe đạp", 120000)),
-                new ServiceItem(new Service("Thuê xe máy", 180000)),
-                new ServiceItem(new Service("Đưa đón sân bay", 600000)),
-                new ServiceItem(new Service("Xông hơi/sauna", 350000)),
-                new ServiceItem(new Service("Dọn phòng theo yêu cầu", 50000)),
-                new ServiceItem(new Service("Gọi đồ ăn nhẹ", 150000)),
-                new ServiceItem(new Service("Trà chiều", 180000)),
-                new ServiceItem(new Service("Chụp hình lưu niệm", 400000)),
-                new ServiceItem(new Service("Tổ chức tiệc sinh nhật", 2000000)),
-                new ServiceItem(new Service("Tour du lịch nội thành", 900000)),
-                new ServiceItem(new Service("Trông trẻ", 300000)),
-                new ServiceItem(new Service("Huấn luyện viên cá nhân tại phòng gym", 500000))
-        );
+
 
         colNum.setCellValueFactory(cell -> cell.getValue().ordinalNumberProperty().asObject());
         colNum.setCellFactory(column -> new TableCell<>() {
@@ -241,13 +220,13 @@ public class BookingController implements Initializable {
         Popup popup = new Popup();
         popup.setAutoHide(true);
 
-        ListView<ServiceItem> listView = new ListView<>(serviceItems);
+        ListView<ServiceBookingReservationDisplay> listView = new ListView<>(viewModel.getServices());
         listView.setPrefSize(350, 250);
         listView.setStyle("-fx-background-color: white; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
 
-        listView.setCellFactory(new Callback<ListView<ServiceItem>, ListCell<ServiceItem>>() {
+        listView.setCellFactory(new Callback<ListView<ServiceBookingReservationDisplay>, ListCell<ServiceBookingReservationDisplay>>() {
             @Override
-            public ListCell<ServiceItem> call(ListView<ServiceItem> param) {
+            public ListCell<ServiceBookingReservationDisplay> call(ListView<ServiceBookingReservationDisplay> param) {
                 return new ServiceListCell();
             }
         });
@@ -256,15 +235,15 @@ public class BookingController implements Initializable {
         okBtn.getStyleClass().add("OK-button");
         okBtn.setOnAction(e -> popup.hide());
         popup.setOnHidden(e -> {
-            selectedServices.clear();
-            for (ServiceItem item : serviceItems) {
-                if (item.isSelected.get() && item.getQuantity() > 0) {
-                    selectedServices.add(item);
+            for (ServiceBookingReservationDisplay item : viewModel.getServices()) {
+                if (!item.isSelected() || item.getQuantity() == 0) {
+                    item.setSelected(false);
+                    item.setQuantity(0);
                 }
             }
             System.out.println("Dịch vụ đã chọn:");
-            selectedServices.forEach(item -> System.out.println(
-                    item.service.getName() + " - Số lượng: " + item.getQuantity()
+            viewModel.getServices().forEach(item -> System.out.println(
+                    item.getServiceName() + " - Số lượng: " + item.getQuantity()
             ));
         });
 
@@ -305,45 +284,14 @@ public class BookingController implements Initializable {
         stage.close();
     }
 
-    public static class Service {
-        private final String name;
-        private final int price;
-
-        public Service(String name, int price) {
-            this.name = name;
-            this.price = price;
-        }
-        public String getName() { return name; }
-        public int getPrice() { return price; }
-    }
-
-    public static class ServiceItem {
-        private final Service service;
-        private final BooleanProperty isSelected = new SimpleBooleanProperty(false);
-        private final IntegerProperty quantity = new SimpleIntegerProperty(0);
-
-        public ServiceItem(Service service) {
-            this.service = service;
-        }
-
-        public Service getService() { return service; }
-        public boolean isSelected() { return isSelected.get(); }
-        public void setSelected(boolean selected) { isSelected.set(selected); }
-        public BooleanProperty selectedProperty() { return isSelected; }
-
-        public int getQuantity() { return quantity.get(); }
-        public void setQuantity(int qty) { quantity.set(qty); }
-        public IntegerProperty quantityProperty() { return quantity; }
-    }
-
-    private class ServiceListCell extends ListCell<ServiceItem> {
+    private class ServiceListCell extends ListCell<ServiceBookingReservationDisplay> {
         private HBox root;
         private MFXCheckbox checkBox;
         private Label nameLabel;
         private Label priceLabel;
         private MFXTextField quantityField;
 
-        private ServiceItem currentItem;
+        private ServiceBookingReservationDisplay currentItem;
 
         public ServiceListCell() {
             super();
@@ -399,16 +347,16 @@ public class BookingController implements Initializable {
         }
 
         @Override
-        protected void updateItem(ServiceItem item, boolean empty) {
+        protected void updateItem(ServiceBookingReservationDisplay item, boolean empty) {
             super.updateItem(item, empty);
             if (empty || item == null) {
                 currentItem = null;
                 setGraphic(null);
             } else {
                 currentItem = item;
-                nameLabel.setText(item.getService().getName());
+                nameLabel.setText(item.getServiceName());
                 NumberFormat nf = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
-                priceLabel.setText(nf.format(item.getService().getPrice()) + " VNĐ");
+                priceLabel.setText(nf.format(item.getPrice()) + " VNĐ");
                 checkBox.setSelected(item.isSelected());
                 quantityField.setText(String.valueOf(item.getQuantity()));
                 quantityField.setDisable(!item.isSelected());

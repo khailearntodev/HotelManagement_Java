@@ -11,9 +11,6 @@ public class RoomDAO {
 
     // Lấy danh sách tất cả phòng chưa xóa
     public List<Room> getAll() {
-        ServiceDAO serviceDAO = new ServiceDAO();
-        var s = serviceDAO.getAll();
-        System.out.println(s.size());
         try (Session session = HibernateUtils.getSession()) {
             return session.createQuery(
                     "SELECT DISTINCT r FROM Room r " +

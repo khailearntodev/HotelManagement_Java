@@ -1,7 +1,7 @@
 package com.example.hotelmanagement.Views;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Locale;
+import java.util.*;
 
 import com.example.hotelmanagement.DAO.RoomDAO;
 import com.example.hotelmanagement.DTO.RoomReservationDisplay;
@@ -11,6 +11,7 @@ import com.example.hotelmanagement.ViewModels.BookingViewModel;
 import com.example.hotelmanagement.ViewModels.ReservationViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -31,7 +32,7 @@ import javafx.scene.control.*;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -47,6 +48,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class ReservationController implements Initializable {
+    @FXML private MFXTextField textfieldSearch;
+    @FXML private MFXComboBox<Integer> comboBoxStatus;
     @FXML private MFXComboBox<Roomtype> comboBoxRoomType;
     @FXML private MFXButton searchButton;
     @FXML private AnchorPane anchorPane;
@@ -61,7 +64,6 @@ public class ReservationController implements Initializable {
     @FXML private TableColumn<RoomReservationDisplay, String> colQuantity;
 
     private final static int ROWS_PER_PAGE = 15;
-    private ObservableList<RoomReservationDisplay> rooms = FXCollections.observableArrayList();
     @Setter
     @Getter
     private ReservationViewModel viewModel = new ReservationViewModel();
@@ -69,10 +71,14 @@ public class ReservationController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         viewModel.loadFromModel();
-        this.rooms = viewModel.getRooms();
         Platform.runLater(() -> anchorPane.requestFocus());
 
+        comboBoxRoomType.setOnAction(e -> applyFilter());
+        comboBoxStatus.setOnAction(e -> applyFilter());
+
         comboBoxRoomType.setItems(viewModel.getRoomTypes());
+        comboBoxStatus.setItems(viewModel.getRoomStatus());
+
         comboBoxRoomType.setConverter(new StringConverter<>() {
             @Override
             public String toString(Roomtype roomtype) {
@@ -85,10 +91,30 @@ public class ReservationController implements Initializable {
             }
         });
 
+        comboBoxStatus.setConverter(new StringConverter<>() {
+
+            @Override
+            public String toString(Integer integer) {
+                if (integer == null) return "Tất cả";
+                switch (integer) {
+                    case 0: return "Tất cả";
+                    case 1: return "Còn trống";
+                    case 2: return "Đang thuê";
+                    case 3: return "Được đặt trước";
+                    default: return "";
+                }
+            }
+
+            @Override
+            public Integer fromString(String s) {
+                return 0;
+            }
+        });
+
+        searchButton.setOnAction(e -> applyFilter());
+
         colRoomNumber.setCellValueFactory(cellData -> cellData.getValue().roomNumberProperty().asObject());
         colRoomType.setCellValueFactory(cell -> cell.getValue().roomTypeNameProperty());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
         colCheckInOut.setCellValueFactory(cell -> cell.getValue().checkInOutDateProperty());
 
         NumberFormat Numformatter = NumberFormat.getInstance(new Locale("vi", "VN"));
@@ -364,7 +390,7 @@ public class ReservationController implements Initializable {
 
         String[] statusOptions = {"Còn trống", "Đang thuê", "Được đặt trước"};
 
-        int pageCount = (int) Math.ceil(rooms.size() * 1.0 / ROWS_PER_PAGE);
+        int pageCount = (int) Math.ceil(viewModel.getRooms().size() * 1.0 / ROWS_PER_PAGE);
         pagination.setPageCount(pageCount);
         pagination.setPageFactory(pageIndex -> {
             myUpdateTableView(pageIndex);
@@ -374,11 +400,44 @@ public class ReservationController implements Initializable {
         myUpdateTableView(0);
     }
 
+    public void applyFilter() {
+        Roomtype selectedType = comboBoxRoomType.getSelectionModel().getSelectedItem();
+        Integer selectedStatus = comboBoxStatus.getSelectionModel().getSelectedItem();
+        Set<Integer> roomNumbers = Arrays.stream(textfieldSearch.getText().split(",\\s*"))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty() && s.matches("\\d+"))
+                .map(Integer::parseInt)
+                .collect(Collectors.toSet());
+
+        viewModel.getRooms().setPredicate(room -> {
+            boolean matchesType = (selectedType == null || selectedType.getId() == -1)
+                    || room.getRoomType().getId().equals(selectedType.getId());
+            boolean matchesStatus = (selectedStatus == null || selectedStatus == 0)
+                    || room.getStatus() == selectedStatus;
+            boolean matchesRoomNumber = roomNumbers.isEmpty()
+                    || roomNumbers.contains(room.getRoomNumber());
+            return matchesType && matchesStatus && matchesRoomNumber;
+        });
+
+        updatePagination();
+        myUpdateTableView(0);
+        pagination.setCurrentPageIndex(0);
+    }
+
+    private void updatePagination() {
+        int totalItems = viewModel.getRooms().size();
+        int pageCount = (int) Math.ceil(totalItems * 1.0 / ROWS_PER_PAGE);
+        pageCount = Math.max(1, pageCount);
+
+        System.out.println("Updating pagination: total=" + totalItems + ", pages=" + pageCount);
+        pagination.setPageCount(pageCount);
+    }
+
     private void myUpdateTableView(int pageIndex) {
         int fromIndex = pageIndex * ROWS_PER_PAGE;
-        int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, rooms.size());
+        int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, viewModel.getRooms().size());
         ObservableList<RoomReservationDisplay> pageData = FXCollections.observableArrayList();
-        pageData.addAll(rooms.subList(fromIndex, toIndex));
+        pageData.addAll(viewModel.getRooms().subList(fromIndex, toIndex));
         bookingTable.setItems(pageData);
         bookingTable.refresh();
     }

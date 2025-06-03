@@ -1,14 +1,9 @@
 package com.example.hotelmanagement.ViewModels;
 
-import com.example.hotelmanagement.DAO.CustomerDAO;
-import com.example.hotelmanagement.DAO.ReservationDAO;
-import com.example.hotelmanagement.DAO.ReservationGuestDAO;
-import com.example.hotelmanagement.DAO.RoomDAO;
+import com.example.hotelmanagement.DAO.*;
 import com.example.hotelmanagement.DTO.RoomReservationDisplay;
-import com.example.hotelmanagement.Models.Customer;
-import com.example.hotelmanagement.Models.Reservation;
-import com.example.hotelmanagement.Models.Reservationguest;
-import com.example.hotelmanagement.Models.Room;
+import com.example.hotelmanagement.DTO.ServiceBookingReservationDisplay;
+import com.example.hotelmanagement.Models.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -17,7 +12,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class BookingViewModel {
@@ -31,6 +29,12 @@ public class BookingViewModel {
     private ObservableList<Customer> customerList;
     @Getter
     private Reservation reservation;
+    @Getter
+    private ObservableList<ServiceBookingReservationDisplay> services;
+
+    @Getter
+    @Setter
+    private ObjectProperty<LocalDate> checkOutDate = new SimpleObjectProperty<>();
 
     public BookingViewModel(Room room) {
         reservation = new Reservation();
@@ -39,9 +43,13 @@ public class BookingViewModel {
         this.customerList = FXCollections.observableArrayList();
     }
 
-    @Getter
-    @Setter
-    private ObjectProperty<LocalDate> checkOutDate = new SimpleObjectProperty<>();
+    public void loadService() {
+        List<Service> tmp = new ServiceDAO().getAll();
+        services = FXCollections.observableArrayList();
+        for (Service s : tmp) {
+            services.add(new ServiceBookingReservationDisplay(s));
+        }
+    }
 
     public void addReservation()
     {
@@ -65,6 +73,20 @@ public class BookingViewModel {
         room.setStatus(2);
         RoomDAO roomDAO = new RoomDAO();
         roomDAO.update(room);
+
+        ServiceBookingDAO serviceBookingDAO = new ServiceBookingDAO();
+        for (var item : services) {
+            if (item.isSelected()) {
+                Servicebooking serviceBooking = new Servicebooking();
+                serviceBooking.setReservationID(reservation);
+                serviceBooking.setBookingDate(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                serviceBooking.setQuantity(item.getQuantity());
+                serviceBooking.setServiceID(item.getService());
+                serviceBooking.setStatus("Chưa xử lý");
+                serviceBookingDAO.save(serviceBooking);
+            }
+        }
+
         RoomReservationDisplay roomReservationDisplay = parent.getRooms().stream().filter(e -> e.getId() == room.getId()).findFirst().orElse(null);
         if (roomReservationDisplay != null) {
             roomReservationDisplay.setStatus(2);
