@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 public class BookingInAdvanceInvoiceViewModel {
     private Room room;
@@ -35,6 +36,9 @@ public class BookingInAdvanceInvoiceViewModel {
         preBookingInvoiceDisplay.setName(customerName);
         preBookingInvoiceDisplay.setAddress(customerAddress);
         preBookingInvoiceDisplay.setPhoneNumber(customerPhone);
+        String uuid = UUID.randomUUID().toString();
+        String shortId = uuid.substring(0, 8).toUpperCase();
+        preBookingInvoiceDisplay.setCode(shortId);
 
         this.room = room;
     }
@@ -57,9 +61,7 @@ public class BookingInAdvanceInvoiceViewModel {
         dao.save(invoice);
 
         Prebooking p = new Prebooking();
-        //
-        p.setBookingCode("12345678");
-        //
+        p.setBookingCode(preBookingInvoiceDisplay.getCode());
 
         p.setCustomerName(preBookingInvoiceDisplay.getName());
         p.setInvoiceID(invoice);

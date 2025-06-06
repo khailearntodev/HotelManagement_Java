@@ -1,10 +1,11 @@
 package com.example.hotelmanagement.Views;
 
 import com.example.hotelmanagement.DAO.RoomDAO;
-import com.example.hotelmanagement.DTO.RoomReservationDisplay;
+import com.example.hotelmanagement.DTO.Reservation_RoomDisplay;
 import com.example.hotelmanagement.Models.Room;
 import com.example.hotelmanagement.ViewModels.BookingInAdvanceInvoiceViewModel;
 import com.example.hotelmanagement.ViewModels.BookingInAdvanceViewModel;
+import com.example.hotelmanagement.ViewModels.BookingViewModel;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.application.Platform;
@@ -73,7 +74,7 @@ public class BookingInAdvanceController implements Initializable {
     public void initializeRoomDisplays() {
         tilePane.getChildren().clear();
 
-        for (RoomReservationDisplay phong : viewModel.getRoomReservationDisplays()) {
+        for (Reservation_RoomDisplay phong : viewModel.getRoomReservationDisplays()) {
             VBox container = new VBox();
             container.setCursor(Cursor.HAND);
             container.setPrefSize(235, 85);
@@ -150,37 +151,64 @@ public class BookingInAdvanceController implements Initializable {
         }
     }
 
-    public void showBIAInvoiceView(MouseEvent mouseEvent) {
-        try {
-            FXMLLoader bookingNotefxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingInAdvanceInvoiceView.fxml"));
-            Parent root = bookingNotefxmlLoader.load();
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
-            if (viewModel.getSelectedItem().getUserData() instanceof RoomReservationDisplay roomReservationDisplay) {
-                Room room = new RoomDAO().findById(roomReservationDisplay.getId());
-                BookingInAdvanceInvoiceViewModel vm = new BookingInAdvanceInvoiceViewModel(room, viewModel.getCheckInDate(), viewModel.getCheckOutDate(), customerNameTextField.getText(), addressTextField.getText(), phoneNumberTextField.getText());
-                vm.setParent(viewModel);
-                BookingInAdvanceInvoiceController controller = bookingNotefxmlLoader.getController();
-                controller.setViewModel(vm);
-                Stage stage = new Stage();
-                stage.initStyle(StageStyle.UNDECORATED);
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.setScene(scene);
-                stage.showAndWait();
-                viewModel.findRoom();
-                initializeRoomDisplays();
-            }
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-    }
-
     public void handleFindRooms(MouseEvent mouseEvent) {
         if (viewModel != null) {
             viewModel.setCheckInDate(checkInPicker.getValue());
             viewModel.setCheckOutDate(checkOutPicker.getValue());
             viewModel.findRoom();
             initializeRoomDisplays();
+        }
+    }
+
+    public void nextView(MouseEvent mouseEvent) {
+        if (!checkInPicker.getValue().equals(LocalDate.now())) {
+            try {
+                FXMLLoader bookingNotefxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingInAdvanceInvoiceView.fxml"));
+                Parent root = bookingNotefxmlLoader.load();
+                Scene scene = new Scene(root);
+                scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
+                if (viewModel.getSelectedItem().getUserData() instanceof Reservation_RoomDisplay roomReservationDisplay) {
+                    Room room = new RoomDAO().findById(roomReservationDisplay.getId());
+                    BookingInAdvanceInvoiceViewModel vm = new BookingInAdvanceInvoiceViewModel(room, viewModel.getCheckInDate(), viewModel.getCheckOutDate(), customerNameTextField.getText(), addressTextField.getText(), phoneNumberTextField.getText());
+                    vm.setParent(viewModel);
+                    BookingInAdvanceInvoiceController controller = bookingNotefxmlLoader.getController();
+                    controller.setViewModel(vm);
+                    Stage stage = new Stage();
+                    stage.initStyle(StageStyle.UNDECORATED);
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.setScene(scene);
+                    stage.showAndWait();
+                    viewModel.findRoom();
+                    initializeRoomDisplays();
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        } else {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingView.fxml"));
+                Parent root = fxmlLoader.load();
+                Scene scene = new Scene(root);
+                scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
+                if (viewModel.getSelectedItem().getUserData() instanceof Reservation_RoomDisplay roomReservationDisplay) {
+                    Room room = new RoomDAO().findById(roomReservationDisplay.getId());
+                    BookingViewModel vm = new BookingViewModel(room, true);
+                    vm.setParent(viewModel.getParent());
+                    BookingController controller = fxmlLoader.getController();
+                    controller.setViewModel(vm);
+                    Stage stage = new Stage();
+                    stage.initStyle(StageStyle.UNDECORATED);
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.setScene(scene);
+                    stage.showAndWait();
+                    viewModel.getRoomReservationDisplays().removeIf(r -> r.getId() == room.getId());
+                    viewModel.setSelectedItem(null);
+                    viewModel.findRoom();
+                    initializeRoomDisplays();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

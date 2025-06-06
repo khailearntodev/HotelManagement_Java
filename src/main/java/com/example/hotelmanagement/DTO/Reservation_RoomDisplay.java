@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public class RoomReservationDisplay {
+public class Reservation_RoomDisplay {
     private final IntegerProperty id;
     private final IntegerProperty roomNumber;
     private final StringProperty note;
@@ -22,7 +22,7 @@ public class RoomReservationDisplay {
     private final ObjectProperty<BigDecimal> roomTypePrice;
     private final StringProperty checkInOutDate;
 
-    public RoomReservationDisplay(Room room) {
+    public Reservation_RoomDisplay(Room room) {
         this.id = new SimpleIntegerProperty(room.getId());
         this.roomNumber = new SimpleIntegerProperty(room.getRoomNumber());
         this.note = new SimpleStringProperty(room.getNote());

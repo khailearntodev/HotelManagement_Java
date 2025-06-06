@@ -17,6 +17,7 @@ public class PreBookingInvoiceDisplay {
     private StringProperty name = new SimpleStringProperty();
     private StringProperty phoneNumber = new SimpleStringProperty();
     private StringProperty address = new SimpleStringProperty();
+    private StringProperty code = new SimpleStringProperty();
 
     public int getRoomNumber() {return roomNumber.get();}
     public IntegerProperty roomNumberProperty() {return roomNumber;}
@@ -48,4 +49,7 @@ public class PreBookingInvoiceDisplay {
     public String getAddress() {return address.get();}
     public StringProperty addressProperty() {return address;}
     public void setAddress(String addreas) {this.address.set(addreas);}
+    public String getCode() {return code.get();}
+    public StringProperty codeProperty() {return code;}
+    public void setCode(String code) {this.code.set(code);}
 }

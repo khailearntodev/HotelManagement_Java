@@ -47,12 +47,12 @@
       </AnchorPane>
       <AnchorPane prefHeight="17.0" prefWidth="450.0">
          <children>
-            <Label alignment="CENTER" layoutX="31.0" layoutY="35.0" text="Mã đặt phòng không chính xác" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+            <Label alignment="CENTER" fx:id="message" layoutX="31.0" layoutY="35.0" text="Mã đặt phòng không chính xác" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="36.0" prefWidth="450.0">
          <children>
-            <MFXButton fx:id="confirmBtn_confirmBookingCode" layoutX="218.0" layoutY="10.0" mnemonicParsing="false" text="Xác nhận" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0" />
+            <MFXButton fx:id="confirmBtn_confirmBookingCode" onMouseClicked="#handleConfirm" layoutX="218.0" layoutY="10.0" mnemonicParsing="false" text="Xác nhận" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
     </children>

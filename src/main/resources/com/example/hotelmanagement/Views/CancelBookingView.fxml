@@ -39,7 +39,7 @@
             <children>
                 <Label layoutX="38.0" layoutY="6.0" style="-fx-font-weight: bold;" text="Nhập mã đặt phòng:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="5.0">
                     <font>
-                        <Font size="14.0" />
+                        <Font size="14" />
                     </font>
                 </Label>
                 <MFXTextField fx:id="cancelCodeTextField" layoutX="186.0" layoutY="22.0" AnchorPane.bottomAnchor="0.3999999999999986" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0" />
@@ -47,7 +47,7 @@
         </AnchorPane>
         <AnchorPane prefHeight="17.0" prefWidth="450.0">
             <children>
-                <Label alignment="CENTER" layoutX="31.0" layoutY="35.0" text="Mã đặt phòng không chính xác" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+                <Label alignment="CENTER" layoutX="31.0" fx:id="messageLabel" layoutY="35.0" text="Mã đặt phòng không chính xác" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
             </children>
         </AnchorPane>
         <AnchorPane prefHeight="36.0" prefWidth="450.0">
@@ -76,7 +76,7 @@
                      <font>
                         <Font size="15.0" />
                      </font></Label>
-                  <Label alignment="CENTER" layoutX="175.0" layoutY="10.0" text="Nguyễn Văn A" textAlignment="CENTER">
+                  <Label alignment="CENTER" layoutX="175.0" layoutY="10.0" fx:id="customerName" textAlignment="CENTER">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -98,7 +98,7 @@
                              <Font size="16.0" />
                          </font>
                      </Label>
-                     <Label layoutX="122.0" layoutY="6.0" text="109" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="0.0">
+                     <Label layoutX="122.0" layoutY="6.0" fx:id="roomNumberLabel" AnchorPane.leftAnchor="105.0" AnchorPane.topAnchor="0.0">
                          <font>
                              <Font size="16.0" />
                          </font>
@@ -112,7 +112,7 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="132.0" layoutY="16.0" text="Phòng VIP đặc biệt mới giá rẻ" AnchorPane.leftAnchor="115.0" AnchorPane.topAnchor="0.0">
+                  <Label layoutX="132.0" layoutY="16.0" fx:id="roomTypeNameLabel" AnchorPane.leftAnchor="115.0" AnchorPane.topAnchor="0.0">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -126,7 +126,7 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="132.0" layoutY="16.0" text="30/05/2025 - 03/06/2025" AnchorPane.leftAnchor="185.0" AnchorPane.topAnchor="0.0">
+                  <Label layoutX="132.0" layoutY="16.0" fx:id="startEndDateLabel" AnchorPane.leftAnchor="185.0" AnchorPane.topAnchor="0.0">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -140,7 +140,7 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="132.0" layoutY="16.0" text="580.000 VNĐ" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="0.0">
+                  <Label layoutX="132.0" layoutY="16.0" fx:id="depositLabel" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="0.0">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -150,7 +150,7 @@
          </children>
           <AnchorPane prefHeight="200.0" prefWidth="200.0">
               <children>
-                  <MFXButton mnemonicParsing="false" text="Xác nhận hủy" fx:id="cancelBtn_cancelBookingCode" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="10.0" />
+                  <MFXButton mnemonicParsing="false" text="Xác nhận hủy" fx:id="cancelBtn_cancelBookingCode" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="10.0" onMouseClicked="#handleDeletePreBooking"/>
               </children>
           </AnchorPane>
       </VBox>

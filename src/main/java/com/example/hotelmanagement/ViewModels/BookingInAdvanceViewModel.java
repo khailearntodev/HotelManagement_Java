@@ -3,12 +3,8 @@ package com.example.hotelmanagement.ViewModels;
 import com.example.hotelmanagement.DAO.PrebookingDAO;
 import com.example.hotelmanagement.DAO.ReservationDAO;
 import com.example.hotelmanagement.DAO.RoomDAO;
-import com.example.hotelmanagement.DAO.RoomTypeDAO;
-import com.example.hotelmanagement.DTO.RoomReservationDisplay;
-import com.example.hotelmanagement.Models.Prebooking;
+import com.example.hotelmanagement.DTO.Reservation_RoomDisplay;
 import com.example.hotelmanagement.Models.Room;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
@@ -19,10 +15,10 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BookingInAdvanceViewModel {
     @Setter
+    @Getter
     ReservationViewModel parent;
     @Setter
     @Getter
@@ -31,7 +27,7 @@ public class BookingInAdvanceViewModel {
     @Getter
     private LocalDate checkOutDate;
     @Getter
-    private ObservableList<RoomReservationDisplay> roomReservationDisplays = FXCollections.observableArrayList();
+    private ObservableList<Reservation_RoomDisplay> roomReservationDisplays = FXCollections.observableArrayList();
     @Getter
     @Setter
     VBox selectedItem = null;
@@ -65,7 +61,7 @@ public class BookingInAdvanceViewModel {
                 .filter(r -> !unavailableRoomIds.contains(r.getId()))
                 .toList();
         for (Room room : availableRooms) {
-            roomReservationDisplays.add(new RoomReservationDisplay(room));
+            roomReservationDisplays.add(new Reservation_RoomDisplay(room));
         }
     }
 }

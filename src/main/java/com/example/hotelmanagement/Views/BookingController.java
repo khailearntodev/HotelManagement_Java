@@ -1,9 +1,7 @@
 package com.example.hotelmanagement.Views;
 
-import com.example.hotelmanagement.DAO.EmployeeDAO;
-import com.example.hotelmanagement.DTO.CustomerBookingDisplay;
-import com.example.hotelmanagement.DTO.ServiceBookingReservationDisplay;
-import com.example.hotelmanagement.Models.Employee;
+import com.example.hotelmanagement.DTO.Booking_CustomerDisplay;
+import com.example.hotelmanagement.DTO.Reservation_ServiceBookingDisplay;
 import com.example.hotelmanagement.ViewModels.AddCustomerViewModel;
 import com.example.hotelmanagement.ViewModels.BookingCalendarViewModel;
 import com.example.hotelmanagement.ViewModels.BookingViewModel;
@@ -35,6 +33,7 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 import javafx.util.converter.LocalDateStringConverter;
 import javafx.util.converter.LocalDateTimeStringConverter;
 import javafx.util.converter.NumberStringConverter;
@@ -46,20 +45,18 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class BookingController implements Initializable {
-    @FXML private TableView<CustomerBookingDisplay> customerTableView;
-    @FXML private TableColumn<CustomerBookingDisplay, Integer> colNum;
-    @FXML private TableColumn<CustomerBookingDisplay, String> colPhoneNumber;
-    @FXML private TableColumn<CustomerBookingDisplay, String> colIDNumber;
-    @FXML private TableColumn<CustomerBookingDisplay, String> colName;
-    @FXML private TableColumn<CustomerBookingDisplay, String> colAddress;
+    @FXML private TableView<Booking_CustomerDisplay> customerTableView;
+    @FXML private TableColumn<Booking_CustomerDisplay, Integer> colNum;
+    @FXML private TableColumn<Booking_CustomerDisplay, String> colPhoneNumber;
+    @FXML private TableColumn<Booking_CustomerDisplay, String> colIDNumber;
+    @FXML private TableColumn<Booking_CustomerDisplay, String> colName;
+    @FXML private TableColumn<Booking_CustomerDisplay, String> colAddress;
     @FXML private MFXButton openAddCustomerBtn;
     @FXML private MFXButton bookingServiceBtn;
     @FXML private MFXTextField bookingNoteTextField;
@@ -75,12 +72,38 @@ public class BookingController implements Initializable {
     @FXML private ImageView closeIcon;
 
     private BookingViewModel viewModel;
-    private ObservableList<CustomerBookingDisplay> customerBookingDisplays = FXCollections.observableArrayList();
+    private ObservableList<Booking_CustomerDisplay> customerBookingDisplays = FXCollections.observableArrayList();
 
     public void setViewModel(BookingViewModel viewModel) {
         this.viewModel = viewModel;
         viewModel.loadService();
         bindData();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        StringConverter<LocalDate> converter = new StringConverter<>() {
+            @Override
+            public String toString(LocalDate date) {
+                return (date != null) ? date.format(formatter) : "";
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                try {
+                    return (string != null && !string.isEmpty()) ? LocalDate.parse(string, formatter) : null;
+                } catch (DateTimeParseException e) {
+                    return null;
+                }
+            }
+        };
+
+        Bindings.bindBidirectional(
+                checkoutDateTextfield.textProperty(),
+                viewModel.getCheckOutDate(),
+                converter
+        );
+
+        checkoutDateTextfield.setEditable(viewModel.isCanEdit());
+        calendarButton.setDisable(!viewModel.isCanEdit());
     }
 
     private void bindData() {
@@ -108,7 +131,6 @@ public class BookingController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         customerTableView.setFixedCellSize(Region.USE_COMPUTED_SIZE);
-
 
         colNum.setCellValueFactory(cell -> cell.getValue().ordinalNumberProperty().asObject());
         colNum.setCellFactory(column -> new TableCell<>() {
@@ -220,13 +242,13 @@ public class BookingController implements Initializable {
         Popup popup = new Popup();
         popup.setAutoHide(true);
 
-        ListView<ServiceBookingReservationDisplay> listView = new ListView<>(viewModel.getServices());
+        ListView<Reservation_ServiceBookingDisplay> listView = new ListView<>(viewModel.getServices());
         listView.setPrefSize(350, 250);
         listView.setStyle("-fx-background-color: white; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
 
-        listView.setCellFactory(new Callback<ListView<ServiceBookingReservationDisplay>, ListCell<ServiceBookingReservationDisplay>>() {
+        listView.setCellFactory(new Callback<ListView<Reservation_ServiceBookingDisplay>, ListCell<Reservation_ServiceBookingDisplay>>() {
             @Override
-            public ListCell<ServiceBookingReservationDisplay> call(ListView<ServiceBookingReservationDisplay> param) {
+            public ListCell<Reservation_ServiceBookingDisplay> call(ListView<Reservation_ServiceBookingDisplay> param) {
                 return new ServiceListCell();
             }
         });
@@ -235,7 +257,7 @@ public class BookingController implements Initializable {
         okBtn.getStyleClass().add("OK-button");
         okBtn.setOnAction(e -> popup.hide());
         popup.setOnHidden(e -> {
-            for (ServiceBookingReservationDisplay item : viewModel.getServices()) {
+            for (Reservation_ServiceBookingDisplay item : viewModel.getServices()) {
                 if (!item.isSelected() || item.getQuantity() == 0) {
                     item.setSelected(false);
                     item.setQuantity(0);
@@ -269,14 +291,14 @@ public class BookingController implements Initializable {
         stage.close();
     }
 
-    private class ServiceListCell extends ListCell<ServiceBookingReservationDisplay> {
+    private class ServiceListCell extends ListCell<Reservation_ServiceBookingDisplay> {
         private HBox root;
         private MFXCheckbox checkBox;
         private Label nameLabel;
         private Label priceLabel;
         private MFXTextField quantityField;
 
-        private ServiceBookingReservationDisplay currentItem;
+        private Reservation_ServiceBookingDisplay currentItem;
 
         public ServiceListCell() {
             super();
@@ -332,7 +354,7 @@ public class BookingController implements Initializable {
         }
 
         @Override
-        protected void updateItem(ServiceBookingReservationDisplay item, boolean empty) {
+        protected void updateItem(Reservation_ServiceBookingDisplay item, boolean empty) {
             super.updateItem(item, empty);
             if (empty || item == null) {
                 currentItem = null;
@@ -369,7 +391,7 @@ public class BookingController implements Initializable {
             stage.showAndWait();
             customerBookingDisplays.clear();
             for (int i = 0; i < viewModel.getCustomerList().size(); i++) {
-                customerBookingDisplays.add(new CustomerBookingDisplay(viewModel.getCustomerList().get(i), i + 1));
+                customerBookingDisplays.add(new Booking_CustomerDisplay(viewModel.getCustomerList().get(i), i + 1));
             }
             customerTableView.setItems(customerBookingDisplays);
             customerTableView.refresh();

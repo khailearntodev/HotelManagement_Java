@@ -1,8 +1,8 @@
 package com.example.hotelmanagement.ViewModels;
 
 import com.example.hotelmanagement.DAO.*;
-import com.example.hotelmanagement.DTO.RoomReservationDisplay;
-import com.example.hotelmanagement.DTO.ServiceBookingReservationDisplay;
+import com.example.hotelmanagement.DTO.Reservation_RoomDisplay;
+import com.example.hotelmanagement.DTO.Reservation_ServiceBookingDisplay;
 import com.example.hotelmanagement.Models.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -13,14 +13,15 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class BookingViewModel {
     @Getter
-    private RoomReservationDisplay roomDisplay;
+    private Reservation_RoomDisplay roomDisplay;
     @Getter
     private Room room;
     @Setter
@@ -30,24 +31,43 @@ public class BookingViewModel {
     @Getter
     private Reservation reservation;
     @Getter
-    private ObservableList<ServiceBookingReservationDisplay> services;
+    private ObservableList<Reservation_ServiceBookingDisplay> services;
 
     @Getter
     @Setter
     private ObjectProperty<LocalDate> checkOutDate = new SimpleObjectProperty<>();
 
-    public BookingViewModel(Room room) {
+    @Getter
+    private boolean canEdit;
+
+    public BookingViewModel(Room room, boolean canEdit) {
+        this.canEdit = canEdit;
         reservation = new Reservation();
         this.room = room;
-        this.roomDisplay = new RoomReservationDisplay(room);
+        this.roomDisplay = new Reservation_RoomDisplay(room);
         this.customerList = FXCollections.observableArrayList();
+        if (!canEdit) {
+            Prebooking preBooking = room.getPrebookings().stream()
+                    .filter(e -> e.getReservationID() == null)
+                    .filter(e -> Objects.equals(e.getRoomID().getId(), room.getId()))
+                    .filter(e -> !e.getIsDeleted())
+                    .filter(e -> {
+                        LocalDate checkIn = e.getCheckInDate()
+                                .atZone(ZoneOffset.UTC)
+                                .toLocalDate();
+                        return !checkIn.isAfter(LocalDate.now());
+                    })
+                    .min(Comparator.comparing(Prebooking::getCheckInDate))
+                    .orElse(null);
+            checkOutDate.set(preBooking.getCheckOutDate().atZone(ZoneOffset.UTC).toLocalDate());
+        }
     }
 
     public void loadService() {
         List<Service> tmp = new ServiceDAO().getAll();
         services = FXCollections.observableArrayList();
         for (Service s : tmp) {
-            services.add(new ServiceBookingReservationDisplay(s));
+            services.add(new Reservation_ServiceBookingDisplay(s));
         }
     }
 
@@ -103,7 +123,25 @@ public class BookingViewModel {
             }
         }
 
-        RoomReservationDisplay roomReservationDisplay = parent.getRooms().stream().filter(e -> e.getId() == room.getId()).findFirst().orElse(null);
+        Prebooking preBooking = room.getPrebookings().stream()
+                .filter(e -> e.getReservationID() == null)
+                .filter(e -> Objects.equals(e.getRoomID().getId(), room.getId()))
+                .filter(e -> !e.getIsDeleted())
+                .filter(e -> {
+                    LocalDate checkIn = e.getCheckInDate()
+                            .atZone(ZoneOffset.UTC)
+                            .toLocalDate();
+                    return !checkIn.isAfter(LocalDate.now());
+                })
+                .min(Comparator.comparing(Prebooking::getCheckInDate))
+                .orElse(null);
+        if (preBooking != null) {
+            preBooking.setReservationID(reservation);
+            PrebookingDAO prebookingDAO = new PrebookingDAO();
+            prebookingDAO.save(preBooking);
+        }
+
+        Reservation_RoomDisplay roomReservationDisplay = parent.getRooms().stream().filter(e -> e.getId() == room.getId()).findFirst().orElse(null);
         if (roomReservationDisplay != null) {
             roomReservationDisplay.setStatus(2);
             roomReservationDisplay.setQuantity(customerList.size());

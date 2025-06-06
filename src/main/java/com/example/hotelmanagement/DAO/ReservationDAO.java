@@ -12,7 +12,13 @@ public class ReservationDAO {
     // Lấy tất cả Reservation chưa bị xóa
     public List<Reservation> getAll() {
         try (Session session = HibernateUtils.getSession()) {
-            return session.createQuery("FROM Reservation WHERE isDeleted = false", Reservation.class).list();
+            return session.createQuery(
+                    "SELECT r FROM Reservation r " +
+                            "JOIN FETCH r.roomID ro " +
+                            "JOIN FETCH ro.roomTypeID rt " +
+                            "WHERE r.isDeleted = false", Reservation.class
+            ).list();
+
         }
     }
 

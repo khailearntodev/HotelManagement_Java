@@ -101,7 +101,7 @@
          </VBox.margin>
         </MFXScrollPane>
         <AnchorPane>
-            <MFXButton fx:id="nextBookingInAdvanceBtn" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="20" text="Xác nhận" onMouseClicked="#showBIAInvoiceView"/>
+            <MFXButton fx:id="nextBookingInAdvanceBtn" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="20" text="Xác nhận" onMouseClicked="#nextView"/>
         </AnchorPane>
     </children>
 </VBox>

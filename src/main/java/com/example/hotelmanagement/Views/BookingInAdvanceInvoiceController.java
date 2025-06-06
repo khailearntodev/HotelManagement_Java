@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class BookingInAdvanceInvoiceController implements Initializable {
+    @FXML private Label codeLabel;
     @FXML private TextArea customerInfoTextArea;
     @FXML private Label totalLabel;
     @FXML private Label checkinDateLabel;
@@ -32,6 +33,8 @@ public class BookingInAdvanceInvoiceController implements Initializable {
 
     public void setViewModel(BookingInAdvanceInvoiceViewModel viewModel) {
         this.viewModel = viewModel;
+        codeLabel.textProperty().bind(viewModel.getPreBookingInvoiceDisplay().codeProperty());
+
         Bindings.bindBidirectional(
                 roomNumberLabel.textProperty(),
                 viewModel.getPreBookingInvoiceDisplay().roomNumberProperty(),

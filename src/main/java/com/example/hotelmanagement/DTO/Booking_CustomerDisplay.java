@@ -1,21 +1,16 @@
 package com.example.hotelmanagement.DTO;
 
 import com.example.hotelmanagement.Models.Customer;
-import com.example.hotelmanagement.Models.Customertype;
 import javafx.beans.property.*;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-
-public class CustomerBookingDisplay {
+public class Booking_CustomerDisplay {
     private final IntegerProperty ordinalNumber = new SimpleIntegerProperty();
     private final StringProperty fullName = new SimpleStringProperty("");
     private final StringProperty identityNumber = new SimpleStringProperty();
     private final StringProperty phoneNumber = new SimpleStringProperty();
     private final StringProperty customerAddress = new SimpleStringProperty();
 
-    public CustomerBookingDisplay(Customer customer, int number) {
+    public Booking_CustomerDisplay(Customer customer, int number) {
         this.ordinalNumber.set(number);
         this.fullName.set(customer.getFullName());
         this.identityNumber.set(customer.getIdentityNumber());

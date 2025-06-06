@@ -1,16 +1,15 @@
 package com.example.hotelmanagement.Views;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 
+import com.example.hotelmanagement.DAO.ReservationDAO;
 import com.example.hotelmanagement.DAO.RoomDAO;
-import com.example.hotelmanagement.DTO.RoomReservationDisplay;
+import com.example.hotelmanagement.DTO.Reservation_RoomDisplay;
+import com.example.hotelmanagement.Models.Reservation;
 import com.example.hotelmanagement.Models.Room;
 import com.example.hotelmanagement.Models.Roomtype;
-import com.example.hotelmanagement.ViewModels.BookingInAdvanceViewModel;
-import com.example.hotelmanagement.ViewModels.BookingNoteViewModel;
-import com.example.hotelmanagement.ViewModels.BookingViewModel;
-import com.example.hotelmanagement.ViewModels.ReservationViewModel;
+import com.example.hotelmanagement.ViewModels.*;
+import com.example.hotelmanagement.ViewModels.SelectRoomForCheckOutViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -33,7 +32,6 @@ import javafx.scene.control.*;
 
 import java.net.URL;
 import java.text.NumberFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 import javafx.scene.input.MouseEvent;
@@ -55,15 +53,15 @@ public class ReservationController implements Initializable {
     @FXML private MFXComboBox<Roomtype> comboBoxRoomType;
     @FXML private MFXButton searchButton;
     @FXML private AnchorPane anchorPane;
-    @FXML private TableView<RoomReservationDisplay> bookingTable;
-    @FXML private TableColumn<RoomReservationDisplay, Integer> colRoomNumber;
-    @FXML private TableColumn<RoomReservationDisplay, String> colRoomType;
+    @FXML private TableView<Reservation_RoomDisplay> bookingTable;
+    @FXML private TableColumn<Reservation_RoomDisplay, Integer> colRoomNumber;
+    @FXML private TableColumn<Reservation_RoomDisplay, String> colRoomType;
     @FXML private Pagination pagination;
-    @FXML private TableColumn<RoomReservationDisplay, String> colCheckInOut;
-    @FXML private TableColumn<RoomReservationDisplay, String> colAmount;
-    @FXML private TableColumn<RoomReservationDisplay, Integer> colStatus;
-    @FXML private TableColumn<RoomReservationDisplay, Void> colAction;
-    @FXML private TableColumn<RoomReservationDisplay, String> colQuantity;
+    @FXML private TableColumn<Reservation_RoomDisplay, String> colCheckInOut;
+    @FXML private TableColumn<Reservation_RoomDisplay, String> colAmount;
+    @FXML private TableColumn<Reservation_RoomDisplay, Integer> colStatus;
+    @FXML private TableColumn<Reservation_RoomDisplay, Void> colAction;
+    @FXML private TableColumn<Reservation_RoomDisplay, String> colQuantity;
 
     private final static int ROWS_PER_PAGE = 15;
     @Setter
@@ -128,7 +126,7 @@ public class ReservationController implements Initializable {
         );
 
         colStatus.setCellValueFactory(cell -> cell.getValue().statusProperty().asObject());
-        colStatus.setCellFactory(cell -> new TableCell<RoomReservationDisplay, Integer>() {
+        colStatus.setCellFactory(cell -> new TableCell<Reservation_RoomDisplay, Integer>() {
             private final Label label = new Label();
             @Override
             protected void updateItem(Integer item, boolean empty) {
@@ -196,7 +194,7 @@ public class ReservationController implements Initializable {
             );
         });
 
-        colAction.setCellFactory(col -> new TableCell<RoomReservationDisplay, Void>() {
+        colAction.setCellFactory(col -> new TableCell<Reservation_RoomDisplay, Void>() {
             private Button btn;
             private Button subbtn;
             private HBox buttonContainer;
@@ -209,7 +207,7 @@ public class ReservationController implements Initializable {
                 if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) {
                     return;
                 }
-                RoomReservationDisplay p = getTableView().getItems().get(getIndex());
+                Reservation_RoomDisplay p = getTableView().getItems().get(getIndex());
                 p.statusProperty().addListener((obs, oldVal, newVal) -> {
                     bookingTable.refresh();
                 });
@@ -236,7 +234,7 @@ public class ReservationController implements Initializable {
                         break;
 
                     case 3:
-                        setupConfirmButton(p);
+                        setupConfirmButton(r);
                         buttonContainer.getChildren().add(btn);
                         break;
                 }
@@ -252,7 +250,7 @@ public class ReservationController implements Initializable {
                         Parent root = fxmlLoader.load();
                         Scene scene = new Scene(root);
                         scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
-                        BookingViewModel vm = new BookingViewModel(p);
+                        BookingViewModel vm = new BookingViewModel(p, true);
                         vm.setParent(viewModel);
                         BookingController controller = fxmlLoader.getController();
                         controller.setViewModel(vm);
@@ -270,7 +268,7 @@ public class ReservationController implements Initializable {
                 btn.getStyleClass().add("booking-button-table-view");
             }
 
-            private void setupCheckoutButton(RoomReservationDisplay p) {
+            private void setupCheckoutButton(Reservation_RoomDisplay p) {
                 btn.setOnAction(e -> {
                     System.out.println("Click phòng: " + p.getRoomNumber());
                 });
@@ -279,14 +277,17 @@ public class ReservationController implements Initializable {
                 btn.getStyleClass().add("checkout-button-table-view");
             }
 
-            private void setupConfirmButton(RoomReservationDisplay p) {
+            private void setupConfirmButton(Room r) {
                 btn.setOnAction(e -> {
                     try {
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/ConfirmBookingCodeView.fxml"));
                         Parent root = fxmlLoader.load();
                         Scene scene = new Scene(root);
                         scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
-
+                        ConfirmBookingCodeViewModel vm = new ConfirmBookingCodeViewModel(r);
+                        vm.setParent(viewModel);
+                        ConfirmBookingCodeController controller = fxmlLoader.getController();
+                        controller.setViewModel(vm);
                         Stage stage = new Stage();
                         stage.initStyle(StageStyle.UNDECORATED);
                         stage.initModality(Modality.APPLICATION_MODAL);
@@ -301,7 +302,7 @@ public class ReservationController implements Initializable {
                 btn.getStyleClass().add("confirm-button-table-view");
             }
 
-            private void setupSubButton(RoomReservationDisplay p) {
+            private void setupSubButton(Reservation_RoomDisplay p) {
                 MFXFontIcon icon = new MFXFontIcon("mfx-chevron-down", 10);
                 subbtn.setPrefWidth(25);
                 subbtn.setMinWidth(25);
@@ -342,7 +343,12 @@ public class ReservationController implements Initializable {
                     vbox.getChildren().addAll(btn1, btnXemGhiChu, btn3);
 
                     btn1.setOnAction(ev -> {
-                        System.out.println("Đặt dịch vụ phòng: " + p.getRoomNumber());
+                        int roomID = p.getId();
+                        Room room = new RoomDAO().findById(roomID);
+                        Reservation reservation = room.getReservations().stream().filter(r -> r.getInvoiceID() == null).findFirst().orElse(null);
+                        if (reservation != null) {
+                            System.out.println(reservation.getId().toString());
+                        }
                         popup.hide();
                     });
 
@@ -442,7 +448,7 @@ public class ReservationController implements Initializable {
     private void myUpdateTableView(int pageIndex) {
         int fromIndex = pageIndex * ROWS_PER_PAGE;
         int toIndex = Math.min(fromIndex + ROWS_PER_PAGE, viewModel.getRooms().size());
-        ObservableList<RoomReservationDisplay> pageData = FXCollections.observableArrayList();
+        ObservableList<Reservation_RoomDisplay> pageData = FXCollections.observableArrayList();
         pageData.addAll(viewModel.getRooms().subList(fromIndex, toIndex));
         bookingTable.setItems(pageData);
         bookingTable.refresh();
@@ -475,10 +481,12 @@ public class ReservationController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/CancelBookingView.fxml"));
             Parent root = fxmlLoader.load();
-
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
-
+            CancelBookingViewModel vm = new CancelBookingViewModel();
+            vm.setParent(viewModel);
+            CancelBookingController controller = fxmlLoader.getController();
+            controller.setViewModel(vm);
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -493,11 +501,13 @@ public class ReservationController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/SelectRoomForCheckOutView.fxml"));
             Parent root = fxmlLoader.load();
-
+            SelectRoomForCheckOutViewModel vm = new SelectRoomForCheckOutViewModel();
+            vm.setParent(viewModel);
+            SelectRoomForCheckOutController controller = fxmlLoader.getController();
+            controller.setViewModel(vm);
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
             System.out.println(scene.getStylesheets());
-
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);

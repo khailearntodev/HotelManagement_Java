@@ -6,7 +6,7 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 
-public class ServiceBookingReservationDisplay {
+public class Reservation_ServiceBookingDisplay {
     @Getter
     private Service service;
     private final StringProperty serviceName = new SimpleStringProperty();
@@ -14,7 +14,7 @@ public class ServiceBookingReservationDisplay {
     private final IntegerProperty quantity = new SimpleIntegerProperty(0);
     private final ObjectProperty<BigDecimal> price = new SimpleObjectProperty<>();
 
-    public ServiceBookingReservationDisplay(Service service) {
+    public Reservation_ServiceBookingDisplay(Service service) {
         this.service = service;
         this.serviceName.set(service.getServiceName());
         this.price.set(service.getPrice());
