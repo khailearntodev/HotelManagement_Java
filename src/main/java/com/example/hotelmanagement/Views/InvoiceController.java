@@ -2,9 +2,11 @@ package com.example.hotelmanagement.Views;
 
 import com.example.hotelmanagement.DAO.InvoiceDAO;
 import com.example.hotelmanagement.DAO.InvoiceDetailAssembler;
+import com.example.hotelmanagement.DAO.ReservationDAO;
 import com.example.hotelmanagement.DTO.InvoiceDetail;
 import com.example.hotelmanagement.Main;
 import com.example.hotelmanagement.Models.Invoice;
+import com.example.hotelmanagement.Models.Reservation;
 import com.example.hotelmanagement.ViewModels.InvoiceViewModel;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXSlider;
@@ -19,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
@@ -162,26 +165,45 @@ public class InvoiceController {
     }
     private void openInvoiceDetailView(Invoice invoice) {
         try {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("Views/InvoiceDetailView.fxml"));
+//            FXMLLoader loader = new FXMLLoader(Main.class.getResource("Views/InvoiceDetailView.fxml"));
+//            Parent root = loader.load();
+//
+//            Invoice fullInvoice = dao.getInvoiceWithDetails(invoice.getId());
+//            InvoiceDetailController controller = loader.getController();
+//
+//            controller.setInvoice(fullInvoice); //
+//
+//            Stage stage = new Stage();
+//            stage.setTitle("Chi tiết hóa đơn #" + invoice.getId());
+//            stage.initStyle(StageStyle.UNDECORATED);
+//            stage.setScene(new Scene(root));
+//            stage.show();
+            // Ví dụ khi mở cửa sổ RoomServiceView từ một view khác
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("Views/RoomService.fxml"));
             Parent root = loader.load();
-            InvoiceDetailController controller = loader.getController();
-            Invoice fullInvoice = dao.getInvoiceWithDetails(invoice.getId());
-            controller.setInvoice(fullInvoice);
-            List<InvoiceDetail> detailDTOs = InvoiceDetailAssembler.buildDetailsFromInvoice(fullInvoice);
-            controller.setInvoiceDetails(detailDTOs);
+            RoomServiceController controller = loader.getController();
+            int reservationIdToLoad = 4;
+            ReservationDAO reservationDAO = new ReservationDAO();
+            Reservation selectedReservation = reservationDAO.findByIdForServiceBK(reservationIdToLoad); // Dùng findById đã sửa
 
-            // Truyền dữ liệu vào controller
-            //InvoiceDetailController detailController = loader.getController();
-            //detailController.setInvoice(invoice);
+            if (selectedReservation != null) {
+                controller.setReservation(selectedReservation);
+                controller.setupBindingsAndData();
 
-            Stage stage = new Stage();
-            stage.setTitle("Chi tiết hóa đơn #" + invoice.getId());
-            stage.setScene(new Scene(root));
-            stage.show();
+                Stage stage = new Stage();
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.setScene(new Scene(root));
+                stage.show();
+            } else {
+                // Xử lý trường hợp không tìm thấy reservation
+                System.err.println("Không tìm thấy Reservation với ID: " + reservationIdToLoad);
+                // Hiển thị Alert cho người dùng
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
 }

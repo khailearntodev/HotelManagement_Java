@@ -82,21 +82,23 @@ public class InvoiceDAO {
                     .list();
         }
     }
-    public Invoice getInvoiceWithDetails(int invoiceId) {
+    public Invoice getInvoiceWithDetails(int id) {
         try (Session session = HibernateUtils.getSession()) {
-            return session.createQuery("""
-            SELECT i FROM Invoice i
-            LEFT JOIN FETCH i.employeeID
-            LEFT JOIN FETCH i.reservations r
-            LEFT JOIN FETCH r.roomID
-            LEFT JOIN FETCH r.servicebookings sb
-            LEFT JOIN FETCH sb.serviceID
-            WHERE i.id = :id
-        """, Invoice.class)
-                    .setParameter("id", invoiceId)
+            return session.createQuery(
+                            "SELECT i FROM Invoice i " +
+                                    "LEFT JOIN FETCH i.employeeID " +
+                                    "LEFT JOIN FETCH i.reservations r " +
+                                    "LEFT JOIN FETCH r.roomID ro " +
+                                    "LEFT JOIN FETCH ro.roomTypeID " +
+                                    "LEFT JOIN FETCH r.servicebookings sb " +
+                                    "LEFT JOIN FETCH sb.serviceID " +
+                                    "WHERE i.id = :id", Invoice.class
+                    ).setParameter("id", id)
                     .uniqueResult();
         }
     }
+
+
 
 
 }

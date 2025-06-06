@@ -22,6 +22,20 @@ public class ReservationDAO {
             return session.get(Reservation.class, id);
         }
     }
+    public Reservation findByIdForServiceBK(int id) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                            "SELECT r FROM Reservation r " +
+                                    "LEFT JOIN FETCH r.roomID " +
+                                    "WHERE r.id = :id AND r.isDeleted = false",
+                            Reservation.class)
+                    .setParameter("id", id)
+                    .uniqueResultOptional().orElse(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     // Thêm Reservation mới
     public boolean save(Reservation reservation) {

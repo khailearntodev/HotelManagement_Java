@@ -1,9 +1,15 @@
 package com.example.hotelmanagement.Views;
 
+import com.example.hotelmanagement.Main;
 import com.example.hotelmanagement.Models.Invoice;
+import com.example.hotelmanagement.Models.Reservation;
+import com.example.hotelmanagement.Models.Servicebooking;
 import com.example.hotelmanagement.ViewModels.InvoiceDetailViewModel;
 import com.example.hotelmanagement.ViewModels.InvoiceViewModel;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -14,8 +20,11 @@ import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Button; // Import Button
 import com.example.hotelmanagement.DTO.InvoiceDetail;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,16 +50,9 @@ public class InvoiceDetailController {
     @FXML private Label employeeNameLabel;
 
     // Totals
-    @FXML private Label totalHtLabel;
-    @FXML private Label discountLabel;
-    @FXML private Label totalVatLabel;
-    @FXML private Label vatAmountLabel;
     @FXML private Label totalDueLabel;
 
     // Footer
-    @FXML private Label companyInfo1Label;
-    @FXML private Label companyInfo2Label;
-    @FXML private Label companyInfo3Label;
     private final ObservableList<InvoiceDetailViewModel> detailList = FXCollections.observableArrayList();
     private Invoice invoice = new Invoice();
     @FXML
@@ -64,16 +66,6 @@ public class InvoiceDetailController {
 //        customerAddressLine2Label.setText("LEVALLOIS-PERRET, 92300, France.");
 
         employeeNameLabel.setText("Huy Le");
-
-//        totalHtLabel.setText("7036.99");
-//        discountLabel.setText("140");
-//        totalVatLabel.setText("1457.32");
-//        vatAmountLabel.setText("1,379.40");
-     //   totalDueLabel.setText();
-//
-//        companyInfo1Label.setText("UIT, Capital 1000, SIRET : 90106223200011");
-//        companyInfo2Label.setText("VAT: FRZ0901062232, Activity Type:58.29C");
-//        companyInfo3Label.setText("RCS: 901062232 Paris 8");
 
         // --- 2. Cấu hình TableView và thêm dữ liệu mẫu ---
         // Cấu hình các cột của TableView
@@ -89,12 +81,15 @@ public class InvoiceDetailController {
             private final Button viewButton = new Button("Xem");
 
             {
-                // Tùy chỉnh Button nếu cần
                 viewButton.setStyle("-fx-background-color: #007bff; -fx-text-fill: white; -fx-cursor: hand; -fx-padding: 3 8; -fx-font-size: 11px;");
                 viewButton.setOnAction(event -> {
-//                    InvoiceViewModel item = getTableView().getItems().get(getIndex());
-//                    System.out.println("Xem dịch vụ của phòng: " + item.getRoomNo());
+                    InvoiceDetailViewModel rowData = getTableView().getItems().get(getIndex());
+                    Reservation reservation = rowData.getReservation(); // ← Bạn cần lưu Reservation trong ViewModel!
+
+                    List<Servicebooking> bookings = new ArrayList<>(reservation.getServicebookings());
+                    openServiceDetail(bookings);
                 });
+
 
             }
 
@@ -112,28 +107,43 @@ public class InvoiceDetailController {
 
         detailTable.setItems(detailList);
     }
-    public void setInvoiceDetails(List<InvoiceDetail> details) {
-        List<InvoiceDetailViewModel> viewModels = details.stream()
-                .map(d -> new InvoiceDetailViewModel(
-                        d.soThuTuProperty().get(),
-                        d.soPhongProperty().get(),
-                        d.soNgayThueProperty().get(),
-                        d.phiDichVuProperty().get(),
-                        d.donGiaPhongProperty().get(),
-                        d.thanhTienProperty().get()
-                ))
-                .collect(Collectors.toList());
 
-        detailList.setAll(viewModels);
-    }
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
-        invoiceNoLabel.setText(String.valueOf(invoice.getId()));
-        customerNameLabel.setText(invoice.getCustomerName());
-        customerAddress.setText(invoice.getCustomerAddres());
-        employeeNameLabel.setText(invoice.getEmployeeID().getFullName());
-        paymentDateLabel.setText(invoice.getIssueDate().toString());
-        totalDueLabel.setText(invoice.getTotalAmount().toString());
+public void setInvoice(Invoice invoice) {
+    this.invoice = invoice;
+
+    // 1. Hiển thị thông tin hóa đơn
+    invoiceNoLabel.setText(String.valueOf(invoice.getId()));
+    customerNameLabel.setText(invoice.getCustomerName());
+    customerAddress.setText(invoice.getCustomerAddres());
+    employeeNameLabel.setText(invoice.getEmployeeID().getFullName());
+    paymentDateLabel.setText(invoice.getIssueDate().toString());
+    totalDueLabel.setText(invoice.getTotalAmount().toString());
+
+    // 2. Hiển thị bảng chi tiết từ reservation
+    List<InvoiceDetailViewModel> viewModels = invoice.getReservations().stream()
+            .map(InvoiceDetailViewModel::new)
+            .toList();
+
+    detailList.setAll(viewModels);
+}
+
+    @FXML
+    public void openServiceDetail(List<Servicebooking> bookings) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("Views/ServiceDetailView.fxml"));
+            Parent root = loader.load();
+
+            ServiceDetailController controller = loader.getController();
+            controller.setServiceDetails(bookings);
+
+            Stage stage = new Stage();
+            stage.setTitle("Chi tiết dịch vụ");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
