@@ -14,7 +14,7 @@
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">none</property>
 
-        <!-- Specify the JDBC driver class -->
+
         <property name="hibernate.current_session_context_class">thread</property>
 
         <!-- Mention annotated class -->

@@ -30,10 +30,6 @@ public class Reservation {
     private Invoice invoiceID;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "CustomerID", nullable = false)
-    private Customer customerID;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "EmployeeID", nullable = false)
     private Employee employeeID;
 
