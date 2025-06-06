@@ -26,15 +26,27 @@ public class ServiceBookingDAO {
     // Thêm Servicebooking mới
     public boolean save(Servicebooking servicebooking) {
         Transaction tx = null;
-        try (Session session = HibernateUtils.getSession()) {
+        Session session = null;
+        try {
+            session = HibernateUtils.getSession();
             tx = session.beginTransaction();
             session.save(servicebooking);
             tx.commit();
             return true;
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null && tx.isActive()) {
+                try {
+                    tx.rollback();
+                } catch (Exception rollbackEx) {
+                    System.err.println("Rollback failed: " + rollbackEx.getMessage());
+                }
+            }
             e.printStackTrace();
             return false;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 

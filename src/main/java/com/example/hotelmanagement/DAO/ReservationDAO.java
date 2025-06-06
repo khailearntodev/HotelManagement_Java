@@ -12,7 +12,13 @@ public class ReservationDAO {
     // Lấy tất cả Reservation chưa bị xóa
     public List<Reservation> getAll() {
         try (Session session = HibernateUtils.getSession()) {
-            return session.createQuery("FROM Reservation WHERE isDeleted = false", Reservation.class).list();
+            return session.createQuery(
+                    "SELECT r FROM Reservation r " +
+                            "JOIN FETCH r.roomID ro " +
+                            "JOIN FETCH ro.roomTypeID rt " +
+                            "WHERE r.isDeleted = false", Reservation.class
+            ).list();
+
         }
     }
 
@@ -25,18 +31,27 @@ public class ReservationDAO {
 
     // Thêm Reservation mới
     public boolean save(Reservation reservation) {
+        Session session = null;
         Transaction tx = null;
-        try (Session session = HibernateUtils.getSession()) {
+        try {
+            session = HibernateUtils.getSession();
             tx = session.beginTransaction();
             session.save(reservation);
             tx.commit();
             return true;
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null && tx.getStatus().canRollback()) {
+                tx.rollback();
+            }
             e.printStackTrace();
             return false;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
+
 
     // Cập nhật Reservation
     public boolean update(Reservation reservation) {

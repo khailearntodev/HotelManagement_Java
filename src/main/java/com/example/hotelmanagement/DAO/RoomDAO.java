@@ -12,14 +12,31 @@ public class RoomDAO {
     // Lấy danh sách tất cả phòng chưa xóa
     public List<Room> getAll() {
         try (Session session = HibernateUtils.getSession()) {
-            return session.createQuery("FROM Room WHERE isDeleted = false", Room.class).list();
+            return session.createQuery(
+                    "SELECT DISTINCT r FROM Room r " +
+                            "LEFT JOIN FETCH r.roomTypeID " +
+                            "LEFT JOIN FETCH r.prebookings pb " +
+                            "LEFT JOIN FETCH r.reservations res " +
+                            "LEFT JOIN FETCH res.reservationguests " +
+                            "WHERE r.isDeleted = false",
+                    Room.class
+            ).list();
         }
     }
+
 
     // Tìm phòng theo ID
     public Room findById(int id) {
         try (Session session = HibernateUtils.getSession()) {
-            return session.get(Room.class, id);
+            return session.createQuery(
+                            "SELECT r FROM Room r " +
+                                    "LEFT JOIN FETCH r.roomTypeID " +
+                                    "LEFT JOIN FETCH r.prebookings pb " +
+                                    "LEFT JOIN FETCH r.reservations res " +
+                                    "LEFT JOIN FETCH res.reservationguests " +
+                                    "WHERE r.id = :id", Room.class)
+                    .setParameter("id", id)
+                    .uniqueResult();
         }
     }
 

@@ -24,19 +24,34 @@ public class ReservationGuestDAO {
     }
 
     // Thêm Reservationguest mới
-    public boolean save(Reservationguest reservationguest) {
+    public boolean save(Reservationguest guest) {
+        Session session = null;
         Transaction tx = null;
-        try (Session session = HibernateUtils.getSession()) {
+        try {
+            session = HibernateUtils.getSession();
             tx = session.beginTransaction();
-            session.save(reservationguest);
+
+            session.save(guest);
+
             tx.commit();
             return true;
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null && tx.getStatus().canRollback()) {
+                try {
+                    tx.rollback();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
             e.printStackTrace();
             return false;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
+
 
     // Cập nhật Reservationguest
     public boolean update(Reservationguest reservationguest) {

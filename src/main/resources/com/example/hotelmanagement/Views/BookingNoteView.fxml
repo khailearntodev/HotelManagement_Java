@@ -27,7 +27,7 @@
       </TextArea>
       <AnchorPane prefHeight="42.0" prefWidth="384.0">
          <children>
-            <MFXButton fx:id="saveNoteBtn" layoutX="213.0" layoutY="9.0" mnemonicParsing="false" text="Lưu" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="7.0" />
+            <MFXButton fx:id="saveNoteBtn" onMouseClicked="#handleSaveNote" layoutX="213.0" layoutY="9.0" mnemonicParsing="false" text="Lưu" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="7.0" />
          </children>
       </AnchorPane>
     </children>
