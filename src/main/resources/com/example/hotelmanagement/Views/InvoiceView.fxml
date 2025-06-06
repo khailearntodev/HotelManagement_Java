@@ -26,34 +26,13 @@
         <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="HÓA ĐƠN" />
         <Region HBox.hgrow="ALWAYS" />
         <MFXComboBox fx:id="nCustomCombo" floatMode="DISABLED" promptText="Tất cả" prefWidth="180.0">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Hàng tháng" />
-                    <String fx:value="Hàng tuần" />
-                    <String fx:value="Hàng năm" />
-                </FXCollections>
-            </items>
         </MFXComboBox>
     </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="15" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="55.0">
         <MFXComboBox fx:id="entriesComboBox"  maxHeight="20.0" prefWidth="100.0" promptText="Số phiếu" floatMode="DISABLED">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="10" />
-                    <String fx:value="25" />
-                    <String fx:value="50" />
-                </FXCollections>
-            </items>
         </MFXComboBox>
         <MFXComboBox fx:id="ComboBox"  maxHeight="20.0" prefWidth="100.0" promptText="Tất cả" floatMode="DISABLED">
-            <items>
-                <FXCollections fx:factory="observableArrayList" >
-                    <String fx:value="Tất cả" />
-                    <String fx:value="Hóa đơn đặt trước" />
-                    <String fx:value="Hóa đơn trực tiếp" />
-                </FXCollections>
-            </items>
         </MFXComboBox>
         <VBox>
             <MFXSlider fx:id="minValue" id="customSlider" >
@@ -79,9 +58,9 @@
         <columns>
             <TableColumn fx:id="invoiceIdColumn" prefWidth="80" text="ID" />
             <TableColumn fx:id="nameClientColumn" prefWidth="230" text="Tên khách hàng" />
-            <TableColumn fx:id="emailColumn" prefWidth="200" text="Email" />
             <TableColumn fx:id="startDateColumn" prefWidth="120" text="Ngày tạo" />
             <TableColumn fx:id="invoiceAmountColumn" prefWidth="180" text="Trị giá" />
+            <TableColumn fx:id="invoiceTypes" prefWidth="210" text="Loại hóa đơn" />
             <TableColumn fx:id="statusColumn" prefWidth="210" text="Trạng thái" />
         </columns>
         <columnResizePolicy>

@@ -29,7 +29,7 @@
 <?import javafx.scene.control.ProgressBar?>
 <AnchorPane prefHeight="660.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.hotelmanagement.Views.StaticticController">
+            fx:controller="com.example.hotelmanagement.Views.StatisticController">
     <VBox alignment="TOP_CENTER"  spacing="10.0" AnchorPane.bottomAnchor="0.0"
           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <padding>

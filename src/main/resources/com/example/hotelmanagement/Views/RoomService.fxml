@@ -69,7 +69,7 @@
         </Label>
         <TableView fx:id="tvRoomServices" prefHeight="400.0" prefWidth="772.0" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colServiceCode" prefWidth="100.0" text="Mã Dịch vụ" />
+                <TableColumn fx:id="colServiceBookingId" prefWidth="100.0" text="Mã Dịch vụ" />
                 <TableColumn fx:id="colServiceName" prefWidth="200.0" text="Tên Dịch vụ" />
                 <TableColumn fx:id="colQuantity" prefWidth="80.0" text="Số lượng" />
                 <TableColumn fx:id="colOrderDate" prefWidth="150.0" text="Ngày đặt" />

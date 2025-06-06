@@ -45,3 +45,21 @@
     -fx-font-family: Arial;
     -fx-font-size: 30px;
 }
+.completedinvoice-label-table-view {
+    -fx-background-color: #e9ffe9;
+    -fx-text-fill: green;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+}
+.notcomplete-label-table-view {
+    -fx-background-color: #effaff;
+    -fx-text-fill: blue;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+}
