@@ -1,43 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Font?>
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.hotelmanagement.Views.InvoiceDetailController"
-            prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5;">
+<AnchorPane prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.InvoiceDetailController">
 
-    <VBox spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <VBox layoutX="3.0" layoutY="-1.0" prefHeight="800.0" prefWidth="796.0" spacing="15.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="-2.0">
         <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="50.0" />
         </padding>
 
         <HBox alignment="CENTER_LEFT" spacing="10.0">
             <VBox alignment="CENTER_LEFT" spacing="5.0">
-                <Label text="U" style="-fx-background-color: #2356eb; -fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5;" />
-                <Label text="UIT" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
-                <Label text="Linh Trung" style="-fx-font-size: 12px;" />
-                <Label text="Thu Duc, HCM VN" style="-fx-font-size: 12px;" />
+                <Label style="-fx-background-color: #2356eb; -fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5;" text="U" />
+                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="UIT" />
+                <Label style="-fx-font-size: 12px;" text="Linh Trung" />
+                <Label style="-fx-font-size: 12px;" text="Thu Duc, HCM VN" />
             </VBox>
 
             <Region HBox.hgrow="ALWAYS" />
 
             <VBox alignment="TOP_RIGHT" spacing="5.0">
-                <Label text="Hóa Đơn" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2356eb;" />
+                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2356eb;" text="Hóa Đơn" />
                 <HBox spacing="3.0">
-                    <Label text="Mã Hóa đơn:" style="-fx-font-size: 12px;" />
-                    <Label fx:id="invoiceNoLabel" text="F-23520610" style="-fx-font-size: 12px;" />
+                    <Label style="-fx-font-size: 12px;" text="Mã Hóa đơn:" />
+                    <Label fx:id="invoiceNoLabel" style="-fx-font-size: 12px;" text="F-23520610" />
                 </HBox>
                 <HBox spacing="3.0">
-                    <Label text="Ngày thanh toán:" style="-fx-font-size: 12px;" />
-                    <Label fx:id="paymentDateLabel" text="17/06/2023" style="-fx-font-size: 12px;" />
+                    <Label style="-fx-font-size: 12px;" text="Ngày thanh toán:" />
+                    <Label fx:id="paymentDateLabel" style="-fx-font-size: 12px;" text="17/06/2023" />
                 </HBox>
             </VBox>
         </HBox>
@@ -45,29 +38,28 @@
         <Separator />
 
         <HBox spacing="20.0">
-            <VBox HBox.hgrow="ALWAYS" spacing="5.0">
-                <Label text="Khách hàng" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                <Label fx:id="customerNameLabel" text="Công Ty TNHH ABC" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Khách hàng" />
+                <Label fx:id="customerNameLabel" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Công Ty TNHH ABC" />
             </VBox>
-            <VBox HBox.hgrow="ALWAYS" spacing="5.0">
-                <Label text="Địa chỉ:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                <Label fx:id="customerAddressLine1Label" text="74 RUE ANATOLE FRANCENATOLE FRANCE" style="-fx-font-size: 12px;" />
-                <Label fx:id="customerAddressLine2Label" text="LEVALLOIS-PERRET, 92300, France." style="-fx-font-size: 12px;" />
+            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Địa chỉ:" />
+                <Label fx:id="customerAddress" style="-fx-font-size: 12px;" text="74 RUE ANATOLE FRANCENATOLE FRANCE" />
             </VBox>
         </HBox>
 
         <Separator />
 
         <VBox spacing="5.0">
-            <Label text="Chi tiết thuê" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-            <TableView fx:id="roomDetailsTableView" prefHeight="600.0" maxHeight="1000.0" VBox.vgrow="ALWAYS" style="-fx-border-color: #cccccc;">
+            <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Chi tiết thuê" />
+            <TableView fx:id="detailTable" maxHeight="1000.0" prefHeight="600.0" style="-fx-border-color: #cccccc;" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="sttColumn" prefWidth="30.0" text="STT" />
-                    <TableColumn fx:id="roomNoColumn" prefWidth="70.0" text="Số phòng" />
-                    <TableColumn fx:id="rentalDaysColumn" prefWidth="70.0" text="Số ngày thuê" />
-                    <TableColumn fx:id="serviceFeeColumn" prefWidth="70.0" text="Tiền dịch vụ" />
-                    <TableColumn fx:id="roomPriceColumn" prefWidth="80.0" text="Đơn giá phòng" />
-                    <TableColumn fx:id="subtotalColumn" prefWidth="100.0" text="Thành tiền" />
+                    <TableColumn fx:id="soThuTuColumn" prefWidth="30.0" text="STT" />
+                    <TableColumn fx:id="soPhongColumn" prefWidth="70.0" text="Số phòng" />
+                    <TableColumn fx:id="soNgayThueColumn" prefWidth="70.0" text="Số ngày thuê" />
+                    <TableColumn fx:id="phiDichVuColumn" prefWidth="70.0" text="Tiền dịch vụ" />
+                    <TableColumn fx:id="donGiaPhongColumn" prefWidth="80.0" text="Đơn giá phòng" />
+                    <TableColumn fx:id="thanhTienColumn" prefWidth="100.0" text="Thành tiền" />
                     <TableColumn fx:id="viewServicesColumn" prefWidth="100.0" text="Xem Dịch vụ" />
                 </columns>
                 <columnResizePolicy>
@@ -75,50 +67,46 @@
                 </columnResizePolicy>
             </TableView>
             <HBox spacing="5.0">
-                <Label text="Nhân viên: " style="-fx-font-size: 12px; -fx-font-weight: bold;" />
-                <Label fx:id="employeeNameLabel" text="Huy Le " style="-fx-font-size: 12px; -fx-font-weight: light;" />
+                <Label style="-fx-font-size: 12px; -fx-font-weight: bold;" text="Nhân viên: " />
+                <Label fx:id="employeeNameLabel" style="-fx-font-size: 12px; -fx-font-weight: light;" text="Huy Le " />
             </HBox>
         </VBox>
 
-        <GridPane hgap="10.0" alignment="BOTTOM_RIGHT">
+        <GridPane alignment="BOTTOM_RIGHT" hgap="10.0">
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
-            <Label text="Tổng tiền trước thuế:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <Label fx:id="totalHtLabel" text="7036.99" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-            <Label text="Giảm giá:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-            <Label fx:id="discountLabel" text="140" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-            <Label text="Tổng VAT:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-            <Label fx:id="totalVatLabel" text="1457.32" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-
-            <Label text="Thuế (20%):" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-            <Label fx:id="vatAmountLabel" text="1,379.40" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-
-            <Label text="Tổng cộng:" style="-fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-            <Label fx:id="totalDueLabel" text="8276.78" style="-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: orange;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="Tổng tiền :" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label fx:id="totalDueLabel" style="-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: orange;" text="8276.78" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
         </GridPane>
 
         <Separator />
 
         <HBox alignment="CENTER" spacing="2.0">
             <VBox>
-                <Label fx:id="companyInfo1Label" text="University Of Information Technology, Capital 1000, SIRET : 90106223200011" style="-fx-font-size: 10px;" />
-                <Label fx:id="companyInfo2Label" text="VAT: FRZ0901062232, Activity Type:58.29C" style="-fx-font-size: 10px;" />
-                <Label fx:id="companyInfo3Label" text="RCS: 901062232 Paris 8" style="-fx-font-size: 10px;" />
+                <Label fx:id="companyInfo1Label" style="-fx-font-size: 10px;" text="University Of Information Technology, Capital 1000, SIRET : 90106223200011" />
+                <Label fx:id="companyInfo2Label" style="-fx-font-size: 10px;" text="VAT: FRZ0901062232, Activity Type:58.29C" />
+                <Label fx:id="companyInfo3Label" style="-fx-font-size: 10px;" text="RCS: 901062232 Paris 8" />
             </VBox>
 
-            <Region HBox.hgrow="ALWAYS"/>
+            <Region HBox.hgrow="ALWAYS" />
 
             <VBox>
-                <MFXButton buttonType="RAISED" minHeight="40.0" minWidth="70.0" text="Thanh Toán"
-                           style="-fx-text-fill: blue;" />
+                <MFXButton buttonType="RAISED" minHeight="40.0" minWidth="70.0" style="-fx-text-fill: blue;" text="Thanh Toán" />
             </VBox>
         </HBox>
     </VBox>
 
-    <MFXButton text="✖"
-            style="-fx-background-color: transparent; -fx-font-size: 24px; -fx-font-weight: bold; -fx-cursor: hand;"
-            AnchorPane.topAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+    <MFXButton layoutY="7.0" prefHeight="46.0" prefWidth="57.0" style="-fx-background-color: transparent; -fx-font-size: 24px; -fx-font-weight: bold; -fx-cursor: hand;" text="✖" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="6.0" />
 </AnchorPane>

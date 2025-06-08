@@ -46,13 +46,13 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <MFXTextField styleClass="customer-info-text-field" layoutX="151.0" layoutY="1.0" prefHeight="26.0" prefWidth="281.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="0.0" />
+            <MFXTextField fx:id="customerNameTextField" styleClass="customer-info-text-field" layoutX="151.0" layoutY="1.0" prefHeight="26.0" prefWidth="281.0" AnchorPane.leftAnchor="150.0" AnchorPane.topAnchor="0.0" />
             <Label layoutX="61.0" layoutY="25.0" style="-fx-font-weight: bold;" text="Số điện thoại:" AnchorPane.leftAnchor="500.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <MFXTextField styleClass="customer-info-text-field" layoutX="161.0" layoutY="11.0" prefHeight="26.0" prefWidth="242.0" AnchorPane.leftAnchor="610.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="0.0" />
+            <MFXTextField fx:id="phoneNumberTextField" styleClass="customer-info-text-field" layoutX="161.0" layoutY="11.0" prefHeight="26.0" prefWidth="242.0" AnchorPane.leftAnchor="610.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="34.0" prefWidth="898.0">
@@ -62,7 +62,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <MFXTextField styleClass="customer-info-text-field" layoutX="151.0" layoutY="1.0" prefHeight="26.0" prefWidth="703.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="0.0" />
+            <MFXTextField fx:id="addressTextField" styleClass="customer-info-text-field" layoutX="151.0" layoutY="1.0" prefHeight="26.0" prefWidth="703.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
       <Separator prefHeight="10.0" prefWidth="898.0">
@@ -84,7 +84,7 @@
                </font>
             </Label>
             <MFXDatePicker fx:id="checkOutPicker" styleClass="checkOut-picker" layoutX="461.0" layoutY="10.0" AnchorPane.leftAnchor="555.0" AnchorPane.topAnchor="10.0" />
-            <MFXButton fx:id="findRoomBtn" layoutX="755.0" layoutY="10.0" mnemonicParsing="false" text="Tìm phòng" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="9.0" />
+            <MFXButton fx:id="findRoomBtn" onMouseClicked="#handleFindRooms" layoutX="755.0" layoutY="10.0" mnemonicParsing="false" text="Tìm phòng" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="9.0" />
          </children>
       </AnchorPane>
         <MFXScrollPane style="-fx-background-color: white" hbarPolicy="NEVER" layoutX="10" layoutY="10" pannable="true" prefHeight="391.0" prefWidth="898.0">
@@ -101,7 +101,7 @@
          </VBox.margin>
         </MFXScrollPane>
         <AnchorPane>
-            <MFXButton fx:id="nextBookingInAdvanceBtn" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="20" text="Xác nhận" onMouseClicked="#showBIAInvoiceView"/>
+            <MFXButton fx:id="nextBookingInAdvanceBtn" AnchorPane.topAnchor="10" AnchorPane.rightAnchor="20" text="Xác nhận" onMouseClicked="#nextView"/>
         </AnchorPane>
     </children>
 </VBox>
