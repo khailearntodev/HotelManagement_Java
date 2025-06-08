@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="selectRoomForCheckOutVBox" prefHeight="520.0" prefWidth="800.0" style="-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.SelectRoomForCheckOutViewModel">
+<VBox fx:id="selectRoomForCheckOutVBox" prefHeight="520.0" prefWidth="800.0" style="-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.SelectRoomForCheckOutController">
     <children>
         <AnchorPane prefHeight="30">
             <Label alignment="CENTER" style="-fx-font-size: 24; -fx-font-weight: bold" text="Thanh toán phiếu thuê" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0.0" />

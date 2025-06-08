@@ -17,9 +17,18 @@ public class PrebookingDAO {
     // Lấy tất cả prebooking chưa xóa
     public List<Prebooking> getAll() {
         try (Session session = HibernateUtils.getSession()) {
-            return session.createQuery("FROM Prebooking WHERE isDeleted = false", Prebooking.class).list();
+            return session.createQuery(
+                    "SELECT DISTINCT p FROM Prebooking p " +
+                            "JOIN FETCH p.roomID r " +
+                            "JOIN FETCH r.roomTypeID " +
+                            "LEFT JOIN FETCH r.reservations " +
+                            "WHERE p.isDeleted = false",
+                    Prebooking.class
+            ).list();
         }
     }
+
+
 
     // Tìm Prebooking theo ID
     public Prebooking findById(int id) {

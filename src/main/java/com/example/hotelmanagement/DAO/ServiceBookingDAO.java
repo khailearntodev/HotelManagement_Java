@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,20 @@ public class ServiceBookingDAO {
             return session.createQuery("FROM Servicebooking WHERE isDeleted = false", Servicebooking.class).list();
         }
     }
+    public List<Servicebooking> findByReservationId(int reservationId) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                            "SELECT sb FROM Servicebooking sb " +
+                                    "JOIN FETCH sb.serviceID " + // Quan trọng: Load Service cùng lúc
+                                    "WHERE sb.reservationID.id = :reservationId AND sb.isDeleted = false",
+                            Servicebooking.class)
+                    .setParameter("reservationId", reservationId)
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
 
     // Tìm Servicebooking theo ID
     public Servicebooking findById(int id) {
@@ -26,19 +41,43 @@ public class ServiceBookingDAO {
             return session.get(Servicebooking.class, id);
         }
     }
-
-    // Thêm Servicebooking mới
-    public boolean save(Servicebooking servicebooking) {
+    public Servicebooking saveAndReturn(Servicebooking servicebooking) {
         Transaction tx = null;
         try (Session session = HibernateUtils.getSession()) {
             tx = session.beginTransaction();
             session.save(servicebooking);
             tx.commit();
-            return true;
+            return servicebooking;
         } catch (Exception e) {
             if (tx != null) tx.rollback();
             e.printStackTrace();
+            return null;
+        }
+    }
+    // Thêm Servicebooking mới
+    public boolean save(Servicebooking servicebooking) {
+        Transaction tx = null;
+        Session session = null;
+        try {
+            session = HibernateUtils.getSession();
+            tx = session.beginTransaction();
+            session.save(servicebooking);
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) {
+                try {
+                    tx.rollback();
+                } catch (Exception rollbackEx) {
+                    System.err.println("Rollback failed: " + rollbackEx.getMessage());
+                }
+            }
+            e.printStackTrace();
             return false;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 

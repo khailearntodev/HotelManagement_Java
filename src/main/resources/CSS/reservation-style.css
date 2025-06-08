@@ -348,7 +348,7 @@
     -fx-cursor: hand;
 }
 
-#cccdRatio, #namRatio, #hochieuRatio, #nuRatio {
+#cccdRadio, #maleRadio, #hochieuRadio, #femaleRadio {
     -mfx-main: #2356eb;
 }
 
