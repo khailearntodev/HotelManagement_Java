@@ -15,6 +15,7 @@ module com.example.hotelmanagement {
     exports com.example.hotelmanagement;
     exports com.example.hotelmanagement.Views;
     opens com.example.hotelmanagement.Views to javafx.fxml;
+    opens com.example.hotelmanagement.Utils to org.hibernate.orm.core;
 
     //ADD
     requires jakarta.persistence;
