@@ -33,6 +33,8 @@ public class StatisticViewModel {
     private final StringProperty totalBookings = new SimpleStringProperty();
     private final StringProperty popularRoomType = new SimpleStringProperty();
     private final StringProperty averageRevenue = new SimpleStringProperty();
+    private BigDecimal currentTotalRevenue = BigDecimal.ZERO;
+
 
     private final ObservableList<RevenueReportDetail> revenueDetails = FXCollections.observableArrayList();
     private final RevenueReportDAO revenueReportDAO = new RevenueReportDAO();
@@ -62,6 +64,7 @@ public class StatisticViewModel {
         if (report != null) {
             List<RevenueReportDetail> details = revenueReportDetailDAO.getByReportId(report.getId());
             updateStatistics(report.getTotalRevenue(), report.getTotalRental(), details);
+            revenueDetails.setAll(details);
         }
     }
 
@@ -95,10 +98,13 @@ public class StatisticViewModel {
                     .values().stream().map(Optional::get).collect(Collectors.toList());
 
             updateStatistics(totalYearRevenue, totalYearRental, aggregatedDetails);
+            revenueDetails.setAll(aggregatedDetails);
+
         }
     }
 
     private void updateStatistics(BigDecimal revenue, BigDecimal rental, List<RevenueReportDetail> details) {
+        this.currentTotalRevenue = revenue;
         totalRevenue.set(String.format("%,.0f VNĐ", revenue));
         totalRental.set(String.format("%,.0f VNĐ", rental));
         revenueDetails.setAll(details);
@@ -121,10 +127,14 @@ public class StatisticViewModel {
     }
 
     private void clearStatistics() {
+        this.currentTotalRevenue = BigDecimal.ZERO;
         totalRevenue.set("0 VNĐ");
         totalRental.set("0 VNĐ");
         totalBookings.set("0");
         popularRoomType.set("N/A");
         averageRevenue.set("0 VNĐ");
         revenueDetails.clear();
+    }
+    public BigDecimal getCurrentTotalRevenue() {
+        return currentTotalRevenue;
     }}

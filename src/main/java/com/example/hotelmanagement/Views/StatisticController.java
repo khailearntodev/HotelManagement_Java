@@ -56,7 +56,7 @@ public class StatisticController {
         popularRoomTypeLabel.textProperty().bind(viewModel.popularRoomTypeProperty());
         averageRevenueLabel.textProperty().bind(viewModel.averageRevenueProperty());
 
-        roomTypeColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRoomTypeID().getTypeName()));
+        roomTypeColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRoomTypeID().getTypeName())) ;
         revenueColumn.setCellValueFactory(data -> new SimpleStringProperty(String.format("%,.0f", data.getValue().getRevenue())));
 
         // Tính toán và hiển thị cột tỷ lệ đóng góp
