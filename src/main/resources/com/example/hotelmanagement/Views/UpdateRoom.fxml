@@ -5,61 +5,58 @@
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<StackPane fx:controller="com.example.hotelmanagement.Views.UpdateRoomController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="1060.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.UpdateRoomController">
    <children>
-      <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" style="-fx-background-color: white;">
-        <items>
-            <StackPane prefHeight="602.0" prefWidth="705.0">
+      <StackPane prefHeight="602.0" prefWidth="705.0">
+         <children>
+            <VBox prefHeight="602.0" prefWidth="592.0">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
                <children>
-                  <VBox prefHeight="602.0" prefWidth="592.0">
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </padding>
+                  <Label prefHeight="27.0" prefWidth="215.0" text="Thông tin phòng">
+                     <font>
+                        <Font name="Arial Bold" size="17.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label prefHeight="27.0" prefWidth="215.0" text="Thông tin phòng">
-                           <font>
-                              <Font name="Arial Bold" size="17.0" />
-                           </font>
-                        </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <VBox prefHeight="107.0" prefWidth="225.0" style="-fx-border-radius: 20; -fx-background-color: #fff;">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
                            <children>
-                              <VBox prefHeight="107.0" prefWidth="225.0" style="-fx-border-radius: 20; -fx-background-color: #fff;">
-                                 <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                 </padding>
-                                 <children>
-                                    <Label prefHeight="27.0" prefWidth="133.0" text="Số phòng">
-                                       <font>
-                                          <Font name="Arial" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <MFXTextField minHeight="24.0" prefHeight="24.0" prefWidth="267.0" />
-                                 </children>
-                              </VBox>
-                              <VBox maxHeight="333.0" prefHeight="77.0" prefWidth="211.0" style="-fx-background-color: white;">
-                                 <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                 </padding>
-                                 <children>
-                                    <Label prefHeight="27.0" prefWidth="133.0" text="Loại phòng">
-                                       <font>
-                                          <Font name="Arial" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <MFXComboBox minHeight="20.0" minWidth="20.0" />
-                                 </children>
-                              </VBox>
+                              <Label prefHeight="27.0" prefWidth="133.0" text="Số phòng">
+                                 <font>
+                                    <Font name="Arial" size="15.0" />
+                                 </font>
+                              </Label>
+                              <MFXTextField fx:id="roomNumberField" minHeight="24.0" prefHeight="24.0" prefWidth="267.0" />
                            </children>
-                        </HBox>
-                        <VBox prefHeight="93.0" prefWidth="436.0">
+                        </VBox>
+                        <VBox maxHeight="333.0" prefHeight="77.0" prefWidth="211.0" style="-fx-background-color: white;">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <Label prefHeight="27.0" prefWidth="133.0" text="Loại phòng">
+                                 <font>
+                                    <Font name="Arial" size="15.0" />
+                                 </font>
+                              </Label>
+                              <MFXTextField fx:id="roomTypeField" editable="false" minHeight="20.0" minWidth="20.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="93.0" prefWidth="436.0">
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
@@ -69,60 +66,64 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <MFXTextField minHeight="24.0" prefHeight="24.0" prefWidth="267.0" />
+                              <MFXButton onAction="#handleStatusButtonClick" fx:id="statusButton" styleClass="normal-button" text="Button" />
                            </children>
                         </VBox>
-                        <VBox prefHeight="93.0" prefWidth="436.0">
+                        <VBox alignment="CENTER" prefHeight="93.0" prefWidth="436.0">
                            <padding>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </padding>
                            <children>
-                              <Label prefHeight="17.0" prefWidth="222.0" text="Upload">
+                              <Label prefHeight="17.0" prefWidth="222.0" text="Trạng thái dọn dẹp">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <MFXTextField minHeight="24.0" prefHeight="24.0" prefWidth="267.0" />
+                              <MFXButton styleClass="normal-button" onAction="#handleCleaningStatusButtonClick" fx:id="cleaningStatusButton" text="Button" />
                            </children>
                         </VBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <VBox prefHeight="89.0" prefWidth="213.0" style="-fx-background-color: white;">
-                                 <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                 </padding>
-                              </VBox>
-                              <VBox maxHeight="333.0" prefHeight="89.0" prefWidth="227.0">
-                                 <padding>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                 </padding>
-                                 <children>
-                                    <MFXButton rippleColor="#3d53d0" style="-fx-background-color: #3d53d0;" text="Sửa" textFill="WHITE">
-                                       <VBox.margin>
-                                          <Insets left="56.0" top="20.0" />
-                                       </VBox.margin>
-                                       <padding>
-                                          <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
-                                       </padding>
-                                    </MFXButton>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
                      </children>
-                  </VBox>
-               </children>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
-               <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  </HBox>
+                  <VBox prefHeight="93.0" prefWidth="436.0">
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
                      <children>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label prefHeight="17.0" prefWidth="222.0" text="Ghi chú">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <MFXTextField fx:id="roomNoteField" minHeight="24.0" prefHeight="24.0" prefWidth="267.0" />
                      </children>
                   </VBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="89.0" prefWidth="213.0" style="-fx-background-color: white;">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox maxHeight="333.0" prefHeight="89.0" prefWidth="227.0">
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                           <children>
+                              <MFXButton fx:id="editButton" onAction="#handleEditRoomClick" rippleColor="#3d53d0" style="-fx-background-color: #3d53d0;" text="Sửa" textFill="WHITE">
+                                 <VBox.margin>
+                                    <Insets left="56.0" top="20.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                                 </padding>
+                              </MFXButton>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
                </children>
-            </StackPane>
-        </items>
-      </SplitPane>
+            </VBox>
+         </children>
+      </StackPane>
    </children>
 </StackPane>

@@ -11,8 +11,8 @@ public class RoomViewModel {
     private final StringProperty roomTypeName; // To display the room type name
     private final ObjectProperty<BigDecimal> roomTypeBasePrice; // To display the room type base price
     private final StringProperty note;
-    private final IntegerProperty status;
-    private final IntegerProperty cleaningStatus;
+    private final IntegerProperty status; // Maps to the Integer status in Room model
+    private final IntegerProperty cleaningStatus; // Maps to the Integer cleaningStatus in Room model
     private final BooleanProperty isDeleted;
 
     /**
@@ -105,5 +105,29 @@ public class RoomViewModel {
 
     public Boolean getIsDeleted() {
         return isDeleted.get();
+    }
+
+    public String getDisplayStatus() {
+        switch (status.get()) {
+            case 1:
+                return "Còn trống";
+            case 2:
+                return "Đang được thuê";
+            case 3:
+                return "Được đặt trước";
+                // Fallback for unexpected status values
+        }
+        return "Không xác định";
+    }
+    public String getDisplayCleaningStatus(){
+        switch (cleaningStatus.get()){
+            case 0:
+                return "Bẩn";
+            case 1:
+                return "Dọn dẹp";
+            case 2:
+                return "Sạch sẽ";
+        }
+        return "Không xác định";
     }
 }

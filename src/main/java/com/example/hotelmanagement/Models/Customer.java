@@ -57,8 +57,8 @@ public class Customer {
     @Column(name = "IsDeleted", nullable = false)
     private Boolean isDeleted = false;
 
-    @OneToMany(mappedBy = "customerID")
-    private Set<com.example.hotelmanagement.Models.Reservation> reservations = new LinkedHashSet<>();
+//    @OneToMany(mappedBy = "customerID")
+//    private Set<com.example.hotelmanagement.Models.Reservation> reservations = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "customerID")
     private Set<com.example.hotelmanagement.Models.Reservationguest> reservationguests = new LinkedHashSet<>();
