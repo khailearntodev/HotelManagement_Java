@@ -57,6 +57,12 @@
             <artifactId>jakarta.persistence-api</artifactId>
             <version>3.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <version>4.0.1</version> <!-- hoặc version phù hợp -->
+            <scope>provided</scope>
+        </dependency>
 
         <!-- lombok -->
         <dependency>

@@ -5,6 +5,7 @@ import java.util.*;
 import com.example.hotelmanagement.DAO.ReservationDAO;
 import com.example.hotelmanagement.DAO.RoomDAO;
 import com.example.hotelmanagement.DTO.Reservation_RoomDisplay;
+import com.example.hotelmanagement.Main;
 import com.example.hotelmanagement.Models.Reservation;
 import com.example.hotelmanagement.Models.Room;
 import com.example.hotelmanagement.Models.Roomtype;
@@ -347,7 +348,7 @@ public class ReservationController implements Initializable {
                         Room room = new RoomDAO().findById(roomID);
                         Reservation reservation = room.getReservations().stream().filter(r -> r.getInvoiceID() == null).findFirst().orElse(null);
                         if (reservation != null) {
-                            System.out.println(reservation.getId().toString());
+                            bookingService(reservation.getId());
                         }
                         popup.hide();
                     });
@@ -516,6 +517,36 @@ public class ReservationController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void bookingService(int reservationId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("Views/RoomService.fxml"));
+            Parent root = loader.load();
+            RoomServiceController controller = loader.getController();
+            ReservationDAO reservationDAO = new ReservationDAO();
+            Reservation selectedReservation = reservationDAO.findByIdForServiceBK(reservationId); // Dùng findById đã sửa
+
+            if (selectedReservation != null) {
+                controller.setReservation(selectedReservation);
+                controller.setupBindingsAndData();
+
+                Stage stage = new Stage();
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.setScene(new Scene(root));
+                stage.showAndWait();
+                System.out.println("Booking Service Booked");
+            } else {
+                // Xử lý trường hợp không tìm thấy reservation
+                System.err.println("Không tìm thấy Reservation với ID: " + reservationId);
+                // Hiển thị Alert cho người dùng
+            }
+        }
+        catch (
+                IOException e
+        ){
+            e.printStackTrace();
+        }
+
     }
 
 }

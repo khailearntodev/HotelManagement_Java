@@ -72,4 +72,13 @@ public class RevenueReportDetailDAO {
             return false;
         }
     }
+    public List<RevenueReportDetail> getByReportId(int reportId) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                            "FROM RevenueReportDetail WHERE reportID.id = :reportId AND isDeleted = false",
+                            RevenueReportDetail.class)
+                    .setParameter("reportId", reportId)
+                    .list();
+        }
+    }
 }
