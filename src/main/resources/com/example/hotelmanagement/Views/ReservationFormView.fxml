@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="ReservationFormVBox" prefHeight="529.0" prefWidth="900.0" style="-fx-background-color: white; -fx-border-width: 1; -fx-border-color: black" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.ReservationFormController">
+    <children>
+        <AnchorPane prefHeight="30">
+            <Label alignment="CENTER" style="-fx-font-size: 24; -fx-font-weight: bold" text="Thông tin phiếu thuê" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="5" />
+            <ImageView fx:id="closeIcon" fitHeight="26.0" fitWidth="29.0" onMouseClicked="#handleClose" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
+                <cursor>
+                    <Cursor fx:constant="HAND" />
+                </cursor>
+                <image>
+                    <Image url="@../../../../Images/Ionic-Ionicons-Close.512.png" />
+                </image>
+            </ImageView>
+        </AnchorPane>
+        <Separator prefWidth="200.0">
+            <VBox.margin>
+                <Insets top="3.0" />
+            </VBox.margin></Separator>
+        <HBox prefHeight="31.0" prefWidth="900.0">
+            <children>
+                <Label prefHeight="26.0" prefWidth="88.0" style="-fx-font-weight: bold" text="Số phòng:">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="40.0" />
+                    </HBox.margin>
+                </Label>
+                <Label fx:id="roomNumberLabel" prefHeight="26.0" prefWidth="88.0">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+        <AnchorPane prefHeight="35.0" prefWidth="900.0">
+            <children>
+                <Label layoutX="14.0" layoutY="1.0" prefHeight="26.0" prefWidth="103.0" style="-fx-font-weight: bold" text="Loại phòng:" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="0.0">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                <Label fx:id="roomTypeLabel" layoutX="24.0" layoutY="11.0" prefHeight="26.0" prefWidth="663.0" AnchorPane.leftAnchor="135.0" AnchorPane.topAnchor="0.0">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="10.0" layoutY="80.0" prefHeight="35.0" prefWidth="900.0">
+            <children>
+                <Label layoutX="14.0" layoutY="1.0" prefHeight="26.0" prefWidth="154.0" style="-fx-font-weight: bold" text="Ngày nhận phòng:" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="0.0">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                <Label fx:id="checkInDateLabel" layoutX="185.0" layoutY="1.0" prefHeight="26.0" prefWidth="154.0" AnchorPane.leftAnchor="190.0" AnchorPane.topAnchor="0.0">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                <Label layoutX="283.0" prefHeight="26.0" prefWidth="200.0" style="-fx-font-weight: bold" text="Ngày trả phòng (dự kiến):" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="0.0">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+            <Label fx:id="checkOutDateLabel" layoutX="200.0" layoutY="10.0" prefHeight="26.0" prefWidth="154.0" AnchorPane.rightAnchor="95.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="10.0" layoutY="81.0" prefHeight="35.0" prefWidth="900.0">
+            <children>
+                <Label layoutX="14.0" layoutY="1.0" prefHeight="26.0" prefWidth="110.0" style="-fx-font-weight: bold" text="Đơn giá thuê:" AnchorPane.leftAnchor="40.0">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                <Label fx:id="priceLabel" layoutX="24.0" layoutY="11.0" prefHeight="26.0" prefWidth="254.0" AnchorPane.leftAnchor="145.0" AnchorPane.topAnchor="0.0">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <Separator />
+        <AnchorPane layoutX="10.0" layoutY="152.0" prefHeight="35.0" prefWidth="900.0">
+            <children>
+                <Label layoutX="14.0" layoutY="1.0" prefHeight="27.0" prefWidth="200.0" style="-fx-font-weight: bold" text="Danh sách khách thuê:" AnchorPane.leftAnchor="40.0">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </children>
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </AnchorPane>
+        <AnchorPane prefHeight="283.0" prefWidth="898.0">
+            <children>
+                <TableView fx:id="customerTableView" layoutX="52.0" layoutY="28.0" prefHeight="306.0" prefWidth="878.0" styleClass="table-view" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                        <TableColumn fx:id="colNum" prefWidth="33.60000765323639" reorderable="false" resizable="false" sortable="false" text="#" />
+                        <TableColumn fx:id="colName" prefWidth="260.0000228881836" reorderable="false" resizable="false" sortable="false" text="Tên khách hàng" />
+                        <TableColumn fx:id="colIDNumber" prefWidth="184.0" reorderable="false" resizable="false" sortable="false" text="Số CCCD/ Hộ chiếu" />
+                        <TableColumn fx:id="colPhoneNumber" prefWidth="156.79998779296875" reorderable="false" resizable="false" sortable="false" text="Số điện thoại" />
+                        <TableColumn fx:id="colAddress" prefWidth="239.4000122070313" reorderable="false" resizable="false" sortable="false" text="Địa chỉ" />
+                    </columns>
+                </TableView>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

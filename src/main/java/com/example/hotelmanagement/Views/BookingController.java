@@ -118,12 +118,12 @@ public class BookingController implements Initializable {
         priceLabel.textProperty().bind(
                 Bindings.createStringBinding(
                         () -> {
-                            BigDecimal price = viewModel.getRoomDisplay().roomTypePriceProperty().get();
+                            BigDecimal price = viewModel.getRoomDisplay().roomPriceProperty().get();
                             return price != null
                                     ? currencyFormat.format(price) + " VNĐ/đêm"
                                     : "";
                         },
-                        viewModel.getRoomDisplay().roomTypePriceProperty()
+                        viewModel.getRoomDisplay().roomPriceProperty()
                 )
         );
     }
@@ -134,13 +134,43 @@ public class BookingController implements Initializable {
 
         colNum.setCellValueFactory(cell -> cell.getValue().ordinalNumberProperty().asObject());
         colNum.setCellFactory(column -> new TableCell<>() {
+            private final Label label = new Label();
+            private final Button deleteButton = new Button("X");
+
+            {
+                deleteButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red; -fx-cursor: hand;");
+                deleteButton.setOnAction(event -> {
+                    int idx = getIndex();
+                    if (idx >= 0 && idx < viewModel.getCustomerList().size()) {
+                        viewModel.getCustomerList().remove(idx);
+
+                        customerBookingDisplays.clear();
+                        for (int i = 0; i < viewModel.getCustomerList().size(); i++) {
+                            customerBookingDisplays.add(new Booking_CustomerDisplay(viewModel.getCustomerList().get(i), i + 1));
+                        }
+
+                        getTableView().requestFocus();
+                    }
+                });
+
+                hoverProperty().addListener((obs, wasHovered, isNowHovered) -> {
+                    TableRow<?> row = getTableRow();
+                    if (row != null && row.getIndex() == getIndex() && !isEmpty()) {
+                        setGraphic(isNowHovered ? deleteButton : label);
+                    }
+                });
+            }
+
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
+                    setGraphic(null);
                 } else {
-                    setText(item.toString());
+                    label.setText(item.toString());
+                    setText(null);
+                    setGraphic(label);
                     setAlignment(Pos.CENTER);
                 }
             }
@@ -286,6 +316,22 @@ public class BookingController implements Initializable {
     }
 
     public void saveBooking(MouseEvent mouseEvent) {
+        if (viewModel.getCheckOutDate().get() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText(null);
+            alert.setContentText("Vui lòng chọn ngày trả phòng");
+            alert.showAndWait();
+            return;
+        }
+        if (viewModel.getCustomerList().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lồi");
+            alert.setHeaderText(null);
+            alert.setContentText("Vui lòng thêm khách hàng");
+            alert.showAndWait();
+            return;
+        }
         viewModel.addReservation(bookingNoteTextField.getText());
         Stage stage = (Stage) closeIcon.getScene().getWindow();
         stage.close();
