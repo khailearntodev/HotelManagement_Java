@@ -15,6 +15,8 @@ module com.example.hotelmanagement {
     exports com.example.hotelmanagement;
     exports com.example.hotelmanagement.Views;
     opens com.example.hotelmanagement.Views to javafx.fxml;
+    opens com.example.hotelmanagement.Models to org.hibernate.orm.core;
+    opens com.example.hotelmanagement.DTO to javafx.base;
 
     //ADD
     requires jakarta.persistence;
@@ -24,5 +26,10 @@ module com.example.hotelmanagement {
     requires MaterialFX;
     requires org.kordamp.ikonli.fontawesome;
     requires fontawesomefx;
+    requires javafx.swing;
+    requires io;
+    requires kernel;
+    requires layout;
+    requires org.apache.poi.ooxml;
 
 }

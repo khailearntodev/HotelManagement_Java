@@ -1,157 +1,210 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import org.kordamp.ikonli.javafx.*?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="660.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.EmployeeDetailController">
-    <children>
-        <Pane layoutX="50.0" layoutY="30.0" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: #FFF3F3F3;">
-            <children>
-                <VBox prefHeight="600.0" prefWidth="700.0">
-                    <HBox>
-                        <StackedFontIcon iconSize="24" prefHeight="39.0" prefWidth="28.0">
-                            <FontIcon iconLiteral="fa-users" wrappingWidth="32.571428298950195" StackedFontIcon.iconSize="1" />
-                            <HBox.margin>
-                                <Insets left="5.0" top="5.0" />
-                            </HBox.margin>
-                        </StackedFontIcon>
-                        <Label contentDisplay="CENTER" prefHeight="42.0" prefWidth="400.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Chi Tiết Nhân Viên">
-                            <VBox.margin>
-                                <Insets />
-                            </VBox.margin>
-                            <font>
-                                <Font size="14.0" />
-                            </font>
-                            <HBox.margin>
-                                <Insets left="10.0" />
-                            </HBox.margin>
-                            <padding>
-                                <Insets top="10.0" />
-                            </padding></Label>
+<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<AnchorPane prefHeight="700.0" prefWidth="800.0" style=" -fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.EmployeeDetailController">
+
+    <Pane layoutX="43.0" layoutY="30.0" prefHeight="637.0" prefWidth="707.0" style="                 -fx-border-radius: 10;                 -fx-background-color: #FFF3F3F3;                 -fx-background-radius: 10;">
+        <VBox prefHeight="600.0" prefWidth="700.0">
+            <HBox>
+                <Label contentDisplay="CENTER" prefHeight="45.0" prefWidth="721.0" style="-fx-font-size: 28; -fx-font-weight: bold;" text="CHI TIẾT NHÂN VIÊN">
+                    <font>
+                        <Font size="36.0" />
+                    </font>
+                    <padding>
+                        <Insets left="220.0" top="10.0" />
+                    </padding>
+                </Label>
+                <HBox.margin>
+                    <Insets left="5.0" top="5.0" />
+                </HBox.margin>
+                <HBox.margin>
+                    <Insets left="10.0" />
+                </HBox.margin>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+                <StackedFontIcon iconSize="64" prefHeight="95.0" prefWidth="150.0" style="-fx-border-color: gray;">
+                    <FontIcon iconLiteral="fa-user" wrappingWidth="47.571428298950195" />
+                </StackedFontIcon>
+                <HBox.margin>
+                    <Insets left="10"/>
+                </HBox.margin>
+
+                <VBox prefHeight="135.0" prefWidth="313.0">
+                    <MFXTextField fx:id="txtFullName" floatingText="Họ tên" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0">
+                  <VBox.margin>
+                     <Insets bottom="5.0" left="20.0" />
+                  </VBox.margin></MFXTextField>
+                    <MFXTextField fx:id="txtPosition" floatingText="Chức vụ" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0">
+                  <VBox.margin>
+                     <Insets bottom="5.0" left="20.0" />
+                  </VBox.margin></MFXTextField>
+                    <MFXTextField fx:id="txtEmployeeId" disable="true" floatingText="Mã nhân viên" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0">
+                  <VBox.margin>
+                     <Insets left="20.0" />
+                  </VBox.margin></MFXTextField>
+                    <VBox.margin>
+                        <Insets left="50.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets left="50.0" top="5.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets left="50.0" top="5.0" />
+                    </VBox.margin>
+                </VBox>
+                <HBox.margin>
+                    <Insets left="5.0" top="5.0" />
+                </HBox.margin>
+            </HBox>
+         <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="700.0" style="-fx-font-size: 20;" text="Thông Tin Cá Nhân">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+            <VBox.margin>
+               <Insets left="30.0" top="10.0" />
+            </VBox.margin>
+         </Label>
+            <HBox prefHeight="441.0" prefWidth="720.0">
+                <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="384.0" prefWidth="350.0">
+                    <MFXTextField fx:id="txtIdentityNumber" floatMode="INLINE" floatingText="Số CCCD" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" style="-fx-border-color: gray;">
                   <VBox.margin>
                      <Insets bottom="10.0" />
-                  </VBox.margin>
-                    </HBox>
-                    <HBox prefHeight="100.0" prefWidth="200.0">
-                        <children>
-                            <StackedFontIcon iconSize="64" prefHeight="95.0" prefWidth="90.0" style="-fx-border-color: gray;">
-                                <FontIcon iconLiteral="fa-user" wrappingWidth="47.571428298950195" StackedFontIcon.iconSize="1" />
-                                <HBox.margin>
-                                    <Insets left="5.0" top="5.0" />
-                                </HBox.margin>
-                            </StackedFontIcon>
-                            <VBox prefHeight="150.0" prefWidth="542.0">
-                                <children>
-                                    <MFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0"  promptText="Họ tên">
-                                        <VBox.margin>
-                                            <Insets left="10.0" top="5.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0"  promptText="Chức vụ">
-                                        <VBox.margin>
-                                            <Insets left="10.0" top="5.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="300.0"  promptText="Mã nhân viên">
-                                        <VBox.margin>
-                                            <Insets left="10.0" top="5.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                </children>
-                            </VBox>
-                        </children>
-                    </HBox>
-                    <HBox prefHeight="458.0" prefWidth="700.0">
-                        <children>
-                            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="457.0" prefWidth="350.0">
-                                <children>
-                                    <MFXTextField floatMode="ABOVE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Số CCCD" style="-fx-border-color: gray;">
-                                        <VBox.margin>
-                                            <Insets top="20.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField floatMode="ABOVE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Ngày  sinh" style="-fx-border-color: gray;">
-                                        <VBox.margin>
-                                            <Insets top="20.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField floatMode="ABOVE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Địa chỉ" style="-fx-border-color: gray;">
-                                        <VBox.margin>
-                                            <Insets top="20.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField floatMode="ABOVE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Hệ số lương" style="-fx-border-color: gray;">
-                                        <VBox.margin>
-                                            <Insets top="20.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField floatMode="ABOVE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Hạn hợp đồng" style="-fx-border-color: gray;">
-                                        <VBox.margin>
-                                            <Insets top="20.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField floatMode="ABOVE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Tài khoản" style="-fx-border-color: gray;">
-                                        <VBox.margin>
-                                            <Insets top="20.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                </children>
-                            </VBox>
-                            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="457.0" prefWidth="350.0">
-                                <children>
-                                    <MFXTextField floatMode="ABOVE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Email" style="-fx-border-color: gray;">
-                                        <VBox.margin>
-                                            <Insets top="20.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField floatMode="ABOVE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Số điện thoại" style="-fx-border-color: gray;">
-                                        <VBox.margin>
-                                            <Insets top="20.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField floatMode="ABOVE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Ngày vào làm" style="-fx-border-color: gray;">
-                                        <VBox.margin>
-                                            <Insets top="20.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField floatMode="ABOVE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Giới tính" style="-fx-border-color: gray;">
-                                        <VBox.margin>
-                                            <Insets top="20.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField floatMode="ABOVE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Loại hợp đồng" style="-fx-border-color: gray;">
-                                        <VBox.margin>
-                                            <Insets top="20.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <MFXTextField floatMode="ABOVE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Mật khẩu" style="-fx-border-color: gray;">
-                                        <VBox.margin>
-                                            <Insets top="20.0" />
-                                        </VBox.margin>
-                                    </MFXTextField>
-                                    <HBox prefHeight="100.0" prefWidth="200.0">
-                                        <children>
-                                            <MFXButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" text="Lưu" style="-fx-background-color: #2563EB; -fx-text-fill: white;"/>
-                                            <MFXButton layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0" text="Đóng" style="-fx-background-color: Maroon; -fx-text-fill: white;">
-                                                <HBox.margin>
-                                                    <Insets left="30.0" />
-                                                </HBox.margin>
-                                            </MFXButton>
-                                        </children>
-                                        <VBox.margin>
-                                            <Insets top="30.0" />
-                                        </VBox.margin>
-                                    </HBox>
-                                </children>
-                            </VBox>
-                        </children>
-                    </HBox>
+                  </VBox.margin></MFXTextField>
+                    <MFXTextField fx:id="txtAddress" floatMode="INLINE" floatingText="Địa chỉ" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" style="-fx-border-color: gray;">
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin></MFXTextField>
+                    <MFXTextField fx:id="txtSalaryRate" floatMode="INLINE" floatingText="Hệ số lương" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" style="-fx-border-color: gray;">
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin></MFXTextField>
+               <Label prefHeight="17.0" prefWidth="97.0" text="Ngày sinh" />
+                    <MFXDatePicker fx:id="dpDateOfBirth" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" promptText="Ngày  sinh" style="-fx-border-color: gray;">
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin></MFXDatePicker>
+               <Label prefHeight="17.0" prefWidth="109.0" text="Ngày vào làm" />
+                    <MFXDatePicker fx:id="dpStartingDate" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" promptText="Ngày vào làm" style="-fx-border-color: gray;">
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin></MFXDatePicker>
+               <Label text="Hạn hợp đồng" />
+                    <MFXDatePicker fx:id="dpContractDate" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" promptText="Hạn hợp đồng" style="-fx-border-color: gray;">
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin></MFXDatePicker>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <HBox.margin>
+                        <Insets left="20.0" top="10.0" />
+                    </HBox.margin>
                 </VBox>
-            </children>
-        </Pane>
-    </children>
+                <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="350.0">
+                    <MFXTextField fx:id="txtEmail" floatMode="INLINE" floatingText="Email" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" style="-fx-border-color: gray;">
+                  <VBox.margin>
+                     <Insets bottom="10.0" left="10.0" />
+                  </VBox.margin></MFXTextField>
+                    <MFXTextField fx:id="txtPhoneNumber" floatMode="INLINE" floatingText="Số điện thoại" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" style="-fx-border-color: gray;">
+                  <VBox.margin>
+                     <Insets bottom="10.0" left="10.0" />
+                  </VBox.margin></MFXTextField>
+                    <MFXComboBox fx:id="comboGender" floatMode="INLINE" floatingText="Giới tính" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" style="-fx-border-color: gray;">
+                  <VBox.margin>
+                     <Insets bottom="10.0" left="10.0" />
+                  </VBox.margin></MFXComboBox>
+                    <MFXTextField fx:id="txtContractType" floatMode="INLINE" floatingText="Loại hợp đồng" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" style="-fx-border-color: gray;">
+                  <VBox.margin>
+                     <Insets bottom="10.0" left="10.0" top="15.0" />
+                  </VBox.margin></MFXTextField>
+               <MFXButton prefHeight="58.0" prefWidth="330.0" style="-fx-background-color: #2563EB; -fx-text-fill: white;" text="Xem thông tin tài khoản" onAction="#onViewAccount">
+                  <VBox.margin>
+                     <Insets top="30.0" />
+                  </VBox.margin>
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </MFXButton>
+                    <HBox prefHeight="100.0" prefWidth="200.0">
+
+                        <MFXButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onSave" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #2563EB; -fx-text-fill: white;" text="Lưu">
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font></MFXButton>
+                        <MFXButton layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onCancel" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: Maroon; -fx-text-fill: white;" text="Đóng">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font></MFXButton>
+                        <HBox.margin>
+                            <Insets left="30.0" />
+                        </HBox.margin>
+                    </HBox>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                    <VBox.margin>
+                        <Insets top="30.0" />
+                    </VBox.margin>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+                </VBox>
+            </HBox>
+            <VBox.margin>
+                <Insets bottom="10.0" />
+            </VBox.margin>
+        </VBox>
+    </Pane>
 </AnchorPane>

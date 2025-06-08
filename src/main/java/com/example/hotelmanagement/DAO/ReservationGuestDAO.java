@@ -72,4 +72,15 @@ public class ReservationGuestDAO {
             return false;
         }
     }
+
+    public int countReservationsByCustomerId(int customerId) {
+        try (Session session = HibernateUtils.getSession()) {
+            Long count = session.createQuery(
+                            "SELECT COUNT(rg.id) FROM Reservationguest rg WHERE rg.customerID.id = :cid AND rg.isDeleted = false", Long.class)
+                    .setParameter("cid", customerId)
+                    .uniqueResult();
+
+            return count != null ? count.intValue() : 0;
+        }
+    }
 }

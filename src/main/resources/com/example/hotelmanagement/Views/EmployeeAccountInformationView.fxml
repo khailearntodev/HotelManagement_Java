@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.ComboBox?>
+<AnchorPane minHeight="-Infinity" prefHeight="400.0" prefWidth="450.0" style="-fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.EmployeeAccountInformationController">
+    <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="500.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Label style="-fx-font-size: 24; -fx-font-weight: bold;" text="Thông tin tài khoản">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin></Label>
+        <MFXTextField fx:id="usernameField" floatingText="Tên đăng nhập" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="300.0">
+            <cursor>
+                <Cursor fx:constant="TEXT" />
+            </cursor>
+        </MFXTextField>
+        <MFXPasswordField fx:id="passwordField" floatingText="Mật khẩu" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="300.0" />
+        <MFXPasswordField fx:id="confirmPasswordField" floatingText="Xác nhận mật khẩu" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="300.0" />
+        <ComboBox fx:id="roleComboBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Phân quyền tài khoản" />
+        <HBox spacing="15.0">
+            <MFXButton fx:id="saveButton" onAction="#onSave" prefHeight="35" prefWidth="170.0" style="-fx-background-color: #2F80ED; -fx-text-fill: white;" text="Lưu">
+            <HBox.margin>
+               <Insets left="55.0" />
+            </HBox.margin>
+            <font>
+               <Font size="13.0" />
+            </font></MFXButton>
+            <MFXButton fx:id="resetButton" onAction="#onReset" prefHeight="35" prefWidth="170.0" style="-fx-background-color: Maroon; -fx-text-fill: white;" text="Đặt lại">
+            <font>
+               <Font size="13.0" />
+            </font></MFXButton>
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+        </HBox>
+    </VBox>
+</AnchorPane>

@@ -8,33 +8,39 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane prefHeight="450.0" prefWidth="800.0" style="-fx-background-radius: 20; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.LoginController">
-   <SplitPane dividerPositions="0.5" prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #ffffff; -fx-background-insets: 0; -fx-background-radius: 20;">
-      <items>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="850.0" style="-fx-background-radius: 20; -fx-background-insets: 0; -fx-border-color: black; -fx-border-width: 2;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.LoginController">
+   <HBox prefHeight="450.0" prefWidth="800.0" style="-fx-background-color: #ffffff; -fx-background-insets: 0; -fx-background-radius: 20;">
+      <children>
          <!-- Bên trái -->
          <StackPane fx:id="carouselPane" prefHeight="450.0" prefWidth="400.0" style="-fx-background-color: #2F80ED;">
             <children>
+               <!-- Ảnh động -->
+               <ImageView fx:id="carouselImage" fitHeight="350.0" fitWidth="310.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                  <StackPane.margin>
+                     <Insets top="50.0" />
+                  </StackPane.margin></ImageView>
                <!-- Tiêu đề overlay -->
                <VBox alignment="BOTTOM_CENTER" spacing="5" StackPane.alignment="BOTTOM_CENTER">
                   <padding>
                      <Insets bottom="20" left="20" right="20" top="20" />
                   </padding>
-                  <Label style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" text="New Scheduling And Routing Options" />
-                  <Label style="-fx-text-fill: white; -fx-font-size: 12px;" text="We also updated the format of podcasts and rewards." />
+                  <Label style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" text="&quot;Nơi sang trọng hòa quyện cùng từng khoảnh">
+                     <font>
+                        <Font size="13.0" />
+                     </font></Label>
+                  <Label style="-fx-text-fill: white; -fx-font-size: 16;" text="khắc tận hưởng cuộc sống đích thực.&quot;" />
                </VBox>
-               <!-- Ảnh động -->
-               <ImageView fx:id="carouselImage" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
             </children>
          </StackPane>
          <!-- Bên phair -->
-         <VBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="400.0" spacing="10">
+         <VBox alignment="TOP_CENTER" prefHeight="496.0" prefWidth="448.0" spacing="10">
             <children>
                <ImageView fx:id="closeIcon" fitHeight="26.0" fitWidth="29.0" onMouseClicked="#handleClose" pickOnBounds="true" preserveRatio="true">
                   <cursor>
                      <Cursor fx:constant="HAND" />
                   </cursor>
                   <VBox.margin>
-                     <Insets left="350.0" top="10.0" />
+                     <Insets left="400.0" top="10.0" />
                   </VBox.margin>
                   <image>
                      <Image url="@../../../../Images/Ionic-Ionicons-Close.512.png" />
@@ -48,12 +54,12 @@
                      <Insets bottom="15.0" top="20.0" />
                   </VBox.margin>
                </ImageView>
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hello Again!">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Xin chào!">
                   <font>
                      <Font name="Arial" size="24.0" />
                   </font>
                </Text>
-               <Label prefHeight="16.0" prefWidth="290.0" text="A brand new day is here. It's your day to shape. ">
+               <Label prefHeight="21.0" prefWidth="326.0" text="&quot;Bước vào đẳng cấp – Khởi đầu hành trình tận hưởng.&quot;" wrapText="true">
                   <font>
                      <Font name="Arial" size="13.0" />
                   </font>
@@ -61,15 +67,7 @@
                      <Insets />
                   </VBox.margin>
                </Label>
-               <Label prefHeight="18.0" prefWidth="292.0" text="Sign in and get started on your project.">
-                  <VBox.margin>
-                     <Insets top="-8.0" />
-                  </VBox.margin>
-                  <font>
-                     <Font name="Arial" size="13.0" />
-                  </font>
-               </Label>
-               <MFXTextField fx:id="usernameField" floatingText="Username" prefHeight="50.0" prefWidth="260.0">
+               <MFXTextField fx:id="usernameField" floatingText="Tên đăng nhập" prefHeight="50.0" prefWidth="260.0">
                   <VBox.margin>
                      <Insets top="10.0" />
                   </VBox.margin>
@@ -77,13 +75,13 @@
                      <Cursor fx:constant="TEXT" />
                   </cursor>
                </MFXTextField>
-               <MFXPasswordField fx:id="passwordField" floatingText="Password" prefHeight="50.0" prefWidth="260.0" />
-               <MFXButton fx:id="loginButton" buttonType="RAISED" prefHeight="35.0" prefWidth="260.0" rippleColor="#2f80ed" style="-fx-background-color: #2F80ED; -fx-text-fill: #000000;" styleClass="mfx-button" text="Login">
+               <MFXPasswordField fx:id="passwordField" floatingText="Mật khẩu" prefHeight="50.0" prefWidth="260.0" />
+               <MFXButton fx:id="loginButton" buttonType="RAISED" prefHeight="35.0" prefWidth="260.0" rippleColor="#2f80ed" style="-fx-background-color: #2F80ED; -fx-text-fill: #ffffff;" styleClass="mfx-button" text="Đăng nhập" textFill="WHITE">
                   <VBox.margin>
                      <Insets top="15.0" />
                   </VBox.margin>
                   <font>
-                     <Font name="Arial Bold" size="13.0" />
+                     <Font name="Arial Bold" size="14.0" />
                   </font>
                   <cursor>
                      <Cursor fx:constant="HAND" />
@@ -91,6 +89,6 @@
                </MFXButton>
             </children>
          </VBox>
-      </items>
-   </SplitPane>
+      </children>
+   </HBox>
 </StackPane>

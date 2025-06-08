@@ -12,9 +12,16 @@ public class CustomerDAO {
     // Lấy tất cả khách hàng chưa bị xóa
     public List<Customer> getAllCustomers() {
         try (Session session = HibernateUtils.getSession()) {
-            return session.createQuery("FROM Customer WHERE isDeleted = false", Customer.class).list();
+            return session.createQuery(
+                    "SELECT DISTINCT c FROM Customer c " +
+                            "LEFT JOIN FETCH c.customerTypeID " +
+                            "LEFT JOIN FETCH c.reservationguests rg " +
+                            "LEFT JOIN FETCH rg.reservationID " +
+                            "WHERE c.isDeleted = false", Customer.class
+            ).list();
         }
     }
+
 
     // Tìm khách hàng theo ID
     public Customer findById(int id) {
@@ -76,6 +83,20 @@ public class CustomerDAO {
                 return true;
             }
             return false;
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean saveOrUpdate(Customer customer) {
+        Transaction tx = null;
+        try (Session session = HibernateUtils.getSession()) {
+            tx = session.beginTransaction();
+            session.saveOrUpdate(customer);
+            tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx != null) tx.rollback();
             e.printStackTrace();

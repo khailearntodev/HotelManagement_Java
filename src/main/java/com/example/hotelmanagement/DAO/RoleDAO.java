@@ -23,6 +23,15 @@ public class RoleDAO {
         }
     }
 
+    // Tìm Role theo tên
+    public Role findByName(String roleName) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery("FROM Role WHERE roleName = :name AND isDeleted = false", Role.class)
+                    .setParameter("name", roleName)
+                    .uniqueResult();
+        }
+    }
+
     // Thêm mới Role
     public boolean save(Role role) {
         Transaction tx = null;
