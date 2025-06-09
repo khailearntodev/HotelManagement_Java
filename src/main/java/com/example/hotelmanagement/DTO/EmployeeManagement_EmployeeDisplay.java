@@ -2,6 +2,8 @@ package com.example.hotelmanagement.DTO;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class EmployeeManagement_EmployeeDisplay {
     private int employeeId;
@@ -96,5 +98,20 @@ public class EmployeeManagement_EmployeeDisplay {
 
     public String getPosition() {
         return position;
+    }
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            .withZone(ZoneId.systemDefault());
+
+    public String getStartingDateFormatted() {
+        return startingDate != null ? formatter.format(startingDate) : "";
+    }
+
+    public String getContractDateFormatted() {
+        return contractDate != null ? formatter.format(contractDate) : "";
+    }
+
+    public String getBirthdayFormatted() {
+        return birthday != null ? formatter.format(birthday) : "";
     }
 }

@@ -338,7 +338,8 @@ public class CustomerManagementViewModel {
                 customerBlock.add(new Paragraph("Loại: " + customer.getCustomerType() + " | Số giấy tờ: " + customer.getIdentityNumber())
                         .setFont(vietnameseFont)
                         .setFontSize(11));
-                customerBlock.add(new Paragraph("Ngày sinh: " + (customer.getBirthday() == null ? "" : customer.getBirthday()) + " | Trạng thái: " + customer.getStatus())
+                customerBlock.add(new Paragraph("Ngày sinh: " + customer.getFormattedBirthday() + " | Trạng thái: " + customer.getStatus())
+
                         .setFont(vietnameseFont)
                         .setFontSize(11));
                 customerBlock.add(new Paragraph("CCCD / Hộ chiếu: " + customer.getIdentityNumber() + " | SDT: " + customer.getPhoneNumber())

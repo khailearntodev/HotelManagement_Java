@@ -1,6 +1,8 @@
 package com.example.hotelmanagement.Views;
 
 import com.example.hotelmanagement.Main;
+import com.example.hotelmanagement.ViewModels.LoginViewModel;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -9,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -25,7 +28,19 @@ public class MainWindowController{
     @FXML
     private StackPane contentContainer;
 
+    @FXML
+    private Label employeeName;
+
+    @FXML
+    private Label tabName;
+
     private SlideBarController slideBarController;
+
+    public void setTabName(String name)
+    {
+        tabName.setText(name);
+    }
+
 
     @FXML
     public void initialize() {
@@ -35,7 +50,8 @@ public class MainWindowController{
             slideBarController = loader.getController();
             slideBarController.setMainWindowController(this);
             barContainer.getChildren().add(slideBar);
-
+            String name = LoginViewModel.employeeName;
+            employeeName.setText(name);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -97,7 +113,7 @@ public class MainWindowController{
         alert.setContentText("Tất cả các thay đổi chưa lưu sẽ bị mất.");
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.setStyle(
-                "-fx-border-color: #2F80ED; " +
+                "-fx-border-color: black; " +
                         "-fx-border-width: 2; "
         );
         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();

@@ -14,10 +14,20 @@
 
       <HBox layoutX="287.0" prefHeight="59.0" prefWidth="1208.0" style="-fx-background-color: #fff; -fx-padding: 5 10; -fx-alignment: center-left; -fx-spacing: 10;" AnchorPane.leftAnchor="270.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <children>
-            <Label fx:id="txtUserName" prefHeight="35.0" prefWidth="200">
+            <Label fx:id="tabName" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="350.0">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <padding>
+                  <Insets left="10.0" />
+               </padding></Label>
+            <Label fx:id="employeeName" alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="200" textAlignment="RIGHT">
                <HBox.margin>
-                  <Insets left="740.0" />
+                  <Insets left="380.0" />
                </HBox.margin>
+               <font>
+                  <Font size="14.0" />
+               </font>
                </Label>
 
             <Region HBox.hgrow="ALWAYS" />
@@ -28,7 +38,7 @@
          </children>
       </HBox>
 
-      <VBox prefHeight="820.0" prefWidth="230.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="4.0" layoutY="4.0" prefHeight="814.0" prefWidth="230.0" style="-fx-background-color: white; -fx-border-radius: 20;" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="3.0" AnchorPane.topAnchor="3.0">
          <children>
             <ImageView fitHeight="64.0" fitWidth="139.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -36,7 +46,8 @@
                </image>
                <VBox.margin>
                   <Insets bottom="10.0" left="40.0" top="10.0" />
-               </VBox.margin></ImageView>
+               </VBox.margin>
+            </ImageView>
             <Label text="Hotel N10">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -57,14 +68,14 @@
                <VBox.margin>
                   <Insets top="50.0" />
                </VBox.margin></StackPane>
-            <MFXButton mnemonicParsing="false" onAction="#onLogoutClicked" prefHeight="38.0" prefWidth="230.0" style="-fx-background-color: white;" text="Đăng xuất">
+            <MFXButton mnemonicParsing="false" onAction="#onLogoutClicked" prefHeight="38.0" prefWidth="230.0" style="-fx-background-color: white; -fx-border-radius: 20;" text="Đăng xuất">
                <graphic>
                   <StackedFontIcon iconSize="30">
                      <FontIcon iconLiteral="fa-sign-out" StackedFontIcon.iconSize="2" />
                   </StackedFontIcon>
                </graphic>
             <VBox.margin>
-                  <Insets top="20.0" />
+                  <Insets left="5.0" top="20.0" />
                </VBox.margin>
                <font>
                   <Font size="18.0" />

@@ -17,8 +17,8 @@
 
             <!-- Filters -->
             <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10">
-                <ComboBox fx:id="cbPosition" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="150" promptText="Chức vụ" />
-                <ComboBox fx:id="cbGender" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="150.0" promptText="Giới tính" />
+                <MFXComboBox fx:id="cbPosition" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="150" promptText="Chức vụ" />
+                <MFXComboBox fx:id="cbGender" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="150.0" promptText="Giới tính" />
             <HBox.margin>
                <Insets left="10.0" top="10.0" />
             </HBox.margin>

@@ -1,6 +1,8 @@
 package com.example.hotelmanagement.DTO;
 
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 
 public class Dashboard_BookingDisplay {
     private String bookingId;
@@ -64,12 +66,16 @@ public class Dashboard_BookingDisplay {
         return sourceType;
     }
 
+    private static final DateTimeFormatter DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy").withZone(ZoneId.systemDefault());
+
     public String getCheckInDateString() {
-        return checkInDate != null ? checkInDate.toString() : "";
+        return checkInDate != null ? DATE_FORMATTER.format(checkInDate) : "";
     }
 
     public String getCheckOutDateString() {
-        return checkOutDate != null ? checkOutDate.toString() : "";
+        return checkOutDate != null ? DATE_FORMATTER.format(checkOutDate) : "";
     }
+
 
 }

@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -30,7 +31,7 @@ public class AddRoomTypeController implements Initializable {
     @FXML
     private MFXTextField basePriceField;
     @FXML
-    private MFXTextField descriptionField;
+    private TextArea descriptionField;
     @FXML
     private MFXTextField maxOccupancyField; // Added fx:id for max occupancy field
     @FXML

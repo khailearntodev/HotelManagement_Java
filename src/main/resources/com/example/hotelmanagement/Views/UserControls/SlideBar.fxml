@@ -22,6 +22,9 @@
                         <children>
                            <StackedFontIcon iconSize="48">
                               <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
                            </StackedFontIcon>
 
                            <Text fill="#0033ff" text="TRANG CHỦ" wrappingWidth="154.6">
@@ -29,7 +32,7 @@
                                  <Insets left="20.0" top="10.0" />
                               </HBox.margin>
                               <font>
-                                 <Font name="Arial" size="17.0" />
+                                 <Font name="Arial Bold" size="16.0" />
                               </font>
                            </Text>
                         </children>
@@ -47,14 +50,17 @@
                      <HBox prefHeight="54.0" prefWidth="800.0">
                         <children>
                            <StackedFontIcon iconSize="48">
-                              <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                              <FontIcon iconLiteral="fa-bed" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
                            </StackedFontIcon>
                            <Text fill="#0033ff" text="PHÒNG" wrappingWidth="92.6">
                               <HBox.margin>
-                                 <Insets left="20.0" top="10.0" />
+                                 <Insets left="18.0" top="10.0" />
                               </HBox.margin>
                               <font>
-                                 <Font name="Arial" size="17.0" />
+                                 <Font name="Arial Bold" size="16.0" />
                               </font>
                            </Text>
                         </children>
@@ -73,16 +79,17 @@
                      <HBox prefHeight="54.0" prefWidth="800.0">
                         <children>
                            <StackedFontIcon iconSize="48">
-                              <children>
-                                 <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
-                              </children>
+                                 <FontIcon iconLiteral="fa-calendar" StackedFontIcon.iconSize="0.5" />
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
                            </StackedFontIcon>
                            <Text fill="#0033ff" text="ĐẶT PHÒNG" wrappingWidth="127.6">
                               <HBox.margin>
-                                 <Insets left="20.0" top="10.0" />
+                                 <Insets left="22.0" top="10.0" />
                               </HBox.margin>
                               <font>
-                                 <Font name="Arial" size="17.0" />
+                                 <Font name="Arial Bold" size="16.0" />
                               </font>
                            </Text>
                         </children>
@@ -97,14 +104,17 @@
                      <HBox prefHeight="54.0" prefWidth="800.0">
                         <children>
                            <StackedFontIcon iconSize="48">
-                              <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                              <FontIcon iconLiteral="fa-bath" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
                            </StackedFontIcon>
                            <Text fill="#0033ff" text="TIỆN NGHI" wrappingWidth="92.6">
                               <HBox.margin>
-                                 <Insets left="20.0" top="10.0" />
+                                 <Insets left="19.0" top="10.0" />
                               </HBox.margin>
                               <font>
-                                 <Font name="Arial" size="17.0" />
+                                 <Font name="Arial Bold" size="16.0" />
                               </font>
                            </Text>
                         </children>
@@ -119,14 +129,17 @@
                      <HBox prefHeight="54.0" prefWidth="800.0">
                         <children>
                            <StackedFontIcon iconSize="48">
-                              <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                              <FontIcon iconLiteral="fa-bell" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
                            </StackedFontIcon>
                            <Text fill="#0033ff" text="DỊCH VỤ" wrappingWidth="92.6">
                               <HBox.margin>
-                                 <Insets left="20.0" top="10.0" />
+                                 <Insets left="21.0" top="10.0" />
                               </HBox.margin>
                               <font>
-                                 <Font name="Arial" size="17.0" />
+                                 <Font name="Arial Bold" size="16.0" />
                               </font>
                            </Text>
                         </children>
@@ -141,14 +154,17 @@
                      <HBox prefHeight="54.0" prefWidth="800.0">
                         <children>
                            <StackedFontIcon iconSize="48">
-                              <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                              <FontIcon iconLiteral="fa-money" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
                            </StackedFontIcon>
                            <Text fill="#0033ff" text="LỊCH SỬ HÓA ĐƠN" wrappingWidth="165.79998168945312">
                               <HBox.margin>
                                  <Insets left="20.0" top="10.0" />
                               </HBox.margin>
                               <font>
-                                 <Font name="Arial" size="17.0" />
+                                 <Font name="Arial Bold" size="16.0" />
                               </font>
                            </Text>
                         </children>
@@ -163,14 +179,17 @@
                      <HBox prefHeight="54.0" prefWidth="800.0">
                         <children>
                            <StackedFontIcon iconSize="48">
-                              <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                              <FontIcon iconLiteral="fa-users" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
                            </StackedFontIcon>
                            <Text fill="#0033ff" text="KHÁCH HÀNG" wrappingWidth="116.59996948242187">
                               <HBox.margin>
                                  <Insets left="20.0" top="10.0" />
                               </HBox.margin>
                               <font>
-                                 <Font name="Arial" size="17.0" />
+                                 <Font name="Arial Bold" size="16.0" />
                               </font>
                            </Text>
                         </children>
@@ -185,14 +204,17 @@
                      <HBox prefHeight="54.0" prefWidth="800.0">
                         <children>
                            <StackedFontIcon iconSize="48">
-                              <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                              <FontIcon iconLiteral="fa-user" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
                            </StackedFontIcon>
                            <Text fill="#0033ff" text="NHÂN VIÊN" wrappingWidth="92.6">
                               <HBox.margin>
-                                 <Insets left="20.0" top="10.0" />
+                                 <Insets left="28.0" top="10.0" />
                               </HBox.margin>
                               <font>
-                                 <Font name="Arial" size="17.0" />
+                                 <Font name="Arial Bold" size="16.0" />
                               </font>
                            </Text>
                         </children>
@@ -207,14 +229,17 @@
                      <HBox prefHeight="54.0" prefWidth="800.0">
                         <children>
                            <StackedFontIcon iconSize="48">
-                              <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                              <FontIcon iconLiteral="fa-bar-chart" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
                            </StackedFontIcon>
                            <Text fill="#0033ff" text="THỐNG KÊ" wrappingWidth="92.6">
                               <HBox.margin>
-                                 <Insets left="20.0" top="10.0" />
+                                 <Insets left="18.0" top="10.0" />
                               </HBox.margin>
                               <font>
-                                 <Font name="Arial" size="17.0" />
+                                 <Font name="Arial Bold" size="16.0" />
                               </font>
                            </Text>
                         </children>
@@ -229,14 +254,17 @@
                      <HBox prefHeight="54.0" prefWidth="800.0">
                         <children>
                            <StackedFontIcon iconSize="48">
-                              <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                              <FontIcon iconLiteral="fa-cogs" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
                            </StackedFontIcon>
                            <Text fill="#0033ff" text="CẤU HÌNH" wrappingWidth="92.6">
                               <HBox.margin>
                                  <Insets left="20.0" top="10.0" />
                               </HBox.margin>
                               <font>
-                                 <Font name="Arial" size="17.0" />
+                                 <Font name="Arial Bold" size="16.0" />
                               </font>
                            </Text>
                         </children>

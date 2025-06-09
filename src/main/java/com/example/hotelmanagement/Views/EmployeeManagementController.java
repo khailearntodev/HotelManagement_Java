@@ -4,6 +4,7 @@ import com.example.hotelmanagement.DTO.EmployeeManagement_EmployeeDisplay;
 import com.example.hotelmanagement.DTO.EmployeeManagement_EmployeeDisplay;
 import com.example.hotelmanagement.Main;
 import com.example.hotelmanagement.ViewModels.EmployeeManagementViewModel;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -30,8 +31,8 @@ public class EmployeeManagementController implements Initializable {
     private final EmployeeManagementViewModel viewModel = new EmployeeManagementViewModel();
 
     // FXML Bindings
-    @FXML private ComboBox<String> cbPosition;
-    @FXML private ComboBox<String> cbGender;
+    @FXML private MFXComboBox<String> cbPosition;
+    @FXML private MFXComboBox<String> cbGender;
     @FXML private MFXTextField searchField;
     @FXML private TableView<EmployeeManagement_EmployeeDisplay> tableEmployees;
     @FXML private TableColumn<EmployeeManagement_EmployeeDisplay, ?> colCheck;
@@ -110,10 +111,12 @@ public class EmployeeManagementController implements Initializable {
         colId.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getEmployeeId()));
         colName.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getEmployeeName()));
         colChucVu.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getPosition()));
-        colNgayTuyen.setCellValueFactory(data -> new ReadOnlyStringWrapper(
-                data.getValue().getStartingDate() != null ? data.getValue().getStartingDate().toString() : ""));
+        //colNgayTuyen.setCellValueFactory(data -> new ReadOnlyStringWrapper(
+                //data.getValue().getStartingDate() != null ? data.getValue().getStartingDate().toString() : ""));
         colHopDong.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getContractType()));
-        colHanHopDong.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getContractDate() != null ? data.getValue().getContractDate().toString() : ""));
+        //colHanHopDong.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getContractDate() != null ? data.getValue().getContractDate().toString() : ""));
+        colNgayTuyen.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getStartingDateFormatted()));
+        colHanHopDong.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getContractDateFormatted()));
         colHeSoLuong.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getSalaryRate()));
 
         // Table data
@@ -138,11 +141,35 @@ public class EmployeeManagementController implements Initializable {
         });
 
         btnDelete.setOnAction(e -> {
-            boolean deleted = viewModel.deleteSelectedEmployee();
-            if (!deleted) {
+            EmployeeManagement_EmployeeDisplay selected = tableEmployees.getSelectionModel().getSelectedItem();
+            if (selected == null) {
                 showAlert(Alert.AlertType.WARNING, "Vui lòng chọn một nhân viên để xóa.");
+                return;
             }
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Xác nhận xóa");
+            alert.setHeaderText("Bạn có chắc chắn muốn xóa nhân viên này không?");
+            alert.setContentText("Hành động này không thể hoàn tác.");
+
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.setStyle(
+                    "-fx-border-color: black; " +
+                            "-fx-border-width: 2;"
+            );
+            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+            alertStage.initStyle(StageStyle.UNDECORATED);
+
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    boolean deleted = viewModel.deleteSelectedEmployee();
+                    if (!deleted) {
+                        showAlert(Alert.AlertType.ERROR, "Xóa thất bại. Vui lòng thử lại.");
+                    }
+                }
+            });
         });
+
 
         btnAdd.setOnAction(e -> openEmployeeDetail(null));
 

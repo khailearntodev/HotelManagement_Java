@@ -52,6 +52,7 @@ public class SlideBarController {
         if (allowedViews.contains("TrangChu")) {
             btnTrangChu.setSelected(true);
             mainWindowController.loadContentView("/com/example/hotelmanagement/Views/DashboardView.fxml");
+            mainWindowController.setTabName("Trang chủ");
         }
 
         updateButtonVisibility(btnTrangChu, allowedViews.contains("TrangChu"));
@@ -71,24 +72,34 @@ public class SlideBarController {
     private void onToggleSelected() {
         if (btnTrangChu.isSelected()) {
             mainWindowController.loadContentView("/com/example/hotelmanagement/Views/DashboardView.fxml");
+            mainWindowController.setTabName("Trang Chủ");
         } else if (btnPhong.isSelected()) {
             mainWindowController.loadContentView("/com/example/hotelmanagement/Views/ManageRoomType.fxml");
+            mainWindowController.setTabName("Quản Lý Phòng");
         } else if (btnDatPhong.isSelected()) {
             mainWindowController.loadContentView("/com/example/hotelmanagement/Views/ReservationView.fxml");
+            mainWindowController.setTabName("Đặt Phòng");
 //        } else if (btnTienNghi.isSelected()) {
 //            mainWindowController.loadContentView("/com/example/hotelmanagement/Views/UserControls/AmenityView.fxml");
+//            mainWindowController.setTabName("Tiện nghi");
         } else if (btnDichVu.isSelected()) {
             mainWindowController.loadContentView("/com/example/hotelmanagement/Views/ServiceManagementView.fxml");
+            mainWindowController.setTabName("Dịch Vụ");
         } else if (btnLichSuHD.isSelected()) {
             mainWindowController.loadContentView("/com/example/hotelmanagement/Views/InvoiceView.fxml");
+            mainWindowController.setTabName("Lịch Sử Hóa Đơn");
         } else if (btnKhachHang.isSelected()) {
             mainWindowController.loadContentView("/com/example/hotelmanagement/Views/CustomerManagementView.fxml");
+            mainWindowController.setTabName("Khách Hàng");
         } else if (btnNhanVien.isSelected()) {
             mainWindowController.loadContentView("/com/example/hotelmanagement/Views/EmployeeManagementView.fxml");
+            mainWindowController.setTabName("Nhân Viên");
         } else if (btnThongKe.isSelected()) {
             mainWindowController.loadContentView("/com/example/hotelmanagement/Views/StatisticView.fxml");
+            mainWindowController.setTabName("Thống Kê");
         } else if (btnCauHinh.isSelected()) {
             mainWindowController.loadContentView("/com/example/hotelmanagement/Views/ConfigView.fxml");
+            mainWindowController.setTabName("Cấu Hình");
         }
     }
 }

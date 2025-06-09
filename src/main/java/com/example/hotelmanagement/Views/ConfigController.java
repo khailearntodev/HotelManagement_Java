@@ -9,7 +9,9 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.util.HashSet;
@@ -127,6 +129,7 @@ public class ConfigController {
         deleteColumn.setPrefWidth(100);
         deleteColumn.setCellFactory(col -> new TableCell<>() {
             private final Button deleteButton = new Button("X");
+            private final StackPane centeredPane = new StackPane(deleteButton);
 
             {
                 deleteButton.setOnAction(e -> {
@@ -136,6 +139,7 @@ public class ConfigController {
                     refreshRoleSelector();
                 });
                 deleteButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+                centeredPane.setAlignment(Pos.CENTER);
             }
 
             @Override
@@ -144,10 +148,11 @@ public class ConfigController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(deleteButton);
+                    setGraphic(centeredPane);
                 }
             }
         });
+
 
         rolesTable.getColumns().setAll(roleNameColumn, deleteColumn);
         rolesTable.setItems(viewModel.getRoles());

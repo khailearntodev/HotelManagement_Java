@@ -29,7 +29,6 @@ public class CustomerManagementController {
     @FXML private MFXComboBox<String> statusComboBox;
     @FXML private MFXComboBox<String> monthComboBox;
     @FXML private MFXComboBox<String> yearComboBox;
-    @FXML private Label clockLabel;
     @FXML private MFXButton btnRefresh;
     @FXML private TableView<CustomerManagement_CustomerDisplay> customerTable;
     @FXML private TableColumn<CustomerManagement_CustomerDisplay, String> idNumberColumn;
@@ -68,10 +67,7 @@ public class CustomerManagementController {
         identifyColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getIdentityNumber()));
         phoneColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getPhoneNumber()));
         typeColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getCustomerType()));
-        birthdayColumn.setCellValueFactory(cell -> new SimpleStringProperty(
-                cell.getValue().getBirthday() != null ?
-                        cell.getValue().getBirthday().atZone(ZoneId.systemDefault()).toLocalDate().toString() : ""
-        ));
+        birthdayColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getFormattedBirthday()));
         statusColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getStatus()));
 
         List<String> typeNames = viewModel.getCustomerTypesNames();
@@ -91,8 +87,6 @@ public class CustomerManagementController {
 
         yearComboBox.setItems(FXCollections.observableArrayList("Năm", "2020", "2021", "2022", "2023", "2024", "2025"));
         yearComboBox.setValue("Năm");
-
-        clockLabel.textProperty().bind(viewModel.realTimeProperty());
 
         viewModel.keywordProperty().bind(keywordField.textProperty());
 

@@ -26,18 +26,26 @@
             <VBox spacing="10">
                 <HBox alignment="CENTER_LEFT" spacing="20">
                     <VBox spacing="5">
-                        <HBox prefHeight="32.0" prefWidth="387.0" spacing="5">
-                            <Label style="-fx-font-size: 18px; -fx-font-family: Arial;" text="Xin chào">
-                        <HBox.margin>
-                           <Insets left="15.0" top="10.0" />
-                        </HBox.margin></Label>
-                            <Label fx:id="greetingLabel" prefHeight="33.0" prefWidth="262.0" style="-fx-font-size: 18px; -fx-font-family: Arial;" />
+                        <HBox prefHeight="32.0" prefWidth="387.0" spacing="5" alignment="CENTER_LEFT">
+                            <Label style="-fx-font-size: 18px; -fx-font-family: Inter;" text="Xin chào">
+                                <HBox.margin>
+                                    <Insets left="15.0" />
+                                </HBox.margin>
+                            </Label>
+                            <Label fx:id="greetingLabel"
+                                   prefHeight="32.0"
+                                   prefWidth="262.0"
+                                   style="-fx-font-size: 18px; -fx-font-family: Inter;"
+                                   alignment="CENTER_LEFT" />
                         </HBox>
-                        <Label fx:id="realTimeClock" style="-fx-font-size: 14px; -fx-font-family: Arial;">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding></Label>
+
+                        <Label fx:id="realTimeClock" style="-fx-font-size: 14px; -fx-font-family: Inter;">
+                            <padding>
+                                <Insets left="15.0" />
+                            </padding>
+                        </Label>
                     </VBox>
+
 
                     <Region fx:id="spacer" HBox.hgrow="ALWAYS" />
 
@@ -69,14 +77,14 @@
                 <HBox alignment="CENTER_LEFT" prefHeight="120.0" spacing="20">
                     <!-- Each card -->
                     <VBox prefWidth="245" spacing="5.0" style="-fx-background-color: #2563EB; -fx-border-radius: 15; -fx-background-radius: 15;">
-                        <Label style="-fx-font-size: 14px; -fx-font-family: Arial;" text="Đặt Trước Mới">
+                        <Label style="-fx-font-size: 14px; -fx-font-family: Inter;" text="Đặt Trước Mới">
                      <VBox.margin>
                         <Insets left="20.0" />
                      </VBox.margin>
                      <padding>
                         <Insets top="5.0" />
                      </padding></Label>
-                        <Label fx:id="totalNewBookingToday" prefHeight="36.0" prefWidth="200.0" style="-fx-font-size: 30px; -fx-font-family: Arial;">
+                        <Label fx:id="totalNewBookingToday" prefHeight="36.0" prefWidth="200.0" style="-fx-font-size: 30px; -fx-font-family: Inter;">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
@@ -85,11 +93,11 @@
                      </padding></Label>
                     </VBox>
                     <VBox prefWidth="245" spacing="5" style="-fx-background-color: #F3F3F3; -fx-border-radius: 15; -fx-background-radius: 15;">
-                        <Label style="-fx-font-size: 14px; -fx-font-family: Arial;" text="Check-In">
+                        <Label style="-fx-font-size: 14px; -fx-font-family: Inter;" text="Check-In">
                      <padding>
                         <Insets left="20.0" top="5.0" />
                      </padding></Label>
-                        <Label fx:id="totalCheckInToday" prefHeight="36.0" prefWidth="200.0" style="-fx-font-size: 30px; -fx-font-family: Arial;">
+                        <Label fx:id="totalCheckInToday" prefHeight="36.0" prefWidth="200.0" style="-fx-font-size: 30px; -fx-font-family: Inter;">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
@@ -98,11 +106,11 @@
                      </padding></Label>
                     </VBox>
                     <VBox prefWidth="245" spacing="5" style="-fx-background-color: #F3F3F3; -fx-border-radius: 15; -fx-background-radius: 15;">
-                        <Label style="-fx-font-size: 14px; -fx-font-family: Arial;" text="Check-Out">
+                        <Label style="-fx-font-size: 14px; -fx-font-family: Inter;" text="Check-Out">
                      <padding>
                         <Insets left="20.0" top="5.0" />
                      </padding></Label>
-                        <Label fx:id="totalCheckOutToday" prefHeight="36.0" prefWidth="200.0" style="-fx-font-size: 30px; -fx-font-family: Arial;">
+                        <Label fx:id="totalCheckOutToday" prefHeight="36.0" prefWidth="200.0" style="-fx-font-size: 30px; -fx-font-family: Inter;">
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
@@ -111,11 +119,11 @@
                      </padding></Label>
                     </VBox>
                     <VBox prefWidth="245" spacing="5" style="-fx-background-color: #F3F3F3; -fx-border-radius: 15; -fx-background-radius: 15;">
-                        <Label style="-fx-font-size: 14px; -fx-font-family: Arial;" text="Số Phòng Đang Sử Dụng">
+                        <Label style="-fx-font-size: 14px; -fx-font-family: Inter;" text="Số Phòng Đang Sử Dụng">
                      <VBox.margin>
                         <Insets left="20.0" top="5.0" />
                      </VBox.margin></Label>
-                        <Label fx:id="totalRoomInUse" prefHeight="36.0" prefWidth="200.0" style="-fx-font-size: 30px; -fx-font-family: Arial;">
+                        <Label fx:id="totalRoomInUse" prefHeight="36.0" prefWidth="200.0" style="-fx-font-size: 30px; -fx-font-family: Inter;">
                      <VBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </VBox.margin></Label>
@@ -130,7 +138,7 @@
                     <!-- Booking List -->
                     <VBox prefWidth="697.0" spacing="10" style="-fx-border-color: black; -fx-border-radius: 5;">
                         <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" spacing="10">
-                            <Label style="-fx-font-size: 17px; -fx-font-family: Arial; -fx-font-weight: bold;" text="Danh sách đặt phòng">
+                            <Label style="-fx-font-size: 17px; -fx-font-family: Inter; -fx-font-weight: bold;" text="Danh sách đặt phòng">
                         <padding>
                            <Insets left="5.0" />
                         </padding>
@@ -182,7 +190,7 @@
 
                     <!-- Right Panel: Chart + Activity -->
                     <VBox prefWidth="345" spacing="15.0" style="-fx-border-color: black; -fx-border-radius: 5;">
-                        <Label style="-fx-font-size: 17px; -fx-font-family: Arial; -fx-font-weight: bold;" text="Tình trạng phòng">
+                        <Label style="-fx-font-size: 17px; -fx-font-family: Inter; -fx-font-weight: bold;" text="Tình trạng phòng">
                      <VBox.margin>
                         <Insets left="5.0" top="10.0" />
                      </VBox.margin></Label>
@@ -195,7 +203,7 @@
                             </yAxis>
                         </BarChart>
 
-                        <Label style="-fx-font-size: 17px; -fx-font-family: Arial; -fx-font-weight: bold;" text="Hoạt động gần đây">
+                        <Label style="-fx-font-size: 17px; -fx-font-family: Inter; -fx-font-weight: bold;" text="Hoạt động gần đây">
                             <VBox.margin>
                                 <Insets left="10.0" />
                             </VBox.margin>
