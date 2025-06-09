@@ -7,6 +7,7 @@ import javafx.beans.property.*;
 
 import java.math.BigDecimal;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 public class Reservation_RoomDisplay {
@@ -19,7 +20,7 @@ public class Reservation_RoomDisplay {
     private final IntegerProperty cleaningStatus;
     private final ObjectProperty<Roomtype> roomType;
     private final StringProperty roomTypeName;
-    private final ObjectProperty<BigDecimal> roomTypePrice;
+    private final ObjectProperty<BigDecimal> roomPrice;
     private final StringProperty checkInOutDate;
 
     public Reservation_RoomDisplay(Room room) {
@@ -30,18 +31,19 @@ public class Reservation_RoomDisplay {
         this.isDeleted = new SimpleBooleanProperty(room.getIsDeleted());
         this.cleaningStatus = new SimpleIntegerProperty(room.getCleaningStatus());
         this.roomType = new SimpleObjectProperty<>(room.getRoomTypeID());
-        this.roomTypePrice = new SimpleObjectProperty<>(room.getRoomTypeID().getBasePrice());
         this.roomTypeName = new SimpleStringProperty(room.getRoomTypeID().getTypeName());
 
         Reservation reservation = room.getReservations().stream().filter(e -> e.getInvoiceID() == null).findFirst().orElse(null);
         if (reservation == null) {
-           this.quantity = new SimpleIntegerProperty(0);
-           this.checkInOutDate = new SimpleStringProperty("");
+            this.roomPrice = new SimpleObjectProperty<>(room.getRoomTypeID().getBasePrice());
+            this.quantity = new SimpleIntegerProperty(0);
+            this.checkInOutDate = new SimpleStringProperty("");
         } else {
+            this.roomPrice = new SimpleObjectProperty<>(reservation.getPrice());
             int quantity = reservation.getReservationguests().size();
             this.quantity = new SimpleIntegerProperty(quantity);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            this.checkInOutDate = new SimpleStringProperty(reservation.getCheckInDate().atZone(ZoneId.systemDefault()).toLocalDate().format(formatter) + " - " + reservation.getCheckOutDate().atZone(ZoneId.systemDefault()).toLocalDate().format(formatter));
+            this.checkInOutDate = new SimpleStringProperty(reservation.getCheckInDate().atZone(ZoneOffset.UTC).toLocalDate().format(formatter) + " - " + reservation.getCheckOutDate().atZone(ZoneOffset.UTC).toLocalDate().format(formatter));
         }
     }
 
@@ -53,7 +55,7 @@ public class Reservation_RoomDisplay {
     public BooleanProperty isDeletedProperty() { return isDeleted; }
     public IntegerProperty cleaningStatusProperty() { return cleaningStatus; }
     public ObjectProperty<Roomtype> roomTypeProperty() { return roomType; }
-    public ObjectProperty<BigDecimal> roomTypePriceProperty() { return roomTypePrice; }
+    public ObjectProperty<BigDecimal> roomPriceProperty() { return roomPrice; }
     public StringProperty checkInOutDateProperty() { return checkInOutDate; }
     public StringProperty roomTypeNameProperty() { return roomTypeName; }
 
@@ -66,7 +68,7 @@ public class Reservation_RoomDisplay {
     public boolean getIsDeleted() { return isDeleted.get(); }
     public int getCleaningStatus() { return cleaningStatus.get(); }
     public Roomtype getRoomType() { return roomType.get(); }
-    public BigDecimal getPrice() {return roomTypePrice.get(); }
+    public BigDecimal getPrice() {return roomPrice.get(); }
     public String getCheckInOutDate() { return checkInOutDate.get(); }
 
     public void setStatus(int status) {this.status.set(status);}

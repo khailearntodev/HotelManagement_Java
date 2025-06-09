@@ -10,7 +10,9 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -176,15 +178,43 @@ public class AddCustomerController implements Initializable {
     }
 
     public void handleAddCustomer(MouseEvent mouseEvent) {
+        String identityNumber = cccdTextField.getText().trim();
+        String fullName = customerNameTextField.getText().trim();
+        String phoneNumber = phoneNumberTextField.getText().trim();
+        String address = addressTextField.getText().trim();
+        Toggle genderToggle = genderGroup.getSelectedToggle();
+        Toggle idToggle = IDGroup.getSelectedToggle();
+        Customertype customerType = customerTypeCombobox.getValue();
+        LocalDate dob = dobDatepicker.getValue();
+
+        if (fullName.isEmpty() || phoneNumber.isEmpty() || address.isEmpty() || genderToggle == null || idToggle == null || customerType == null || dob == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText(null);
+            alert.setContentText("Vui lòng nhập đầy đủ tất cả các thông tin bắt buộc");
+            alert.showAndWait();
+            return;
+        }
+
+        if (!phoneNumber.matches("\\d+")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText(null);
+            alert.setContentText("Số điện thoại chỉ được chứa chữ số");
+            alert.showAndWait();
+            return;
+        }
+
         Customer customer = new Customer();
         customer.setIdentityNumber(cccdTextField.getText());
-        customer.setFullName(customerNameTextField.getText());
-        customer.setPhoneNumber(phoneNumberTextField.getText());
-        customer.setCustomerAddress(addressTextField.getText());
-        customer.setGender(genderGroup.getSelectedToggle().getUserData() == "true");
-        customer.setIdentityType(IDGroup.getSelectedToggle().getUserData().toString());
-        customer.setCustomerTypeID(customerTypeCombobox.getValue());
-        customer.setDateOfBirth(dobDatepicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        customer.setIdentityNumber(identityNumber);
+        customer.setFullName(fullName);
+        customer.setPhoneNumber(phoneNumber);
+        customer.setCustomerAddress(address);
+        customer.setGender(genderToggle.getUserData().toString().equals("true"));
+        customer.setIdentityType(idToggle.getUserData().toString());
+        customer.setCustomerTypeID(customerType);
+        customer.setDateOfBirth(dob.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         setInfoTextFieldDisable(true);
         messageLabel.setVisible(false);
@@ -203,6 +233,22 @@ public class AddCustomerController implements Initializable {
     }
 
     public void checkCustomerInfo(MouseEvent mouseEvent) {
+        if (cccdTextField.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText(null);
+            alert.setContentText("Vui lòng nhập số Căn cước công dân/Hộ chiếu");
+            alert.showAndWait();
+            return;
+        }
+        if (!cccdTextField.getText().matches("\\d+")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText(null);
+            alert.setContentText("Số Căn cước công dân/Hộ chiếu chỉ được chứa chữ số");
+            alert.showAndWait();
+            return;
+        }
         setInfoTextFieldDisable(false);
         boolean found = viewModel.isCustomerExist(cccdTextField.getText(), IDGroup.getSelectedToggle().getUserData().toString());
         messageLabel.setVisible(true);
