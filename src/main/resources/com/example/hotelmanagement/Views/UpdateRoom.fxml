@@ -80,7 +80,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <MFXButton styleClass="normal-button" fx:id="cleaningStatusButton" text="Button" />
+                              <MFXButton styleClass="normal-button" onAction="#handleCleaningStatusButtonClick" fx:id="cleaningStatusButton" text="Button" />
                            </children>
                         </VBox>
                      </children>
