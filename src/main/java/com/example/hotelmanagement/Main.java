@@ -15,7 +15,8 @@ public class Main extends Application {
         //FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Views/StatisticView.fxml"));
         //Scene scene = new Scene(fxmlLoader.load(), 1060, 660);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Views/MainWindow.fxml"));
+       FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Views/InvoiceView.fxml"));
+        //FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Views/ReservationView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1060, 820);
 
         //FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/CustomerManagementView.fxml"));

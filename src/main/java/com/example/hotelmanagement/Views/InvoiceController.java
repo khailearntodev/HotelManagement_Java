@@ -171,7 +171,7 @@ public class InvoiceController {
             Invoice fullInvoice = dao.getInvoiceWithDetails(invoice.getId());
             InvoiceDetailController controller = loader.getController();
 
-            controller.setInvoice(fullInvoice); //
+            controller.setInvoice(fullInvoice);
 
             Stage stage = new Stage();
             stage.setTitle("Chi tiết hóa đơn #" + invoice.getId());

@@ -1,24 +1,23 @@
 package com.example.hotelmanagement.Views;
 
+import com.example.hotelmanagement.DAO.InvoiceDAO;
 import com.example.hotelmanagement.Main;
 import com.example.hotelmanagement.Models.Invoice;
 import com.example.hotelmanagement.Models.Reservation;
 import com.example.hotelmanagement.Models.Servicebooking;
 import com.example.hotelmanagement.ViewModels.InvoiceDetailViewModel;
 import com.example.hotelmanagement.ViewModels.InvoiceViewModel;
+import com.example.hotelmanagement.ViewModels.SelectRoomForCheckOutViewModel;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.Button; // Import Button
 import com.example.hotelmanagement.DTO.InvoiceDetail;
 import javafx.stage.Stage;
 
@@ -33,7 +32,8 @@ public class InvoiceDetailController {
 
     @FXML private Label invoiceNoLabel;
     @FXML private Label paymentDateLabel;
-
+    @FXML private MFXButton closeButton;
+    @FXML private MFXButton payButton;
     // Customer
     @FXML private Label customerNameLabel;
     @FXML private Label customerAddress;
@@ -51,23 +51,28 @@ public class InvoiceDetailController {
 
     // Totals
     @FXML private Label totalDueLabel;
+    @FXML private Label totalServiceLabel;
 
     // Footer
     private final ObservableList<InvoiceDetailViewModel> detailList = FXCollections.observableArrayList();
     private Invoice invoice = new Invoice();
     @FXML
     public void initialize() {
-        // --- 1. Gán dữ liệu trực tiếp cho các Label ---
-        invoiceNoLabel.setText("F-23520610");
-        paymentDateLabel.setText("17/06/2023");
-
-        customerNameLabel.setText("Công Ty TNHH ABC");
-//        customerAddressLine1Label.setText("74 RUE ANATOLE FRANCENATOLE FRANCE");
-//        customerAddressLine2Label.setText("LEVALLOIS-PERRET, 92300, France.");
-
-        employeeNameLabel.setText("Huy Le");
-
-        // --- 2. Cấu hình TableView và thêm dữ liệu mẫu ---
+        closeButton.setOnAction(event -> {
+            Stage stage = (Stage) closeButton.getScene().getWindow();
+            if (stage != null) {
+                stage.close();
+            }
+        });
+        payButton.setOnAction(event -> {
+            if ("Đã thanh toán".equals(invoice.getPaymentStatus())) {
+                showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Hóa đơn này đã được thanh toán rồi.");
+                return;
+            }
+            invoice.setPaymentStatus("Đã thanh toán");
+            InvoiceDAO dao = new InvoiceDAO();
+            dao.update(invoice);
+        });
         // Cấu hình các cột của TableView
         soThuTuColumn.setCellValueFactory(data -> data.getValue().soThuTuProperty());
         soPhongColumn.setCellValueFactory(data -> data.getValue().soPhongProperty());
@@ -111,7 +116,6 @@ public class InvoiceDetailController {
 public void setInvoice(Invoice invoice) {
     this.invoice = invoice;
 
-    // 1. Hiển thị thông tin hóa đơn
     invoiceNoLabel.setText(String.valueOf(invoice.getId()));
     customerNameLabel.setText(invoice.getCustomerName());
     customerAddress.setText(invoice.getCustomerAddres());
@@ -119,7 +123,6 @@ public void setInvoice(Invoice invoice) {
     paymentDateLabel.setText(invoice.getIssueDate().toString());
     totalDueLabel.setText(invoice.getTotalAmount().toString());
 
-    // 2. Hiển thị bảng chi tiết từ reservation
     List<InvoiceDetailViewModel> viewModels = invoice.getReservations().stream()
             .map(InvoiceDetailViewModel::new)
             .toList();
@@ -145,7 +148,11 @@ public void setInvoice(Invoice invoice) {
             e.printStackTrace();
         }
     }
-
-
-
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

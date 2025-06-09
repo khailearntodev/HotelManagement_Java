@@ -1,13 +1,24 @@
 package com.example.hotelmanagement.Views;
 
+import com.example.hotelmanagement.DAO.EmployeeDAO;
+import com.example.hotelmanagement.DAO.InvoiceDAO;
+import com.example.hotelmanagement.DAO.ReservationDAO;
+import com.example.hotelmanagement.DAO.RoomDAO;
 import com.example.hotelmanagement.DTO.SelectRoom_RoomDisplay;
+import com.example.hotelmanagement.Models.Employee;
+import com.example.hotelmanagement.Models.Invoice;
 import com.example.hotelmanagement.Models.Reservation;
+import com.example.hotelmanagement.Models.Room;
+import com.example.hotelmanagement.ViewModels.InvoiceDetailViewModel;
 import com.example.hotelmanagement.ViewModels.SelectRoomForCheckOutViewModel;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
@@ -16,8 +27,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -96,7 +110,75 @@ public class SelectRoomForCheckOutController implements Initializable {
         stage.close();
     }
 
-    public void nextCheckout(MouseEvent mouseEvent) {
-        System.out.println(viewModel.getSelectedRooms().stream().map(Reservation::getBasePrice).collect(Collectors.toList()));
+    @FXML
+    public void nextCheckout() {
+        if (viewModel.getSelectedRooms().isEmpty()) {
+            System.out.println("Vui lòng chọn ít nhất một phòng để thanh toán.");
+            return;
+        }
+
+        try {
+            List<Reservation> reservations = viewModel.getSelectedRooms().stream()
+                    .map(room -> {
+                        ReservationDAO reservationDAO = new ReservationDAO();
+                        return reservationDAO.findByIdForServiceBK(room.getId());
+                    })
+                    .collect(Collectors.toList());
+            ReservationDAO reservationDAO = new ReservationDAO();
+            for (Reservation res : reservations) {
+                res.setCheckOutDate(java.time.Instant.now());
+                reservationDAO.update(res);
+            }
+            InvoiceDetailViewModel invoiceDetailVM = new InvoiceDetailViewModel(reservations);
+
+            Invoice invoice = new Invoice();
+            Employee employee = new EmployeeDAO().findById(2);
+            invoice.setEmployeeID(employee);
+            invoice.setIssueDate(java.time.Instant.now());
+            invoice.setTotalAmount(invoiceDetailVM.getTongTien().get());
+            invoice.setCustomerName(reservations.getFirst().getReservationguests().getClass().getName());
+            invoice.setCustomerAddres(reservations.getFirst().getReservationguests().getClass().getName());
+            invoice.setInvoiceType(2);
+            invoice.setPaymentStatus("Chưa thanh toán");
+
+            InvoiceDAO invoiceDAO = new InvoiceDAO();
+            boolean saveSuccessful = invoiceDAO.save(invoice);
+
+            if (!saveSuccessful) {
+                System.err.println("Lỗi: Không thể lưu hóa đơn vào cơ sở dữ liệu. Vui lòng kiểm tra log.");
+                return;
+            }
+
+            RoomDAO roomDAO = new RoomDAO();
+            for (Reservation res : reservations) {
+                res.setInvoiceID(invoice);
+                reservationDAO.update(res);
+
+                Room room = res.getRoomID();
+                if (room != null) {
+                    room.setStatus(1);
+                    roomDAO.update(room);
+                }
+            }
+
+            Invoice fullInvoice = invoiceDAO.getInvoiceWithDetails(invoice.getId());
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/InvoiceDetailView.fxml"));
+            Parent root = fxmlLoader.load();
+            InvoiceDetailController controller = fxmlLoader.getController();
+            controller.setInvoice(fullInvoice);
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
+
+            Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -25,16 +25,24 @@ public class InvoiceDAO {
 
     // Thêm hóa đơn mới
     public boolean save(Invoice invoice) {
+        Session session = null;
         Transaction tx = null;
-        try (Session session = HibernateUtils.getSession()) {
+        try {
+            session = HibernateUtils.getSession();
             tx = session.beginTransaction();
             session.save(invoice);
             tx.commit();
             return true;
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null) {
+                tx.rollback();
+            }
             e.printStackTrace();
             return false;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
@@ -53,19 +61,15 @@ public class InvoiceDAO {
         }
     }
 
-    // Xóa mềm hóa đơn
-    public boolean softDelete(int id) {
+    // Xóa hóa đơn (đánh dấu là đã xóa)
+    public boolean delete(Invoice invoice) {
         Transaction tx = null;
         try (Session session = HibernateUtils.getSession()) {
             tx = session.beginTransaction();
-            Invoice invoice = session.get(Invoice.class, id);
-            if (invoice != null) {
-                invoice.setIsDeleted(true);
-                session.update(invoice);
-                tx.commit();
-                return true;
-            }
-            return false;
+            invoice.setIsDeleted(true); // Đánh dấu là đã xóa mềm
+            session.update(invoice);
+            tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx != null) tx.rollback();
             e.printStackTrace();
@@ -73,11 +77,10 @@ public class InvoiceDAO {
         }
     }
 
-    // Tìm theo tên khách hàng (tuỳ chọn)
+    // Tìm kiếm hóa đơn theo tên khách hàng
     public List<Invoice> findByCustomerName(String customerName) {
         try (Session session = HibernateUtils.getSession()) {
-            return session.createQuery(
-                            "FROM Invoice WHERE customerName LIKE :name AND isDeleted = false", Invoice.class)
+            return session.createQuery("FROM Invoice WHERE customerName LIKE :name AND isDeleted = false", Invoice.class)
                     .setParameter("name", "%" + customerName + "%")
                     .list();
         }
@@ -106,8 +109,4 @@ public class InvoiceDAO {
                     .list();
         }
     }
-
-
-
-
 }
