@@ -1,6 +1,7 @@
 package com.example.hotelmanagement.DAO;
 
 import com.example.hotelmanagement.Models.RevenueReport;
+import com.example.hotelmanagement.Models.RevenueReportDetail;
 import com.example.hotelmanagement.Utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -70,6 +71,26 @@ public class RevenueReportDAO {
             if (tx != null) tx.rollback();
             e.printStackTrace();
             return false;
+        }}
+    public RevenueReport getByMonth(int month, int year) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                            "FROM RevenueReport WHERE month = :month AND year = :year AND isDeleted = false",
+                            RevenueReport.class)
+                    .setParameter("month", month)
+                    .setParameter("year", year)
+                    .uniqueResult();
         }
     }
+
+    public RevenueReport getByYear(int year) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                            "FROM RevenueReport WHERE year = :year AND isDeleted = false AND month IS NULL",
+                            RevenueReport.class)
+                    .setParameter("year", year)
+                    .uniqueResult();
+        }
+    }
+
 }

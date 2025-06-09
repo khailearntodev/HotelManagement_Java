@@ -97,6 +97,15 @@ public class InvoiceDAO {
                     .uniqueResult();
         }
     }
+    public List<Invoice> findByMonthAndYear(int month, int year) {
+        try (Session session = HibernateUtils.getSession()) {
+            String hql = "FROM Invoice i WHERE MONTH(i.issueDate) = :month AND YEAR(i.issueDate) = :year AND i.isDeleted = false";
+            return session.createQuery(hql, Invoice.class)
+                    .setParameter("month", month)
+                    .setParameter("year", year)
+                    .list();
+        }
+    }
 
 
 
