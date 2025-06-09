@@ -69,6 +69,9 @@ public class InvoiceDetailController {
                 showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Hóa đơn này đã được thanh toán rồi.");
                 return;
             }
+            else {
+                showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Thanh toán thành công!");
+            }
             invoice.setPaymentStatus("Đã thanh toán");
             InvoiceDAO dao = new InvoiceDAO();
             dao.update(invoice);
