@@ -82,4 +82,13 @@ public class EmployeeDAO {
             return false;
         }
     }
+
+    public List<String> getAllPositions() {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                    "SELECT DISTINCT e.position FROM Employee e WHERE e.isDeleted = false AND e.position IS NOT NULL", String.class
+            ).list();
+        }
+    }
+
 }

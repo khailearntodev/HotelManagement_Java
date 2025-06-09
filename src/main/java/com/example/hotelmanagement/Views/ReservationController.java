@@ -1,13 +1,15 @@
 package com.example.hotelmanagement.Views;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 
+import com.example.hotelmanagement.DAO.EmployeeDAO;
+import com.example.hotelmanagement.DAO.InvoiceDAO;
 import com.example.hotelmanagement.DAO.ReservationDAO;
 import com.example.hotelmanagement.DAO.RoomDAO;
 import com.example.hotelmanagement.DTO.Reservation_RoomDisplay;
-import com.example.hotelmanagement.Models.Reservation;
-import com.example.hotelmanagement.Models.Room;
-import com.example.hotelmanagement.Models.Roomtype;
+import com.example.hotelmanagement.Main;
+import com.example.hotelmanagement.Models.*;
 import com.example.hotelmanagement.ViewModels.*;
 import com.example.hotelmanagement.ViewModels.SelectRoomForCheckOutViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -39,6 +41,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -46,6 +49,8 @@ import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.Setter;
+
+
 
 public class ReservationController implements Initializable {
     @FXML private MFXTextField textfieldSearch;
@@ -120,10 +125,32 @@ public class ReservationController implements Initializable {
         NumberFormat Numformatter = NumberFormat.getInstance(new Locale("vi", "VN"));
         colAmount.setCellValueFactory(cell ->
                 Bindings.createStringBinding(
-                        () -> Numformatter.format(cell.getValue().roomTypePriceProperty().get())  + " VNĐ/đêm",
-                        cell.getValue().roomTypePriceProperty()
+                        () -> Numformatter.format(cell.getValue().roomPriceProperty().get())  + " VNĐ/đêm",
+                        cell.getValue().roomPriceProperty()
                 )
         );
+        colAmount.setCellFactory(column -> new TableCell<Reservation_RoomDisplay, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                            setGraphic(null);
+                        } else {
+                            Reservation_RoomDisplay r = getTableView().getItems().get(getIndex());
+                            Label label = new Label(item);
+
+                            if (r.getStatus() != 2) {
+                                label.setStyle("-fx-font-size: 13.5;");
+                            } else {
+                                label.setStyle("");
+                            }
+                            setGraphic(label);
+                            setText(null);
+                        }
+                    }
+                });
+
 
         colStatus.setCellValueFactory(cell -> cell.getValue().statusProperty().asObject());
         colStatus.setCellFactory(cell -> new TableCell<Reservation_RoomDisplay, Integer>() {
@@ -271,6 +298,75 @@ public class ReservationController implements Initializable {
             private void setupCheckoutButton(Reservation_RoomDisplay p) {
                 btn.setOnAction(e -> {
                     System.out.println("Click phòng: " + p.getRoomNumber());
+                    Room room = new RoomDAO().findById(p.getId());
+
+                    if (room != null) {
+                        try {
+                            ReservationDAO reservationDAO = new ReservationDAO();
+                            Reservation activeReservation = reservationDAO.findActiveReservationByRoomId(room.getId());
+
+                            if (activeReservation == null) {
+                                System.err.println("Lỗi: Không tìm thấy Reservation đang hoạt động cho phòng " + p.getRoomNumber());
+                                return;
+                            }
+                            List<Reservation> reservations = new ArrayList<>();
+                            reservations.add(activeReservation);
+                            for (Reservation res : reservations) {
+                                res.setCheckOutDate(java.time.Instant.now());
+                                reservationDAO.update(res);
+                            }
+                            InvoiceDetailViewModel invoiceDetailVM = new InvoiceDetailViewModel(reservations);
+
+                            Invoice invoice = new Invoice();
+                            Employee employee = new EmployeeDAO().findById(2);
+                            invoice.setEmployeeID(employee);
+                            invoice.setIssueDate(java.time.Instant.now());
+                            invoice.setTotalAmount(invoiceDetailVM.getTongTien().get());
+                            invoice.setCustomerName(reservations.getFirst().getReservationguests().getClass().getName());
+                            invoice.setCustomerAddres(reservations.getFirst().getReservationguests().getClass().getName());
+                            invoice.setInvoiceType(2);
+                            invoice.setPaymentStatus("Chưa thanh toán");
+
+                            InvoiceDAO invoiceDAO = new InvoiceDAO();
+                            boolean saveSuccessful = invoiceDAO.save(invoice);
+
+                            if (!saveSuccessful) {
+                                System.err.println("Lỗi: Không thể lưu hóa đơn vào cơ sở dữ liệu. Vui lòng kiểm tra log.");
+                                return;
+                            }
+
+
+                            RoomDAO roomDAO = new RoomDAO();
+                            for (Reservation res : reservations) {
+                                res.setCheckOutDate(java.time.Instant.now());
+                                res.setInvoiceID(invoice);
+                                reservationDAO.update(res);
+                                room.setStatus(1);
+                                roomDAO.update(room);
+                            }
+
+                            Invoice fullInvoice = invoiceDAO.getInvoiceWithDetails(invoice.getId());
+
+                            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/InvoiceDetailView.fxml"));
+                            Parent root = fxmlLoader.load();
+                            InvoiceDetailController controller = fxmlLoader.getController();
+                            controller.setInvoice(fullInvoice);
+
+                            Scene scene = new Scene(root);
+                            scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
+
+                            Stage stage = new Stage();
+                            stage.initStyle(StageStyle.UNDECORATED);
+                            stage.initModality(Modality.APPLICATION_MODAL);
+                            stage.setScene(scene);
+                            stage.showAndWait();
+
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    } else {
+                        System.err.println("Room not found with ID: " + p.getId());
+                    }
                 });
 
                 configureButton(btn, 87, "Thanh toán");
@@ -328,26 +424,26 @@ public class ReservationController implements Initializable {
                 -fx-cursor: hand;
             """);
 
-                    MFXButton btn1 = new MFXButton("Đặt dịch vụ");
+                    MFXButton btnDatDichVu = new MFXButton("Đặt dịch vụ");
                     MFXButton btnXemGhiChu = new MFXButton("Xem ghi chú");
-                    MFXButton btn3 = new MFXButton("Xem phiếu thuê");
+                    MFXButton btnXemPhieuThue = new MFXButton("Xem phiếu thuê");
 
-                    btn1.setPrefWidth(120);
+                    btnDatDichVu.setPrefWidth(120);
                     btnXemGhiChu.setPrefWidth(120);
-                    btn3.setPrefWidth(120);
+                    btnXemPhieuThue.setPrefWidth(120);
 
-                    btn1.getStyleClass().add("popup-button");
+                    btnDatDichVu.getStyleClass().add("popup-button");
                     btnXemGhiChu.getStyleClass().add("popup-button");
-                    btn3.getStyleClass().add("popup-button");
+                    btnXemPhieuThue.getStyleClass().add("popup-button");
 
-                    vbox.getChildren().addAll(btn1, btnXemGhiChu, btn3);
+                    vbox.getChildren().addAll(btnDatDichVu, btnXemGhiChu, btnXemPhieuThue);
 
-                    btn1.setOnAction(ev -> {
+                    btnDatDichVu.setOnAction(ev -> {
                         int roomID = p.getId();
                         Room room = new RoomDAO().findById(roomID);
                         Reservation reservation = room.getReservations().stream().filter(r -> r.getInvoiceID() == null).findFirst().orElse(null);
                         if (reservation != null) {
-                            System.out.println(reservation.getId().toString());
+                            bookingService(reservation.getId());
                         }
                         popup.hide();
                     });
@@ -374,8 +470,27 @@ public class ReservationController implements Initializable {
                         popup.hide();
                     });
 
-                    btn3.setOnAction(ev -> {
-                        System.out.println("Xem phiếu thuê phòng: " + p.getRoomNumber());
+                    btnXemPhieuThue.setOnAction(ev -> {
+                        try {
+                            FXMLLoader bookingNotefxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/ReservationFormView.fxml"));
+                            Parent root = bookingNotefxmlLoader.load();
+                            int roomID = p.getId();
+                            Reservation reservation = new ReservationDAO().getAll().stream().filter(r -> r.getRoomID().getId() == roomID && r.getInvoiceID() == null).findFirst().orElse(null);
+                            ReservationFormViewModel vm = new ReservationFormViewModel(reservation);
+                            vm.setParent(viewModel);
+                            ReservationFormController controller = bookingNotefxmlLoader.getController();
+                            controller.setViewModel(vm);
+                            Scene scene = new Scene(root);
+                            scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
+
+                            Stage stage = new Stage();
+                            stage.initStyle(StageStyle.UNDECORATED);
+                            stage.initModality(Modality.APPLICATION_MODAL);
+                            stage.setScene(scene);
+                            stage.showAndWait();
+                        } catch (IOException exception) {
+                            exception.printStackTrace();
+                        }
                         popup.hide();
                     });
 
@@ -516,6 +631,36 @@ public class ReservationController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void bookingService(int reservationId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("Views/RoomService.fxml"));
+            Parent root = loader.load();
+            RoomServiceController controller = loader.getController();
+            ReservationDAO reservationDAO = new ReservationDAO();
+            Reservation selectedReservation = reservationDAO.findByIdForServiceBK(reservationId); // Dùng findById đã sửa
+
+            if (selectedReservation != null) {
+                controller.setReservation(selectedReservation);
+                controller.setupBindingsAndData();
+
+                Stage stage = new Stage();
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.setScene(new Scene(root));
+                stage.showAndWait();
+                System.out.println("Booking Service Booked");
+            } else {
+                // Xử lý trường hợp không tìm thấy reservation
+                System.err.println("Không tìm thấy Reservation với ID: " + reservationId);
+                // Hiển thị Alert cho người dùng
+            }
+        }
+        catch (
+                IOException e
+        ){
+            e.printStackTrace();
+        }
+
     }
 
 }

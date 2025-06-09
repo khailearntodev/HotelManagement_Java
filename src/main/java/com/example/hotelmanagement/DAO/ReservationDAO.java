@@ -1,10 +1,15 @@
 package com.example.hotelmanagement.DAO;
 
+import com.example.hotelmanagement.DTO.Dashboard_BookingDisplay;
 import com.example.hotelmanagement.Models.Reservation;
 import com.example.hotelmanagement.Utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationDAO {
@@ -32,10 +37,50 @@ public class ReservationDAO {
         try (Session session = HibernateUtils.getSession()) {
             return session.createQuery(
                             "SELECT r FROM Reservation r " +
-                                    "LEFT JOIN FETCH r.roomID " +
+                                    "LEFT JOIN FETCH r.roomID ro " +
+                                    "LEFT JOIN FETCH ro.roomTypeID " +
+                                    "LEFT JOIN FETCH r.servicebookings sb " +
+                                    "LEFT JOIN FETCH sb.serviceID " +
                                     "WHERE r.id = :id AND r.isDeleted = false",
                             Reservation.class)
                     .setParameter("id", id)
+                    .uniqueResultOptional().orElse(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public Reservation findActiveReservationByRoomId(int roomId) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                            "SELECT r FROM Reservation r " +
+                                    "LEFT JOIN FETCH r.roomID ro " +
+                                    "LEFT JOIN FETCH ro.roomTypeID " +
+                                    "LEFT JOIN FETCH r.reservationguests " +
+                                    "LEFT JOIN FETCH r.servicebookings sb " +
+                                    "LEFT JOIN FETCH sb.serviceID " +
+                                    "WHERE r.roomID.id = :roomId " +
+                                    "AND r.invoiceID IS NULL " +
+                                    "AND r.isDeleted = false",
+                            Reservation.class)
+                    .setParameter("roomId", roomId)
+                    .uniqueResultOptional().orElse(null); // Sử dụng uniqueResultOptional để trả về null nếu không tìm thấy
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public Reservation findByRoomNumber(int roomNumber) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                            "SELECT r FROM Reservation r " +
+                                    "JOIN FETCH r.roomID ro " +
+                                    "JOIN FETCH ro.roomTypeID rt " +
+                                    "LEFT JOIN FETCH r.servicebookings sb " +
+                                    "LEFT JOIN FETCH sb.serviceID " +
+                                    "WHERE ro.roomNumber = :roomNumber AND r.isDeleted = false AND r.invoiceID IS NULL ",
+                            Reservation.class)
+                    .setParameter("roomNumber", roomNumber)
                     .uniqueResultOptional().orElse(null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,4 +146,80 @@ public class ReservationDAO {
             return false;
         }
     }
+
+    public int countCheckInByDate(LocalDate date) {
+        try (Session session = HibernateUtils.getSession()) {
+            Instant startOfDay = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
+            Instant startOfNextDay = date.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
+
+            return ((Long) session.createQuery("""
+            SELECT COUNT(r) FROM Reservation r 
+            WHERE r.checkInDate >= :startOfDay AND r.checkInDate < :startOfNextDay AND r.isDeleted = false
+        """)
+                    .setParameter("startOfDay", startOfDay)
+                    .setParameter("startOfNextDay", startOfNextDay)
+                    .uniqueResult()
+            ).intValue();
+        }
+    }
+
+    public int countCheckOutByDate(LocalDate date) {
+        try (Session session = HibernateUtils.getSession()) {
+            Instant startOfDay = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
+            Instant startOfNextDay = date.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
+
+            return ((Long) session.createQuery("""
+            SELECT COUNT(r) FROM Reservation r 
+            WHERE r.checkOutDate >= :startOfDay AND r.checkOutDate < :startOfNextDay AND r.isDeleted = false
+        """)
+                    .setParameter("startOfDay", startOfDay)
+                    .setParameter("startOfNextDay", startOfNextDay)
+                    .uniqueResult()
+            ).intValue();
+        }
+    }
+
+
+    public List<Dashboard_BookingDisplay> getRecentBookingDisplays() {
+        try (Session session = HibernateUtils.getSession()) {
+            String sql = "SELECT TOP (10) r.ReservationID, c.FullName, rm.RoomNumber, rmt.TypeName, rm.Status, r.CheckInDate, r.CheckOutDate, 'Reservation' " +
+                    "FROM RESERVATION r " +
+                    "JOIN CUSTOMER c ON r.CustomerID = c.CustomerID " +
+                    "JOIN ROOM rm ON r.RoomID = rm.RoomID " +
+                    "JOIN ROOMTYPE rmt ON rmt.RoomTypeID = rm.RoomTypeID " +
+                    "WHERE r.IsDeleted = 0 " +
+                    "ORDER BY r.CheckInDate DESC";
+
+            List<Object[]> rows = session.createNativeQuery(sql).list();
+            List<Dashboard_BookingDisplay> result = new ArrayList<>();
+
+            for (Object[] row : rows) {
+                String id =  row[0].toString();
+                String customerName = (String) row[1];
+                int roomNumber = ((Number) row[2]).intValue();
+                String roomType = (String) row[3];
+                int status = ((Number) row[4]).intValue();
+                Instant checkInDate = row[5] != null ? ((java.util.Date) row[5]).toInstant() : null;
+                Instant checkOutDate = row[6] != null ? ((java.util.Date) row[6]).toInstant() : null;
+                String sourceType = (String) row[7];
+
+                Dashboard_BookingDisplay bd = new Dashboard_BookingDisplay(
+                        id,
+                        customerName,
+                        roomNumber,
+                        roomType,
+                        status,
+                        checkInDate,
+                        checkOutDate,
+                        sourceType
+                );
+                result.add(bd);
+            }
+
+            return result;
+        }
+    }
+
+
 }
+

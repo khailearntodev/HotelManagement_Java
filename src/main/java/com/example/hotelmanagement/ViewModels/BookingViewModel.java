@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -47,19 +48,23 @@ public class BookingViewModel {
         this.roomDisplay = new Reservation_RoomDisplay(room);
         this.customerList = FXCollections.observableArrayList();
         if (!canEdit) {
-            Prebooking preBooking = room.getPrebookings().stream()
-                    .filter(e -> e.getReservationID() == null)
-                    .filter(e -> Objects.equals(e.getRoomID().getId(), room.getId()))
-                    .filter(e -> !e.getIsDeleted())
-                    .filter(e -> {
-                        LocalDate checkIn = e.getCheckInDate()
-                                .atZone(ZoneOffset.UTC)
-                                .toLocalDate();
-                        return !checkIn.isAfter(LocalDate.now());
-                    })
-                    .min(Comparator.comparing(Prebooking::getCheckInDate))
-                    .orElse(null);
-            checkOutDate.set(preBooking.getCheckOutDate().atZone(ZoneOffset.UTC).toLocalDate());
+            if (checkOutDate.get() != null) {
+                System.out.println(checkOutDate.get());
+                System.out.println(LocalDate.now());
+                Prebooking preBooking = room.getPrebookings().stream()
+                        .filter(e -> e.getReservationID() == null)
+                        .filter(e -> Objects.equals(e.getRoomID().getId(), room.getId()))
+                        .filter(e -> !e.getIsDeleted())
+                        .filter(e -> {
+                            LocalDate checkIn = e.getCheckInDate()
+                                    .atZone(ZoneOffset.UTC)
+                                    .toLocalDate();
+                            return !checkIn.isAfter(LocalDate.now());
+                        })
+                        .min(Comparator.comparing(Prebooking::getCheckInDate))
+                        .orElse(null);
+                checkOutDate.set(preBooking.getCheckOutDate().atZone(ZoneOffset.UTC).toLocalDate());
+            }
         }
     }
 
@@ -73,6 +78,18 @@ public class BookingViewModel {
 
     public void addReservation(String note)
     {
+        CustomerDAO customerDAO = new CustomerDAO();
+        BigDecimal maxBonus = BigDecimal.valueOf(1.0);
+        for (Customer guest : customerList) {
+            if (guest.getCustomerTypeID().getBonusCharge().compareTo(maxBonus) > 0) maxBonus = guest.getCustomerTypeID().getBonusCharge();
+            Customer customer = customerDAO.findByIdentityNumber(guest.getIdentityNumber(), guest.getIdentityType());
+            if (customerDAO.findByIdentityNumber(guest.getIdentityNumber(), guest.getIdentityType()) == null) {
+                customerDAO.save(guest);
+            } else {
+                guest.setId(customer.getId());
+                customerDAO.update(guest);
+            }
+        }
         //
         Employee employee = new Employee();
         EmployeeDAO employeeDAO = new EmployeeDAO();
@@ -83,24 +100,14 @@ public class BookingViewModel {
         reservation.setEmployeeID(employee);
         reservation.setCheckInDate(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
         reservation.setCheckOutDate(checkOutDate.get().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        //
-        reservation.setPrice(room.getRoomTypeID().getBasePrice());
-        reservation.setTotal(room.getRoomTypeID().getBasePrice());
-        //
+        reservation.setPrice(room.getRoomTypeID().getBasePrice().multiply(maxBonus));
+        reservation.setTotal(null);
         reservation.setNote(note);
 
         ReservationDAO reservationDAO = new ReservationDAO();
         reservationDAO.save(reservation);
-        CustomerDAO customerDAO = new CustomerDAO();
         ReservationGuestDAO reservationGuestDAO = new ReservationGuestDAO();
         for(var guest : customerList) {
-            Customer customer = customerDAO.findByIdentityNumber(guest.getIdentityNumber(), guest.getIdentityType());
-            if (customerDAO.findByIdentityNumber(guest.getIdentityNumber(), guest.getIdentityType()) == null) {
-                customerDAO.save(guest);
-            } else {
-                guest.setId(customer.getId());
-                customerDAO.update(guest);
-            }
             Reservationguest guestReservation = new Reservationguest();
             guestReservation.setReservationID(reservation);
             guestReservation.setCustomerID(guest);

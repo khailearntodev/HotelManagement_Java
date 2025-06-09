@@ -5,6 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.InvoiceDetailController">
 
     <VBox layoutX="3.0" layoutY="-1.0" prefHeight="800.0" prefWidth="796.0" spacing="15.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="-2.0">
@@ -103,10 +104,16 @@
             <Region HBox.hgrow="ALWAYS" />
 
             <VBox>
-                <MFXButton buttonType="RAISED" minHeight="40.0" minWidth="70.0" style="-fx-text-fill: blue;" text="Thanh Toán" />
+                <MFXButton fx:id="payButton" buttonType="RAISED" minHeight="40.0" minWidth="70.0" style="-fx-text-fill: blue;" text="Thanh Toán" />
             </VBox>
         </HBox>
     </VBox>
-
-    <MFXButton layoutY="7.0" prefHeight="46.0" prefWidth="57.0" style="-fx-background-color: transparent; -fx-font-size: 24px; -fx-font-weight: bold; -fx-cursor: hand;" text="✖" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="6.0" />
-</AnchorPane>
+    <MFXButton fx:id="closeButton" style="-fx-background-color: transparent;" text="✖" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="6.0">
+        <font>
+            <Font size="24.0"/>
+        </font>
+        <HBox.margin>
+            <Insets right="10.0"/>
+        </HBox.margin>
+    </MFXButton>
+   </AnchorPane>

@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -20,7 +21,7 @@ public class AddRoomController implements Initializable {
     @FXML
     public MFXTextField roomTypeField;
     @FXML
-    public MFXTextField roomNoteField;
+    public TextArea roomNoteField;
     private RoomService roomService;
     private Consumer<Boolean> onAddCallback; // Callback to notify parent on add success/failure
     private Roomtype selectedRoomType;

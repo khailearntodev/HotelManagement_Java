@@ -25,7 +25,6 @@ public class RoomDAO {
         }
     }
 
-
     // Tìm phòng theo ID
     public Room findById(int id) {
         try (Session session = HibernateUtils.getSession()) {
@@ -131,6 +130,26 @@ public class RoomDAO {
             System.err.println("Error counting available rooms for RoomType ID " + roomTypeId + ": " + e.getMessage());
             e.printStackTrace();
             return 0;
+        }
+    }
+
+    public int countInUseRooms() {
+        try (Session session = HibernateUtils.getSession()) {
+            String sql = "SELECT COUNT(*) FROM Reservation re " +
+                    "JOIN Room r ON r.RoomID = re.RoomID " +
+                    "WHERE re.isDeleted = 0 AND r.Status = 2 AND r.isDeleted = 0";
+            Object result = session.createNativeQuery(sql).getSingleResult();
+            return ((Number) result).intValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public long countAll() {
+        try (Session session = HibernateUtils.getSession()) {
+            String hql = "SELECT COUNT(*) FROM Room WHERE isDeleted = false";
+            return session.createQuery(hql, Long.class).uniqueResult();
         }
     }
 }

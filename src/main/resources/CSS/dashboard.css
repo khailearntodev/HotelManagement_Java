@@ -1,0 +1,140 @@
+/* dashboard.css */
+
+/* Nền chính cho toàn bộ dashboard */
+.root {
+    -fx-background-color: white;
+    -fx-font-family: "Arial";
+}
+
+/* Các Border có bo góc và viền nhạt */
+.border-rounded {
+    -fx-background-color: white;
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+}
+
+/* Tiêu đề section (TextBlock - tương đương Label lớn) */
+.label-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 10 20; /* top, right, bottom, left */
+    -fx-text-fill: black;
+}
+
+/* Button màu xanh chủ đạo (#2563EB) với chữ trắng */
+.button-primary {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-family: "Arial";
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-padding: 6 20 6 20;
+}
+
+/* Button primary khi hover */
+.button-primary:hover {
+    -fx-background-color: #1E4BB8;
+}
+
+/* StackPanel ngang (HBox) căn giữa theo chiều dọc */
+.hbox-center-vertical {
+    -fx-alignment: center-left;
+    -fx-spacing: 10;
+}
+
+/* TextBlock nhỏ, dùng font Arial, cỡ 14 */
+.text-small {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-fill: black;
+}
+
+/* TextBlock to cho số liệu (cỡ 30) */
+.text-large-number {
+    -fx-font-family: "Arial";
+    -fx-font-size: 30px;
+    -fx-fill: black;
+}
+
+/* Background xanh cho box nhỏ (thống kê) */
+.box-blue {
+    -fx-background-color: #2563EB;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-padding: 15;
+    -fx-text-fill: white;
+}
+
+/* Background xanh nhạt cho icon trong box */
+.box-icon-bg {
+    -fx-background-color: #B1FFDD;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-min-width: 33px;
+    -fx-min-height: 28px;
+    -fx-alignment: center;
+}
+
+/* ComboBox style cho chọn trạng thái với màu nền xanh chủ đạo */
+.combo-box-primary {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-family: "Arial";
+    -fx-padding: 8 12 8 16;
+}
+
+/* DataGrid / TableView style */
+.table-view {
+    -fx-font-family: "Arial";
+    -fx-font-size: 12px;
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+}
+
+/* DataGrid Header style */
+.table-view .column-header {
+    -fx-background-color: #F3F3F3;
+    -fx-font-weight: bold;
+}
+
+/* TextBox tìm kiếm */
+.text-field-search {
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+}
+
+/* ListView style */
+.list-view {
+    -fx-background-color: white;
+    -fx-border-color: lightgray;
+    -fx-border-width: 1;
+    -fx-padding: 5;
+}
+
+/* Tooltip style */
+.tooltip {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: white;
+    -fx-font-family: "Arial";
+}
+
+/* BarChart Bar fill mặc định màu xanh #2563EB */
+.chart-bar {
+    -fx-bar-fill: #2563EB;
+}
+
+/* BarChart Bar khi hover đổi sang màu đậm hơn */
+.chart-bar:hover {
+    -fx-bar-fill: #1E4BB8;
+}
+
+/* Tooltip cho BarChart khi hover */
+.chart-bar-tooltip {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: white;
+    -fx-font-family: "Arial";
+}

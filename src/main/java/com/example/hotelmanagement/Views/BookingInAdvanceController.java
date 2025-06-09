@@ -16,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
@@ -35,6 +36,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -148,6 +150,12 @@ public class BookingInAdvanceController implements Initializable {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+                viewModel.getRoomReservationDisplays().clear();
+                initializeRoomDisplays();
+                viewModel.setSelectedItem(null);
+            });
         }
     }
 
@@ -155,6 +163,43 @@ public class BookingInAdvanceController implements Initializable {
         if (viewModel != null) {
             viewModel.setCheckInDate(checkInPicker.getValue());
             viewModel.setCheckOutDate(checkOutPicker.getValue());
+
+            if (viewModel.getCheckInDate() == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText(null);
+                alert.setContentText("Vui lòng chọn ngày nhận phòng");
+                alert.showAndWait();
+                return;
+            }
+
+            if (viewModel.getCheckOutDate() == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText(null);
+                alert.setContentText("Vui lòng chọn ngày trả phòng");
+                alert.showAndWait();
+                return;
+            }
+
+            if (viewModel.getCheckInDate().isBefore(LocalDate.now())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText(null);
+                alert.setContentText("Ngày nhận phòng không được trước ngày hôm nay");
+                alert.showAndWait();
+                return;
+            }
+
+            if (viewModel.getCheckOutDate().isBefore(viewModel.getCheckInDate())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText(null);
+                alert.setContentText("Ngày trả phòng không được trước ngày nhận phòng");
+                alert.showAndWait();
+                return;
+            }
+
             viewModel.findRoom();
             initializeRoomDisplays();
         }
@@ -162,6 +207,15 @@ public class BookingInAdvanceController implements Initializable {
 
     public void nextView(MouseEvent mouseEvent) {
         if (!checkInPicker.getValue().equals(LocalDate.now())) {
+            if (customerNameTextField.getText().isEmpty() || addressTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText(null);
+                alert.setContentText("Vui lòng nhập đầy đủ tất cả các thông tin bắt buộc");
+                alert.showAndWait();
+                return;
+            }
+
             try {
                 FXMLLoader bookingNotefxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingInAdvanceInvoiceView.fxml"));
                 Parent root = bookingNotefxmlLoader.load();
@@ -192,7 +246,8 @@ public class BookingInAdvanceController implements Initializable {
                 scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
                 if (viewModel.getSelectedItem().getUserData() instanceof Reservation_RoomDisplay roomReservationDisplay) {
                     Room room = new RoomDAO().findById(roomReservationDisplay.getId());
-                    BookingViewModel vm = new BookingViewModel(room, true);
+                    BookingViewModel vm = new BookingViewModel(room, false);
+                    vm.getCheckOutDate().set(checkOutPicker.getValue().atStartOfDay(ZoneOffset.UTC).toLocalDate());
                     vm.setParent(viewModel.getParent());
                     BookingController controller = fxmlLoader.getController();
                     controller.setViewModel(vm);

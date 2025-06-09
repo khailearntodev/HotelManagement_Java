@@ -1,19 +1,29 @@
 .toggle-button {
-    -fx-background-color: #ffffff;
+    -fx-background-color: transparent;
     -fx-text-fill: #000000;
+    -fx-padding: 10 5;
+    -fx-alignment: CENTER_LEFT;
+    -fx-font-size: 14px;
+    -fx-font-family: Inter;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-graphic-text-gap: 10;
+    -fx-content-display: LEFT;
 }
 
 .toggle-button:hover {
-    -fx-background-color: #e0ecfb;
-    -fx-text-fill: #000000;
+    -fx-background-color: #f3f8ff;
 }
 .button-border{
     -fx-border-radius: 20;
 }
 .toggle-button:selected {
-    -fx-background-color: #c4daf7;
+    -fx-background-color: #e6f0ff;
     -fx-text-fill: #000000;
 }
+
 .normal-button{
     -fx-background-color: #3b63b3;
     -fx-text-fill: #ffffff;
