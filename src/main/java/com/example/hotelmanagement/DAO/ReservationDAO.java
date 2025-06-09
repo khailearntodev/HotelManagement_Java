@@ -37,10 +37,50 @@ public class ReservationDAO {
         try (Session session = HibernateUtils.getSession()) {
             return session.createQuery(
                             "SELECT r FROM Reservation r " +
-                                    "LEFT JOIN FETCH r.roomID " +
+                                    "LEFT JOIN FETCH r.roomID ro " +
+                                    "LEFT JOIN FETCH ro.roomTypeID " +
+                                    "LEFT JOIN FETCH r.servicebookings sb " +
+                                    "LEFT JOIN FETCH sb.serviceID " +
                                     "WHERE r.id = :id AND r.isDeleted = false",
                             Reservation.class)
                     .setParameter("id", id)
+                    .uniqueResultOptional().orElse(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public Reservation findActiveReservationByRoomId(int roomId) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                            "SELECT r FROM Reservation r " +
+                                    "LEFT JOIN FETCH r.roomID ro " +
+                                    "LEFT JOIN FETCH ro.roomTypeID " +
+                                    "LEFT JOIN FETCH r.reservationguests " +
+                                    "LEFT JOIN FETCH r.servicebookings sb " +
+                                    "LEFT JOIN FETCH sb.serviceID " +
+                                    "WHERE r.roomID.id = :roomId " +
+                                    "AND r.invoiceID IS NULL " +
+                                    "AND r.isDeleted = false",
+                            Reservation.class)
+                    .setParameter("roomId", roomId)
+                    .uniqueResultOptional().orElse(null); // Sử dụng uniqueResultOptional để trả về null nếu không tìm thấy
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public Reservation findByRoomNumber(int roomNumber) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                            "SELECT r FROM Reservation r " +
+                                    "JOIN FETCH r.roomID ro " +
+                                    "JOIN FETCH ro.roomTypeID rt " +
+                                    "LEFT JOIN FETCH r.servicebookings sb " +
+                                    "LEFT JOIN FETCH sb.serviceID " +
+                                    "WHERE ro.roomNumber = :roomNumber AND r.isDeleted = false AND r.invoiceID IS NULL ",
+                            Reservation.class)
+                    .setParameter("roomNumber", roomNumber)
                     .uniqueResultOptional().orElse(null);
         } catch (Exception e) {
             e.printStackTrace();

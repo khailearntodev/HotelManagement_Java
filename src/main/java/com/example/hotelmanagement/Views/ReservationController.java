@@ -3,13 +3,13 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
+import com.example.hotelmanagement.DAO.EmployeeDAO;
+import com.example.hotelmanagement.DAO.InvoiceDAO;
 import com.example.hotelmanagement.DAO.ReservationDAO;
 import com.example.hotelmanagement.DAO.RoomDAO;
 import com.example.hotelmanagement.DTO.Reservation_RoomDisplay;
 import com.example.hotelmanagement.Main;
-import com.example.hotelmanagement.Models.Reservation;
-import com.example.hotelmanagement.Models.Room;
-import com.example.hotelmanagement.Models.Roomtype;
+import com.example.hotelmanagement.Models.*;
 import com.example.hotelmanagement.ViewModels.*;
 import com.example.hotelmanagement.ViewModels.SelectRoomForCheckOutViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -49,6 +49,8 @@ import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.Setter;
+
+
 
 public class ReservationController implements Initializable {
     @FXML private MFXTextField textfieldSearch;
@@ -296,6 +298,75 @@ public class ReservationController implements Initializable {
             private void setupCheckoutButton(Reservation_RoomDisplay p) {
                 btn.setOnAction(e -> {
                     System.out.println("Click phòng: " + p.getRoomNumber());
+                    Room room = new RoomDAO().findById(p.getId());
+
+                    if (room != null) {
+                        try {
+                            ReservationDAO reservationDAO = new ReservationDAO();
+                            Reservation activeReservation = reservationDAO.findActiveReservationByRoomId(room.getId());
+
+                            if (activeReservation == null) {
+                                System.err.println("Lỗi: Không tìm thấy Reservation đang hoạt động cho phòng " + p.getRoomNumber());
+                                return;
+                            }
+                            List<Reservation> reservations = new ArrayList<>();
+                            reservations.add(activeReservation);
+                            for (Reservation res : reservations) {
+                                res.setCheckOutDate(java.time.Instant.now());
+                                reservationDAO.update(res);
+                            }
+                            InvoiceDetailViewModel invoiceDetailVM = new InvoiceDetailViewModel(reservations);
+
+                            Invoice invoice = new Invoice();
+                            Employee employee = new EmployeeDAO().findById(2);
+                            invoice.setEmployeeID(employee);
+                            invoice.setIssueDate(java.time.Instant.now());
+                            invoice.setTotalAmount(invoiceDetailVM.getTongTien().get());
+                            invoice.setCustomerName(reservations.getFirst().getReservationguests().getClass().getName());
+                            invoice.setCustomerAddres(reservations.getFirst().getReservationguests().getClass().getName());
+                            invoice.setInvoiceType(2);
+                            invoice.setPaymentStatus("Chưa thanh toán");
+
+                            InvoiceDAO invoiceDAO = new InvoiceDAO();
+                            boolean saveSuccessful = invoiceDAO.save(invoice);
+
+                            if (!saveSuccessful) {
+                                System.err.println("Lỗi: Không thể lưu hóa đơn vào cơ sở dữ liệu. Vui lòng kiểm tra log.");
+                                return;
+                            }
+
+
+                            RoomDAO roomDAO = new RoomDAO();
+                            for (Reservation res : reservations) {
+                                res.setCheckOutDate(java.time.Instant.now());
+                                res.setInvoiceID(invoice);
+                                reservationDAO.update(res);
+                                room.setStatus(1);
+                                roomDAO.update(room);
+                            }
+
+                            Invoice fullInvoice = invoiceDAO.getInvoiceWithDetails(invoice.getId());
+
+                            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/InvoiceDetailView.fxml"));
+                            Parent root = fxmlLoader.load();
+                            InvoiceDetailController controller = fxmlLoader.getController();
+                            controller.setInvoice(fullInvoice);
+
+                            Scene scene = new Scene(root);
+                            scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
+
+                            Stage stage = new Stage();
+                            stage.initStyle(StageStyle.UNDECORATED);
+                            stage.initModality(Modality.APPLICATION_MODAL);
+                            stage.setScene(scene);
+                            stage.showAndWait();
+
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    } else {
+                        System.err.println("Room not found with ID: " + p.getId());
+                    }
                 });
 
                 configureButton(btn, 87, "Thanh toán");
