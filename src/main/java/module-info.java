@@ -15,7 +15,6 @@ module com.example.hotelmanagement {
     exports com.example.hotelmanagement;
     exports com.example.hotelmanagement.Views;
     opens com.example.hotelmanagement.Views to javafx.fxml;
-    opens com.example.hotelmanagement.Models to org.hibernate.orm.core;
     opens com.example.hotelmanagement.Utils to org.hibernate.orm.core; // Example if HibernateUtils is in Utils package
 
 

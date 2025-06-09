@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.TextArea?>
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.UpdateRoomController">
    <children>
       <StackPane prefHeight="602.0" prefWidth="705.0">
@@ -66,7 +67,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <MFXButton onAction="#handleStatusButtonClick" fx:id="statusButton" styleClass="normal-button" text="Button" />
+                              <MFXButton fx:id="statusButton" styleClass="normal-button" text="Button" />
                            </children>
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="93.0" prefWidth="436.0">
@@ -79,7 +80,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <MFXButton styleClass="normal-button" onAction="#handleCleaningStatusButtonClick" fx:id="cleaningStatusButton" text="Button" />
+                              <MFXButton styleClass="normal-button" fx:id="cleaningStatusButton" text="Button" />
                            </children>
                         </VBox>
                      </children>
@@ -94,7 +95,7 @@
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <MFXTextField fx:id="roomNoteField" minHeight="24.0" prefHeight="24.0" prefWidth="267.0" />
+                        <TextArea fx:id="roomNoteField" minHeight="24.0" prefHeight="24.0" prefWidth="267.0" />
                      </children>
                   </VBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
