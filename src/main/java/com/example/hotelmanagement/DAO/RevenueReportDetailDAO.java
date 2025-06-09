@@ -4,7 +4,9 @@ import com.example.hotelmanagement.Models.RevenueReportDetail;
 import com.example.hotelmanagement.Utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
+import java.util.Collections;
 import java.util.List;
 
 public class RevenueReportDetailDAO {
@@ -72,4 +74,16 @@ public class RevenueReportDetailDAO {
             return false;
         }
     }
+    public List<RevenueReportDetail> getByReportId(int reportId) {
+        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            String sql = "FROM RevenueReportDetail rd JOIN FETCH rd.roomTypeID WHERE rd.reportID.id = :reportId AND rd.isDeleted = false";
+            Query<RevenueReportDetail> query = session.createQuery(sql, RevenueReportDetail.class);
+            query.setParameter("reportId", reportId);
+            return query.list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
 }

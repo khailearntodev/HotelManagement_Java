@@ -165,40 +165,20 @@ public class InvoiceController {
     }
     private void openInvoiceDetailView(Invoice invoice) {
         try {
-//            FXMLLoader loader = new FXMLLoader(Main.class.getResource("Views/InvoiceDetailView.fxml"));
-//            Parent root = loader.load();
-//
-//            Invoice fullInvoice = dao.getInvoiceWithDetails(invoice.getId());
-//            InvoiceDetailController controller = loader.getController();
-//
-//            controller.setInvoice(fullInvoice); //
-//
-//            Stage stage = new Stage();
-//            stage.setTitle("Chi tiết hóa đơn #" + invoice.getId());
-//            stage.initStyle(StageStyle.UNDECORATED);
-//            stage.setScene(new Scene(root));
-//            stage.show();
-            // Ví dụ khi mở cửa sổ RoomServiceView từ một view khác
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("Views/RoomService.fxml"));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("Views/InvoiceDetailView.fxml"));
             Parent root = loader.load();
-            RoomServiceController controller = loader.getController();
-            int reservationIdToLoad = 4;
-            ReservationDAO reservationDAO = new ReservationDAO();
-            Reservation selectedReservation = reservationDAO.findByIdForServiceBK(reservationIdToLoad); // Dùng findById đã sửa
 
-            if (selectedReservation != null) {
-                controller.setReservation(selectedReservation);
-                controller.setupBindingsAndData();
+            Invoice fullInvoice = dao.getInvoiceWithDetails(invoice.getId());
+            InvoiceDetailController controller = loader.getController();
 
-                Stage stage = new Stage();
-                stage.initStyle(StageStyle.UNDECORATED);
-                stage.setScene(new Scene(root));
-                stage.show();
-            } else {
-                // Xử lý trường hợp không tìm thấy reservation
-                System.err.println("Không tìm thấy Reservation với ID: " + reservationIdToLoad);
-                // Hiển thị Alert cho người dùng
-            }
+            controller.setInvoice(fullInvoice); //
+
+            Stage stage = new Stage();
+            stage.setTitle("Chi tiết hóa đơn #" + invoice.getId());
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(new Scene(root));
+            stage.show();
+
 
         } catch (Exception e) {
             e.printStackTrace();

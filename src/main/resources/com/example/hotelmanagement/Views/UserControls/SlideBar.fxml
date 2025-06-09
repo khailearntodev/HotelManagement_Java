@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<AnchorPane prefHeight="505.0" prefWidth="230.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.SlideBarController">
+   <HBox minHeight="-Infinity" minWidth="-Infinity" prefWidth="230.0">
+      <children>
+         <fx:define>
+            <ToggleGroup fx:id="menuGroup" />
+         </fx:define>
+         <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="506.0" prefWidth="230.0" style="-fx-background-color: #FFFF;">
+            <children>
+               <!-- ToggleButton 1 -->
+               <ToggleButton fx:id="btnTrangChu" minWidth="-Infinity" mnemonicParsing="false" onAction="#onToggleSelected" prefHeight="62.0" prefWidth="230.0" selected="true" stylesheets="@../../../../../CSS/style.css">
+                  <graphic>
+                     <HBox prefHeight="54.0" prefWidth="201.0">
+                        <children>
+                           <StackedFontIcon iconSize="48">
+                              <FontIcon iconLiteral="fa-home" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
+                           </StackedFontIcon>
+
+                           <Text fill="#0033ff" text="TRANG CHỦ" wrappingWidth="154.6">
+                              <HBox.margin>
+                                 <Insets left="20.0" top="10.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font name="Arial Bold" size="16.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </HBox>
+                  </graphic>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+                  <toggleGroup>
+                     <ToggleGroup fx:id="menuGroup" />
+                  </toggleGroup>
+               </ToggleButton>
+               <ToggleButton fx:id="btnPhong" minWidth="-Infinity" mnemonicParsing="false" onAction="#onToggleSelected" prefHeight="62.0" prefWidth="230.0" stylesheets="@../../../../../CSS/style.css" toggleGroup="$menuGroup">
+                  <graphic>
+                     <HBox prefHeight="54.0" prefWidth="800.0">
+                        <children>
+                           <StackedFontIcon iconSize="48">
+                              <FontIcon iconLiteral="fa-bed" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
+                           </StackedFontIcon>
+                           <Text fill="#0033ff" text="PHÒNG" wrappingWidth="92.6">
+                              <HBox.margin>
+                                 <Insets left="18.0" top="10.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font name="Arial Bold" size="16.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </HBox>
+                  </graphic>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+
+               </ToggleButton>
+               <ToggleButton fx:id="btnDatPhong" layoutX="10.0" layoutY="66.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#onToggleSelected" prefHeight="62.0" prefWidth="230.0" stylesheets="@../../../../../CSS/style.css" toggleGroup="$menuGroup">
+                  <toggleGroup>
+                     <ToggleGroup fx:id="menuGroup1" />
+                  </toggleGroup>
+                  <graphic>
+                     <HBox prefHeight="54.0" prefWidth="800.0">
+                        <children>
+                           <StackedFontIcon iconSize="48">
+                                 <FontIcon iconLiteral="fa-calendar" StackedFontIcon.iconSize="0.5" />
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                           </StackedFontIcon>
+                           <Text fill="#0033ff" text="ĐẶT PHÒNG" wrappingWidth="127.6">
+                              <HBox.margin>
+                                 <Insets left="22.0" top="10.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font name="Arial Bold" size="16.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </HBox>
+                  </graphic>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+               </ToggleButton>
+               <ToggleButton fx:id="btnTienNghi" minWidth="-Infinity" mnemonicParsing="false" onAction="#onToggleSelected" prefHeight="62.0" prefWidth="230.0" stylesheets="@../../../../../CSS/style.css" toggleGroup="$menuGroup">
+                  <graphic>
+                     <HBox prefHeight="54.0" prefWidth="800.0">
+                        <children>
+                           <StackedFontIcon iconSize="48">
+                              <FontIcon iconLiteral="fa-bath" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
+                           </StackedFontIcon>
+                           <Text fill="#0033ff" text="TIỆN NGHI" wrappingWidth="92.6">
+                              <HBox.margin>
+                                 <Insets left="19.0" top="10.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font name="Arial Bold" size="16.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </HBox>
+                  </graphic>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+               </ToggleButton>
+               <ToggleButton fx:id="btnDichVu" minWidth="-Infinity" mnemonicParsing="false" onAction="#onToggleSelected" prefHeight="62.0" prefWidth="230.0" stylesheets="@../../../../../CSS/style.css" toggleGroup="$menuGroup">
+                  <graphic>
+                     <HBox prefHeight="54.0" prefWidth="800.0">
+                        <children>
+                           <StackedFontIcon iconSize="48">
+                              <FontIcon iconLiteral="fa-bell" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
+                           </StackedFontIcon>
+                           <Text fill="#0033ff" text="DỊCH VỤ" wrappingWidth="92.6">
+                              <HBox.margin>
+                                 <Insets left="21.0" top="10.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font name="Arial Bold" size="16.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </HBox>
+                  </graphic>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+               </ToggleButton>
+               <ToggleButton fx:id="btnLichSuHD" minWidth="-Infinity" mnemonicParsing="false" onAction="#onToggleSelected" prefHeight="62.0" prefWidth="230.0" stylesheets="@../../../../../CSS/style.css" toggleGroup="$menuGroup">
+                  <graphic>
+                     <HBox prefHeight="54.0" prefWidth="800.0">
+                        <children>
+                           <StackedFontIcon iconSize="48">
+                              <FontIcon iconLiteral="fa-money" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
+                           </StackedFontIcon>
+                           <Text fill="#0033ff" text="LỊCH SỬ HÓA ĐƠN" wrappingWidth="165.79998168945312">
+                              <HBox.margin>
+                                 <Insets left="20.0" top="10.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font name="Arial Bold" size="16.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </HBox>
+                  </graphic>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+               </ToggleButton>
+               <ToggleButton fx:id="btnKhachHang" minWidth="-Infinity" mnemonicParsing="false" onAction="#onToggleSelected" prefHeight="62.0" prefWidth="230.0" stylesheets="@../../../../../CSS/style.css" toggleGroup="$menuGroup">
+                  <graphic>
+                     <HBox prefHeight="54.0" prefWidth="800.0">
+                        <children>
+                           <StackedFontIcon iconSize="48">
+                              <FontIcon iconLiteral="fa-users" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
+                           </StackedFontIcon>
+                           <Text fill="#0033ff" text="KHÁCH HÀNG" wrappingWidth="116.59996948242187">
+                              <HBox.margin>
+                                 <Insets left="20.0" top="10.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font name="Arial Bold" size="16.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </HBox>
+                  </graphic>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+               </ToggleButton>
+               <ToggleButton fx:id="btnNhanVien" minWidth="-Infinity" mnemonicParsing="false" onAction="#onToggleSelected" prefHeight="62.0" prefWidth="230.0" stylesheets="@../../../../../CSS/style.css" toggleGroup="$menuGroup">
+                  <graphic>
+                     <HBox prefHeight="54.0" prefWidth="800.0">
+                        <children>
+                           <StackedFontIcon iconSize="48">
+                              <FontIcon iconLiteral="fa-user" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
+                           </StackedFontIcon>
+                           <Text fill="#0033ff" text="NHÂN VIÊN" wrappingWidth="92.6">
+                              <HBox.margin>
+                                 <Insets left="28.0" top="10.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font name="Arial Bold" size="16.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </HBox>
+                  </graphic>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+               </ToggleButton>
+               <ToggleButton fx:id="btnThongKe" minWidth="-Infinity" mnemonicParsing="false" onAction="#onToggleSelected" prefHeight="62.0" prefWidth="230.0" stylesheets="@../../../../../CSS/style.css" toggleGroup="$menuGroup">
+                  <graphic>
+                     <HBox prefHeight="54.0" prefWidth="800.0">
+                        <children>
+                           <StackedFontIcon iconSize="48">
+                              <FontIcon iconLiteral="fa-bar-chart" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
+                           </StackedFontIcon>
+                           <Text fill="#0033ff" text="THỐNG KÊ" wrappingWidth="92.6">
+                              <HBox.margin>
+                                 <Insets left="18.0" top="10.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font name="Arial Bold" size="16.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </HBox>
+                  </graphic>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+               </ToggleButton>
+               <ToggleButton fx:id="btnCauHinh" minWidth="-Infinity" mnemonicParsing="false" onAction="#onToggleSelected" prefHeight="62.0" prefWidth="230.0" stylesheets="@../../../../../CSS/style.css" toggleGroup="$menuGroup">
+                  <graphic>
+                     <HBox prefHeight="54.0" prefWidth="800.0">
+                        <children>
+                           <StackedFontIcon iconSize="48">
+                              <FontIcon iconLiteral="fa-cogs" StackedFontIcon.iconSize="0.5" />
+                              <HBox.margin>
+                                 <Insets left="10.0" />
+                              </HBox.margin>
+                           </StackedFontIcon>
+                           <Text fill="#0033ff" text="CẤU HÌNH" wrappingWidth="92.6">
+                              <HBox.margin>
+                                 <Insets left="20.0" top="10.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font name="Arial Bold" size="16.0" />
+                              </font>
+                           </Text>
+                        </children>
+                     </HBox>
+                  </graphic>
+                  <cursor>
+                     <Cursor fx:constant="HAND" />
+                  </cursor>
+               </ToggleButton>
+            </children>
+         </VBox>
+      </children>
+   </HBox>
+</AnchorPane>

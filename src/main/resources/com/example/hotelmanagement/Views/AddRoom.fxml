@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.AddRoomController">
+    <children>
+        <StackPane prefHeight="602.0" prefWidth="705.0">
+            <children>
+                <VBox prefHeight="602.0" prefWidth="592.0">
+                    <children>
+                        <Label prefHeight="85.0" prefWidth="400.0" style="-fx-background-color: #B0E0E6;" text="Thông tin phòng">
+                            <font>
+                                <Font name="Arial Bold" size="24.0" />
+                            </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="100.0" />
+                     </padding>
+                        </Label>
+                        <HBox prefHeight="91.0" prefWidth="400.0">
+                            <children>
+                        <VBox prefHeight="78.0" prefWidth="170.0">
+                           <children>
+                              <Label text="Số phòng">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="3.0" />
+                                 </VBox.margin>
+                              </Label>
+                                        <MFXTextField fx:id="roomNumberField" floatMode="BORDER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="150.0" style="-fx-font-size: 14;">
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </MFXTextField>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="35.0" layoutY="30.0" prefHeight="78.0" prefWidth="170.0">
+                           <children>
+                              <Label text="Loại phòng">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="3.0" />
+                                 </VBox.margin>
+                              </Label>
+                                        <MFXTextField fx:id="roomTypeField" editable="false" floatMode="DISABLED" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="150.0" selectable="false" style="-fx-font-size: 14;">
+                                 <VBox.margin>
+                                    <Insets left="5.0" />
+                                 </VBox.margin>
+                              </MFXTextField>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </VBox>
+                            </children>
+                     <padding>
+                        <Insets left="25.0" top="20.0" />
+                     </padding>
+                        </HBox>
+                        <VBox prefHeight="153.0" prefWidth="400.0">
+                            <children>
+                                <Label prefHeight="17.0" prefWidth="222.0" text="Ghi chú">
+                                    <font>
+                                        <Font size="16.0" />
+                                    </font>
+                                </Label>
+                                <TextArea fx:id="roomNoteField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="128.0" prefWidth="350.0" promptText="(Nếu có)" />
+                            </children>
+                     <padding>
+                        <Insets left="25.0" />
+                     </padding>
+                        </VBox>
+                        <HBox prefHeight="72.0" prefWidth="360.0">
+                            <children>
+                                <VBox maxHeight="333.0" prefHeight="97.0" prefWidth="363.0">
+                                    <children>
+                                        <MFXButton onAction="#handleAddClick" rippleColor="#3d53d0" style="-fx-background-color: #3d53d0;" text="Thêm phòng" textFill="WHITE">
+                                            <VBox.margin>
+                                                <Insets left="135.0" top="15.0" />
+                                            </VBox.margin>
+                                            <padding>
+                                                <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                                            </padding>
+                                 <font>
+                                    <Font size="13.0" />
+                                 </font>
+                                        </MFXButton>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </StackPane>
+    </children>
+</StackPane>

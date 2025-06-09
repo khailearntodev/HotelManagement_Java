@@ -30,4 +30,8 @@ public class Role {
     @OneToMany(mappedBy = "roleID")
     private Set<com.example.hotelmanagement.Models.Useraccount> useraccounts = new LinkedHashSet<>();
 
+    @Override
+    public String toString() {
+        return roleName;
+    }
 }

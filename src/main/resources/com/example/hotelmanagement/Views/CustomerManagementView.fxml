@@ -1,36 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import org.kordamp.ikonli.javafx.*?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
+<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <AnchorPane maxHeight="660.0" maxWidth="1060.0" minHeight="660" minWidth="1060" prefHeight="660" prefWidth="1060" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.CustomerManagementController">
     <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="1060.0" spacing="20">
         <!-- HEADER -->
         <HBox alignment="CENTER_LEFT" spacing="15">
-            <StackedFontIcon iconSize="64" prefWidth="100.0">
-                <FontIcon iconLiteral="fa-users" wrappingWidth="53.571428298950195" StackedFontIcon.iconSize="1" />
+
+            <Region fx:id="spacer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
             <HBox.margin>
-               <Insets left="5.0" top="5.0" />
+               <Insets />
+            </HBox.margin></Region>
+            <MFXTextField fx:id="keywordField" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="600.0" promptText="Tìm kiếm khách hàng">
+                <leadingIcon>
+                    <StackedFontIcon iconSize="16">
+                        <FontIcon iconLiteral="fa-search" wrappingWidth="18.142857551574707" StackedFontIcon.iconSize="0.7">
+                     <font>
+                        <Font size="14.0" />
+                     </font></FontIcon>
+                    </StackedFontIcon>
+                </leadingIcon>
+            <HBox.margin>
+               <Insets top="10.0" />
             </HBox.margin>
-            </StackedFontIcon>
-            <VBox spacing="5">
-                <Label prefHeight="50.0" prefWidth="400.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Quản lý khách hàng">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <font>
-                  <Font size="14.0" />
-               </font></Label>
-                <Label fx:id="realTimeClockLabel" style="-fx-font-size: 14px;" text="00:00:00" />
-            </VBox>
-            <Region fx:id="spacer" HBox.hgrow="ALWAYS" />
+            </MFXTextField>
+        </HBox>
+
+        <!-- FILTER SECTION -->
+        <HBox prefHeight="43.0" prefWidth="1060.0" spacing="10.0" style="-fx-border-radius: 5;">
+            <MFXComboBox fx:id="statusComboBox" alignment="CENTER" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="120" promptText="Trạng thái" />
+            <MFXComboBox fx:id="customerTypeComboBox" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="120" promptText="Loại khách" />
+            <MFXComboBox fx:id="yearComboBox" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="90" promptText="Năm" />
+            <MFXComboBox fx:id="monthComboBox" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="90" promptText="Tháng" />
 
             <!-- BUTTON: Xuất PDF -->
-            <MFXButton maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="35" prefWidth="120" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-border-color: gray; -fx-border-radius: 5;" text="Xuất PDF">
+            <MFXButton fx:id="btnExportPdf" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35" prefWidth="120" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-border-color: gray; -fx-border-radius: 5;" text="Xuất PDF">
                 <graphic>
                     <StackedFontIcon iconSize="18" prefHeight="36.0" prefWidth="31.0">
                         <FontIcon iconLiteral="fa-print" StackedFontIcon.iconSize="0.7" />
@@ -39,10 +55,13 @@
             <font>
                <Font size="14.0" />
             </font>
+            <HBox.margin>
+               <Insets left="270.0" />
+            </HBox.margin>
             </MFXButton>
 
             <!-- BUTTON: Làm mới -->
-            <MFXButton maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="35" prefWidth="120" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-border-color: gray; -fx-border-radius: 5;" text="Refresh">
+            <MFXButton fx:id="btnRefresh" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35" prefWidth="120" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-border-color: gray; -fx-border-radius: 5;" text="Refresh">
                 <graphic>
                     <StackedFontIcon iconSize="18" prefHeight="37.0" prefWidth="26.0">
                         <FontIcon iconLiteral="fa-print" wrappingWidth="28.0" StackedFontIcon.iconSize="0.7" />
@@ -55,42 +74,21 @@
                <Font size="14.0" />
             </font>
             </MFXButton>
-        </HBox>
-
-        <!-- FILTER SECTION -->
-        <HBox prefHeight="60.0" prefWidth="1060.0" spacing="10" style="-fx-border-radius: 5;">
-            <MFXComboBox fx:id="statusComboBox" alignment="CENTER" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="120" promptText="Trạng thái" />
-            <MFXComboBox fx:id="customerTypeComboBox" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="120" promptText="Loại khách" />
-            <MFXComboBox fx:id="yearComboBox" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="90" promptText="Năm" />
-            <MFXComboBox fx:id="monthComboBox" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="90" promptText="Tháng" />
-            <MFXTextField fx:id="searchField" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="400.0" promptText="Tìm kiếm khách hàng">
-                <leadingIcon>
-                    <StackedFontIcon iconSize="16">
-                        <FontIcon iconLiteral="fa-search" wrappingWidth="18.142857551574707" StackedFontIcon.iconSize="0.7">
-                     <font>
-                        <Font size="14.0" />
-                     </font></FontIcon>
-                    </StackedFontIcon>
-                </leadingIcon>
-            <HBox.margin>
-               <Insets left="120.0" />
-            </HBox.margin>
-            </MFXTextField>
          <padding>
-            <Insets left="10.0" top="15.0" />
+            <Insets left="10.0" />
          </padding>
         </HBox>
 
         <!-- TABLE -->
-        <TableView fx:id="customerTable" minWidth="1060.0" prefHeight="526.0" prefWidth="1060.0">
+        <TableView fx:id="customerTable" minHeight="-Infinity" minWidth="1060.0" prefHeight="535.0" prefWidth="1060.0">
             <columns>
-                <TableColumn fx:id="idColumn" prefWidth="130" text="Mã khách hàng" />
+                <TableColumn fx:id="idNumberColumn" prefWidth="130" text="Mã khách hàng" />
                 <TableColumn fx:id="nameColumn" prefWidth="200" text="Tên khách hàng" />
-                <TableColumn fx:id="typeColumn" prefWidth="130" text="Loại khách" />
+                <TableColumn fx:id="typeColumn" prefWidth="140" text="Loại khách" />
                 <TableColumn fx:id="birthdayColumn" prefWidth="120" text="Ngày sinh" />
                 <TableColumn fx:id="identifyColumn" prefWidth="170" text="CCCD / Passport" />
-                <TableColumn fx:id="phoneColumn" prefWidth="120" text="SĐT" />
-                <TableColumn fx:id="statusColumn" prefWidth="100" text="Trạng thái" />
+                <TableColumn fx:id="phoneColumn" prefWidth="130" text="SĐT" />
+                <TableColumn fx:id="statusColumn" prefWidth="150" text="Trạng thái" />
             </columns>
         </TableView>
     </VBox>

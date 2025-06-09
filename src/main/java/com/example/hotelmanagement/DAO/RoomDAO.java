@@ -4,6 +4,7 @@ import com.example.hotelmanagement.Models.Room;
 import com.example.hotelmanagement.Utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -23,7 +24,6 @@ public class RoomDAO {
             ).list();
         }
     }
-
 
     // Tìm phòng theo ID
     public Room findById(int id) {
@@ -96,6 +96,60 @@ public class RoomDAO {
             return session.createQuery("FROM Room WHERE status = :status AND isDeleted = false", Room.class)
                     .setParameter("status", status)
                     .list();
+        }
+    }
+    public List<Room> findByRoomTypeId (int roomTypeId){
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery("FROM Room r JOIN FETCH r.roomTypeID WHERE r.roomTypeID.id = :roomTypeId AND r.isDeleted = false", Room.class)
+                    .setParameter("roomTypeId", roomTypeId)
+                    .list();
+        }
+    }
+    public long countTotalRoomsByRoomTypeId(Integer roomTypeId) {
+        try (Session session = HibernateUtils.getSession()) {
+            // No JOIN FETCH needed here as we are only counting, not returning Room objects
+            Query<Long> query = session.createQuery(
+                    "SELECT COUNT(r) FROM Room r WHERE r.roomTypeID.id = :roomTypeId AND r.isDeleted = false", Long.class);
+            query.setParameter("roomTypeId", roomTypeId);
+            return query.uniqueResult();
+        } catch (Exception e) {
+            System.err.println("Error counting total rooms for RoomType ID " + roomTypeId + ": " + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    public long countAvailableRoomsByRoomTypeId(Integer roomTypeId) {
+        try (Session session = HibernateUtils.getSession()) {
+            // No JOIN FETCH needed here as we are only counting, not returning Room objects
+            // Assuming 'status' 0 means available and 'cleaningStatus' 0 means clean.
+            Query<Long> query = session.createQuery(
+                    "SELECT COUNT(r) FROM Room r WHERE r.roomTypeID.id = :roomTypeId AND r.isDeleted = false AND r.status = 0 AND r.cleaningStatus = 0", Long.class);
+            query.setParameter("roomTypeId", roomTypeId);
+            return query.uniqueResult();
+        } catch (Exception e) {
+            System.err.println("Error counting available rooms for RoomType ID " + roomTypeId + ": " + e.getMessage());
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int countInUseRooms() {
+        try (Session session = HibernateUtils.getSession()) {
+            String sql = "SELECT COUNT(*) FROM Reservation re " +
+                    "JOIN Room r ON r.RoomID = re.RoomID " +
+                    "WHERE re.isDeleted = 0 AND r.Status = 2 AND r.isDeleted = 0";
+            Object result = session.createNativeQuery(sql).getSingleResult();
+            return ((Number) result).intValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public long countAll() {
+        try (Session session = HibernateUtils.getSession()) {
+            String hql = "SELECT COUNT(*) FROM Room WHERE isDeleted = false";
+            return session.createQuery(hql, Long.class).uniqueResult();
         }
     }
 }

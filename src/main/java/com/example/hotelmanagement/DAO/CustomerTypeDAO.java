@@ -81,4 +81,11 @@ public class CustomerTypeDAO {
             return false;
         }
     }
+    public Customertype findByName(String name) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery("FROM Customertype WHERE typeName = :name", Customertype.class)
+                    .setParameter("name", name)
+                    .uniqueResult();
+        }
+    }
 }
