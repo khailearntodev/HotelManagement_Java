@@ -20,6 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label; // Import Label for error messages
 import javafx.scene.layout.FlowPane;
 import javafx.scene.Parent;
@@ -107,6 +108,38 @@ public class RoomTypeController implements Initializable {
     }
 
     private void handleDeleteRoom(RoomViewModel item) {
+        System.out.println("Attempting to delete Room: " + item.getRoomNumber() + " (ID: " + item.getId() + ")");
+
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Xác nhận xóa phòng");
+        confirmationAlert.setHeaderText("Bạn có chắc chắn muốn xóa phòng này?");
+        confirmationAlert.setContentText("Phòng số " + item.getRoomNumber() + " sẽ được đánh dấu là đã xóa. Bạn không thể hoàn tác thao tác này.");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                // Call the service to soft delete the room
+                boolean success = roomService.delete(item.getId());
+                if (success) {
+                    showAlert(Alert.AlertType.INFORMATION, "Thành công", "Đã xóa mềm phòng thành công!");
+                    // Refresh the rooms list in the table after successful deletion
+                    loadRoomTypeCards(); // Refresh the list of cards
+                    // After update, re-display the updated details in the side panel
+                    if (this.currentlyDisplayedRoomType != null && this.currentlyDisplayedRoomType.getId() != null) {
+                        Roomtype a = roomTypeService.getRoomTypeById(this.currentlyDisplayedRoomType.getId());
+                        if(a != null){
+                            displayRoomTypeDetails(a);
+                        }
+                    }
+
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể xóa mềm phòng. Vui lòng kiểm tra nhật ký lỗi.");
+                }
+            } catch (RuntimeException e) {
+                showAlert(Alert.AlertType.ERROR, "Lỗi cơ sở dữ liệu", "Đã xảy ra lỗi khi xóa mềm phòng: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
     }
 
     private void handleEditRoom(RoomViewModel item) {
@@ -183,6 +216,8 @@ public class RoomTypeController implements Initializable {
                     cardController.setRoomtypeData(viewModel);
                     // Set the click handler for the card
                     cardController.setOnCardClick(this::handleRoomTypeCardClick);
+                    //Set the delete handler for the card
+                    cardController.handleDeleteRoomtype(this::handleDeleteRoomTypeClick);
 
                     // Add the loaded card to our container (FlowPane)
                     roomCardsContainer.getChildren().add(roomCardNode);
@@ -224,6 +259,34 @@ public class RoomTypeController implements Initializable {
             e.printStackTrace();
             clearRoomDetails();
 
+        }
+    }
+    private void handleDeleteRoomTypeClick(RoomTypeViewModel deletedViewModel){
+        // Fetch the room type details to show in the confirmation alert
+        Roomtype roomTypeOptional = roomTypeService.getRoomTypeById(deletedViewModel.getId());
+        Integer roomTypeId = deletedViewModel.getId();
+        String roomTypeName = roomTypeOptional.getTypeName();
+
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Xác nhận xóa loại phòng");
+        confirmationAlert.setHeaderText("Bạn có chắc chắn muốn xóa loại phòng này?");
+        confirmationAlert.setContentText("Loại phòng '" + roomTypeName + "' sẽ được đánh dấu là đã xóa. Bạn không thể hoàn tác thao tác này.");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                boolean success = roomTypeService.softDeleteRoomType(roomTypeId);
+                if (success) {
+                    showAlert(Alert.AlertType.INFORMATION, "Thành công", "Đã xóa mềm loại phòng thành công!");
+                    loadRoomTypeCards(); // Refresh the list of cards
+                    clearRoomDetails(); // Clear details since the room type might be gone
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể xóa mềm loại phòng. Vui lòng kiểm tra nhật ký lỗi.");
+                }
+            } catch (RuntimeException e) {
+                showAlert(Alert.AlertType.ERROR, "Lỗi cơ sở dữ liệu", "Đã xảy ra lỗi khi xóa mềm loại phòng: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
     private void displayRoomTypeDetails(Roomtype roomType) {

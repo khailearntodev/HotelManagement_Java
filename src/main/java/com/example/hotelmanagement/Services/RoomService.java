@@ -28,6 +28,9 @@ public class RoomService {
     public  boolean update(Room room){
         return  roomDAO.update(room);
     }
+    public boolean delete(int id){
+        return roomDAO.softDelete(id);
+    }
     public List<Room> findRoomsByRoomTypeId(Integer roomTypeId) {
         return  roomDAO.findByRoomTypeId(roomTypeId);
     }

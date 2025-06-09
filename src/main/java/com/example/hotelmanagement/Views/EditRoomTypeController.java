@@ -13,15 +13,20 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
@@ -32,6 +37,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer; // For callback
 
@@ -279,9 +285,75 @@ public class EditRoomTypeController implements Initializable {
     }
 
     private void handleDeleteRoom(RoomViewModel item) {
+        System.out.println("Attempting to delete Room: " + item.getRoomNumber() + " (ID: " + item.getId() + ")");
+
+        Alert confirmationAlert = new Alert(AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Xác nhận xóa phòng");
+        confirmationAlert.setHeaderText("Bạn có chắc chắn muốn xóa phòng này?");
+        confirmationAlert.setContentText("Phòng số " + item.getRoomNumber() + " sẽ được đánh dấu là đã xóa. Bạn không thể hoàn tác thao tác này.");
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                // Call the service to soft delete the room
+                boolean success = roomService.delete(item.getId());
+                if (success) {
+                    showAlert(AlertType.INFORMATION, "Thành công", "Đã xóa mềm phòng thành công!");
+                    // Refresh the rooms list in the table after successful deletion
+                    if (currentRoomType != null && currentRoomType.getId() != null) {
+                        loadRoomsForRoomType(currentRoomType.getId());
+                    }
+                } else {
+                    showAlert(AlertType.ERROR, "Lỗi", "Không thể xóa mềm phòng. Vui lòng kiểm tra nhật ký lỗi.");
+                }
+            } catch (RuntimeException e) {
+                showAlert(AlertType.ERROR, "Lỗi cơ sở dữ liệu", "Đã xảy ra lỗi khi xóa mềm phòng: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
     }
 
     private void handleEditRoom(RoomViewModel item) {
+        System.out.println("Editing Room: " + item.getRoomNumber());
+        try {
+            Room roomOptional = roomService.getRoomById(item.getId());
+            if (roomOptional != null) {
+
+
+                // Load UpdateRoom.fxml (This is the FXML for the UpdateRoomController)
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/UpdateRoom.fxml"));
+                Parent editRoomRoot = loader.load();
+                // Get the controller for the UpdateRoom.fxml
+                UpdateRoomController updateRoomController = loader.getController(); // Corrected type
+
+                // Pass the Room entity to the UpdateRoomController
+                updateRoomController.handleSetRoomData(item);
+
+                // Set a callback to refresh the rooms table after editing a room
+                updateRoomController.setOnUpdateCallback(success -> {
+                    if (success) {
+                        loadRoomsForRoomType(currentRoomType.getId());
+                    } else {
+                        showAlert(AlertType.ERROR, "Cập nhật phòng thất bại", "Có lỗi xảy ra khi cập nhật phòng.");
+                    }
+                });
+
+                Stage editRoomStage = new Stage();
+                editRoomStage.setTitle("Chỉnh sửa phòng");
+                editRoomStage.setScene(new Scene(editRoomRoot));
+                editRoomStage.initModality(Modality.APPLICATION_MODAL);
+                editRoomStage.showAndWait();
+
+            } else {
+                showAlert(AlertType.ERROR, "Lỗi", "Không tìm thấy thông tin phòng để chỉnh sửa.");
+            }
+        } catch (IOException e) {
+            showAlert(AlertType.ERROR, "Lỗi tải cửa sổ", "Không thể tải cửa sổ chỉnh sửa phòng.");
+            e.printStackTrace();
+        } catch (RuntimeException e) {
+            showAlert(AlertType.ERROR, "Lỗi truy xuất dữ liệu", "Không thể lấy dữ liệu phòng từ cơ sở dữ liệu: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**

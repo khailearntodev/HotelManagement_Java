@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 public class UpdateRoomController implements Initializable {
@@ -27,7 +28,7 @@ public class UpdateRoomController implements Initializable {
     @FXML
     public MFXButton cleaningStatusButton;
     @FXML
-    public MFXTextField roomNoteField;
+    public TextArea roomNoteField;
     @FXML
     public MFXButton editButton;
     public RoomService roomService;

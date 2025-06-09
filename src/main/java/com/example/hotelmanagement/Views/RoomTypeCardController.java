@@ -1,7 +1,9 @@
 package com.example.hotelmanagement.Views;
 
 import com.example.hotelmanagement.ViewModels.RoomTypeViewModel;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -19,6 +21,7 @@ import java.util.function.Consumer;
 public class RoomTypeCardController {
 
     public VBox roomCardRoot;
+    public MFXButton deleteButton;
     @FXML
     private ImageView roomTypeImageView;
     @FXML
@@ -39,7 +42,7 @@ public class RoomTypeCardController {
 
     private Consumer<RoomTypeViewModel> onCardClick; // Callback for click event
 
-
+    private Consumer<RoomTypeViewModel> onDeleteClick;
     public void setRoomtypeData(RoomTypeViewModel viewModel) {
         this.viewModel = viewModel; // Store the view model
         if (viewModel == null) {
@@ -82,6 +85,13 @@ public class RoomTypeCardController {
                 }
             });
         }
+        if(deleteButton != null){
+            deleteButton.setOnAction(event ->{
+                if(onDeleteClick != null){
+                    onDeleteClick.accept(this.viewModel);
+                }
+            });
+        }
     }
 
     /**
@@ -99,5 +109,9 @@ public class RoomTypeCardController {
         quantityTextField.setText("");
         descriptionTextArea.setText("");
         maxOccupancyTextField.setText("");
+    }
+
+    public void handleDeleteRoomtype(Consumer<RoomTypeViewModel> onDeleteClick) {
+        this.onDeleteClick = onDeleteClick;
     }
 }

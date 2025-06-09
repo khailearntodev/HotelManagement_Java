@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
 <VBox fx:id="roomCardRoot" alignment="CENTER" prefHeight="200.0" prefWidth="220.0" style="-fx-border-color: purple; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.RoomTypeCardController">
     <children>
         <ImageView fx:id="roomTypeImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
@@ -65,6 +66,15 @@
             <padding>
                 <Insets top="10.0" />
             </padding>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" spacing="10">
+            <children>
+                <MFXButton fx:id="deleteButton" text="Xóa" style="-fx-background-color: #F44336; -fx-text-fill: white;" />
+                <!-- You might add an "Sửa" button here too if you want it directly on the card -->
+            </children>
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
         </HBox>
     </children>
     <padding>
