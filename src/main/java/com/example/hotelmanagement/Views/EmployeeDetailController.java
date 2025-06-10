@@ -42,10 +42,10 @@ public class EmployeeDetailController {
     @FXML private MFXTextField txtSalaryRate;
     @FXML private MFXTextField txtPosition;
     @FXML private ImageView imageAvatar;
-
+    @FXML private MFXButton btnViewAccount;
+    @Setter private boolean readOnlyMode = false;
     private EmployeeDetailViewModel viewModel;
-    @Setter
-    private Runnable onSaveSuccess;
+    @Setter private Runnable onSaveSuccess;
     private final Locale vietnamLocale = new Locale("vi", "VN");
     private final DateTimeFormatter vietnameseFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -164,8 +164,6 @@ public class EmployeeDetailController {
                 viewModel.getContractDate().set(newVal.atStartOfDay(ZoneId.systemDefault()).toInstant());
         });
 
-
-
         if (viewModel.getAvatar().get() != null && !viewModel.getAvatar().get().isBlank()) {
             try {
                 Image img = new Image(viewModel.getAvatar().get(), true);
@@ -173,6 +171,9 @@ public class EmployeeDetailController {
             } catch (Exception ignored) {}
         }
 
+        if (readOnlyMode) {
+            btnViewAccount.setDisable(true);
+        }
     }
 
     @FXML

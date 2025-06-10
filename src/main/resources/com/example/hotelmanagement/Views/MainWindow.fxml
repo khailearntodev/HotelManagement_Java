@@ -21,13 +21,16 @@
                <padding>
                   <Insets left="10.0" />
                </padding></Label>
-            <Label fx:id="employeeName" alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="200" textAlignment="RIGHT">
+            <Label fx:id="employeeName" onMouseClicked="#handleEmployeeNameClick" alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="200" textAlignment="CENTER">
                <HBox.margin>
-                  <Insets left="380.0" />
+                  <Insets left="350.0" />
                </HBox.margin>
                <font>
                   <Font size="14.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
                </Label>
 
             <Region HBox.hgrow="ALWAYS" />

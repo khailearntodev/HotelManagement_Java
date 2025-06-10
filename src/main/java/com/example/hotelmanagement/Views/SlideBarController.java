@@ -18,8 +18,8 @@ public class SlideBarController {
     private ToggleButton btnPhong;
     @FXML
     private ToggleButton btnDatPhong;
-    @FXML
-    private ToggleButton btnTienNghi;
+//    @FXML
+//    private ToggleButton btnTienNghi;
     @FXML
     private ToggleButton btnDichVu;
     @FXML
@@ -58,7 +58,7 @@ public class SlideBarController {
         updateButtonVisibility(btnTrangChu, allowedViews.contains("TrangChu"));
         updateButtonVisibility(btnPhong, allowedViews.contains("Phong"));
         updateButtonVisibility(btnDatPhong, allowedViews.contains("DatPhong"));
-        updateButtonVisibility(btnTienNghi, allowedViews.contains("TienNghi"));
+        //updateButtonVisibility(btnTienNghi, allowedViews.contains("TienNghi"));
         updateButtonVisibility(btnDichVu, allowedViews.contains("DichVu"));
         updateButtonVisibility(btnLichSuHD, allowedViews.contains("LichSuHoaDon"));
         updateButtonVisibility(btnKhachHang, allowedViews.contains("KhachHang"));
