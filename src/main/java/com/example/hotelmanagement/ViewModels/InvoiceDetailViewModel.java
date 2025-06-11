@@ -29,7 +29,7 @@ public class InvoiceDetailViewModel {
     private final ObservableList<InvoiceDetailViewModel> reservationDetails = FXCollections.observableArrayList();
     private final ObjectProperty<BigDecimal> tongTien = new SimpleObjectProperty<>(BigDecimal.ZERO);
     private final ObjectProperty<Invoice> invoice = new SimpleObjectProperty<>();
-
+    LoginViewModel loginViewModel=new LoginViewModel();
     public InvoiceDetailViewModel(Reservation reservation) {
         this.reservation = reservation;
         initializeSingleReservation(reservation);
@@ -38,7 +38,7 @@ public class InvoiceDetailViewModel {
     public InvoiceDetailViewModel(List<Reservation> reservations) {
         this.reservation = null;
         Invoice newInvoice = new Invoice();
-        Employee employee = new EmployeeDAO().findById(23520610); //for test
+        Employee employee = new EmployeeDAO().findById(loginViewModel.getEmployeeId()); //for test
         newInvoice.setEmployeeID(employee);
         newInvoice.setIssueDate(java.time.Instant.now());
         invoice.set(newInvoice);
@@ -72,6 +72,7 @@ public class InvoiceDetailViewModel {
 
     public void saveInvoice() {
         InvoiceDAO invoiceDAO = new InvoiceDAO();
+        invoice.get().setPaymentStatus("Đã thanh toán");
         invoiceDAO.save(invoice.get());
 
         ReservationDAO reservationDAO = new ReservationDAO();

@@ -6,14 +6,14 @@
 <?import javafx.scene.text.Font?>
 <?import java.net.URL?>
 
-<AnchorPane fx:id="rootPane" prefHeight="800.0" prefWidth="800.0" styleClass="root-invoice-detail"
+<AnchorPane fx:id="rootPane" prefHeight="800.0" prefWidth="1000.0" styleClass="root-invoice-detail"
             xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.hotelmanagement.Views.InvoiceDetailController">
 
-    <VBox layoutX="3.0" layoutY="-1.0" prefHeight="800.0" prefWidth="796.0" spacing="10.0"
+    <VBox layoutX="3.0" layoutY="-1.0" prefHeight="800.0" prefWidth="100.0" spacing="10.0"
           AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="-2.0">
         <padding>
-            <Insets bottom="15.0" left="20.0" right="20.0" top="60.0" /> </padding>
+            <Insets bottom="15.0" left="20.0" right="20.0" top="20.0" /> </padding>
 
         <HBox alignment="CENTER_LEFT" spacing="10.0">
             <VBox alignment="CENTER_LEFT" spacing="5.0">
@@ -60,9 +60,11 @@
                     <TableColumn fx:id="soThuTuColumn" prefWidth="30.0" text="STT" />
                     <TableColumn fx:id="soPhongColumn" prefWidth="70.0" text="Số phòng" />
                     <TableColumn fx:id="soNgayThueColumn" prefWidth="70.0" text="Số ngày thuê" />
-                    <TableColumn fx:id="phiDichVuColumn" prefWidth="70.0" text="Tiền dịch vụ" />
-                    <TableColumn fx:id="donGiaPhongColumn" prefWidth="80.0" text="Đơn giá phòng" />
+                    <TableColumn fx:id="donGiaPhongColumn" prefWidth="80.0" text="Đơn giá thuê" />
                     <TableColumn fx:id="thanhTienColumn" prefWidth="100.0" text="Thành tiền" />
+                    <TableColumn fx:id="phiDichVuColumn" prefWidth="70.0" text="Tiền dịch vụ" />
+                    <TableColumn fx:id="tiencocColumn" prefWidth="70.0" text="Tiền cọc" />
+                    <TableColumn fx:id="tongColumn" prefWidth="70.0" text="Tổng cộng" />
                     <TableColumn fx:id="viewServicesColumn" prefWidth="100.0" text="Xem Dịch vụ" />
                 </columns>
                 <columnResizePolicy>

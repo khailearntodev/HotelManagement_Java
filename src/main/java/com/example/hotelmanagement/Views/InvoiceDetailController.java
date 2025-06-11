@@ -5,6 +5,7 @@ import com.example.hotelmanagement.Main;
 import com.example.hotelmanagement.Models.*;
 import com.example.hotelmanagement.ViewModels.InvoiceDetailViewModel;
 import com.example.hotelmanagement.ViewModels.InvoiceViewModel;
+import com.example.hotelmanagement.ViewModels.LoginViewModel;
 import com.example.hotelmanagement.ViewModels.SelectRoomForCheckOutViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
@@ -42,7 +43,7 @@ public class InvoiceDetailController {
     // Customer
     @FXML private Label customerNameLabel;
     @FXML private Label customerAddress;
-
+    LoginViewModel loginVM = new LoginViewModel();
     // Order Details
     @FXML private TableView<InvoiceDetailViewModel> detailTable;
     @FXML private TableColumn<InvoiceDetailViewModel, Number> soThuTuColumn;
@@ -51,6 +52,8 @@ public class InvoiceDetailController {
     @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> phiDichVuColumn;
     @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> donGiaPhongColumn;
     @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> thanhTienColumn;
+    @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> tiencocColumn;
+    @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> tongColumn;
     @FXML private TableColumn<InvoiceDetailViewModel, String> viewServicesColumn;
     @FXML private Label employeeNameLabel;
 
@@ -61,6 +64,7 @@ public class InvoiceDetailController {
     // Footer
     private final ObservableList<InvoiceDetailViewModel> detailList = FXCollections.observableArrayList();
     private Invoice invoice = new Invoice();
+    private InvoiceDetailViewModel viewModel;
     @FXML
     public void initialize() {
         URL cssUrl = getClass().getResource("/CSS/invoicedetail.css");
@@ -76,16 +80,25 @@ public class InvoiceDetailController {
             }
         });
         payButton.setOnAction(event -> {
-            if ("Đã thanh toán".equals(invoice.getPaymentStatus())) {
-                showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Hóa đơn này đã được thanh toán rồi.");
-                return;
+            if (viewModel != null) {
+                viewModel.saveInvoice();
+                showAlert(Alert.AlertType.INFORMATION, "Thành công", "Đã lưu và thanh toán hóa đơn thành công!");
+                this.invoice = viewModel.getInvoice().get();
+                this.viewModel = null;
+                payButton.setText("Đã thanh toán");
+                payButton.setDisable(true);
             }
-            else {
-                showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Thanh toán thành công!");
+            else if (invoice != null) {
+                if ("Đã thanh toán".equals(invoice.getPaymentStatus())) {
+                    showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Hóa đơn này đã được thanh toán rồi.");
+                    return;
+                }
+                invoice.setPaymentStatus("Đã thanh toán");
+                new InvoiceDAO().update(invoice);
+                showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Cập nhật trạng thái thanh toán thành công!");
+                payButton.setText("Đã thanh toán");
+                payButton.setDisable(true);
             }
-            invoice.setPaymentStatus("Đã thanh toán");
-            InvoiceDAO dao = new InvoiceDAO();
-            dao.update(invoice);
         });
         // Cấu hình các cột của TableView
         soThuTuColumn.setCellValueFactory(data -> data.getValue().soThuTuProperty());
@@ -126,30 +139,64 @@ public class InvoiceDetailController {
 
         detailTable.setItems(detailList);
     }
+    //NEw
+    public void setViewModelForCreation(InvoiceDetailViewModel viewModel) {
+        this.viewModel = viewModel;
+        this.invoice = viewModel.getInvoice().get(); // Lấy hóa đơn tạm thời để hiển thị
 
-public void setInvoice(Invoice invoice) {
-    this.invoice = invoice;
+        invoiceNoLabel.setText("Chưa lưu");
+        customerNameLabel.setText(invoice.getCustomerName());
+        customerAddress.setText(invoice.getCustomerAddres());
+        employeeNameLabel.setText(invoice.getEmployeeID().getFullName());
 
-    invoiceNoLabel.setText(String.valueOf(invoice.getId()));
-    customerNameLabel.setText(invoice.getCustomerName());
-    customerAddress.setText(invoice.getCustomerAddres());
-    employeeNameLabel.setText(invoice.getEmployeeID().getFullName());
-    Instant issueInstant = invoice.getIssueDate();
-    if (issueInstant != null) {
-        LocalDateTime localDateTime = issueInstant.atZone(ZoneId.systemDefault()).toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
-        paymentDateLabel.setText(localDateTime.format(formatter));
-    } else {
-        paymentDateLabel.setText("N/A");
+        paymentDateLabel.setText(LocalDateTime.now().format(formatter));
+
+        totalDueLabel.setText(viewModel.getTongTien().get().toString());
+        detailList.setAll(viewModel.getReservationDetails());
+        detailTable.setItems(detailList);
+
+        if ("Đã thanh toán".equals(invoice.getPaymentStatus())) {
+            payButton.setDisable(true);
+            payButton.setText("Đã thanh toán");
+        } else {
+            payButton.setDisable(false);
+            payButton.setText("Xác nhận & Thanh toán");
+        }
     }
-    totalDueLabel.setText(invoice.getTotalAmount().toString());
 
-    List<InvoiceDetailViewModel> viewModels = invoice.getReservations().stream()
-            .map(InvoiceDetailViewModel::new)
-            .toList();
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+        this.viewModel = null;
 
-    detailList.setAll(viewModels);
-}
+        invoiceNoLabel.setText(String.valueOf(invoice.getId()));
+        customerNameLabel.setText(invoice.getCustomerName());
+        customerAddress.setText(invoice.getCustomerAddres());
+        employeeNameLabel.setText(invoice.getEmployeeID().getFullName());
+        Instant issueInstant = invoice.getIssueDate();
+        if (issueInstant != null) {
+            LocalDateTime localDateTime = issueInstant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
+            paymentDateLabel.setText(localDateTime.format(formatter));
+        } else {
+            paymentDateLabel.setText("N/A");
+        }
+        totalDueLabel.setText(invoice.getTotalAmount().toString());
+
+        List<InvoiceDetailViewModel> viewModels = invoice.getReservations().stream()
+                .map(InvoiceDetailViewModel::new)
+                .toList();
+        detailList.setAll(viewModels);
+        detailTable.setItems(detailList);
+
+        if ("Đã thanh toán".equals(invoice.getPaymentStatus())) {
+            payButton.setText("Đã thanh toán");
+            payButton.setDisable(true);
+        } else {
+            payButton.setText("Thanh toán");
+            payButton.setDisable(false);
+        }
+    }
 
     @FXML
     public void openServiceDetail(List<Servicebooking> bookings) {

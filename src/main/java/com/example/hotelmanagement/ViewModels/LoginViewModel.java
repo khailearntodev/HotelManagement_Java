@@ -57,6 +57,7 @@ public class LoginViewModel
     public StringProperty loginMessageProperty() {
         return loginMessage;
     }
+    public int getEmployeeId(){return employeeId; }
 
     public void login() {
         loginMessage.set("");
