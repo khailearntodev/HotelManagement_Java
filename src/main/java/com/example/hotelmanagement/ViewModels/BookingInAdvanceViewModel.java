@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class BookingInAdvanceViewModel {
     @Setter
@@ -61,7 +62,9 @@ public class BookingInAdvanceViewModel {
                 .filter(r -> !unavailableRoomIds.contains(r.getId()))
                 .toList();
         for (Room room : availableRooms) {
-            roomReservationDisplays.add(new Reservation_RoomDisplay(room));
+            if (!Objects.equals(checkInDate, LocalDate.now()) || room.getCleaningStatus() == 0) {
+                roomReservationDisplays.add(new Reservation_RoomDisplay(room));
+            }
         }
     }
 }

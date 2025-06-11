@@ -271,6 +271,7 @@ public class ReservationController implements Initializable {
             }
 
             private void setupBookingButton(Room p) {
+                btn.setDisable(p.getCleaningStatus() != 0);
                 btn.setOnAction(ae -> {
                     try {
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingView.fxml"));
