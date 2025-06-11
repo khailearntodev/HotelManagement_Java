@@ -2,9 +2,7 @@ package com.example.hotelmanagement.Views;
 
 import com.example.hotelmanagement.DAO.InvoiceDAO;
 import com.example.hotelmanagement.Main;
-import com.example.hotelmanagement.Models.Invoice;
-import com.example.hotelmanagement.Models.Reservation;
-import com.example.hotelmanagement.Models.Servicebooking;
+import com.example.hotelmanagement.Models.*;
 import com.example.hotelmanagement.ViewModels.InvoiceDetailViewModel;
 import com.example.hotelmanagement.ViewModels.InvoiceViewModel;
 import com.example.hotelmanagement.ViewModels.SelectRoomForCheckOutViewModel;
@@ -160,7 +158,16 @@ public void setInvoice(Invoice invoice) {
             Parent root = loader.load();
 
             ServiceDetailController controller = loader.getController();
-            controller.setServiceDetails(bookings);
+
+            Room room = null;
+            Customer customer = null;
+            if (bookings != null && !bookings.isEmpty()) {
+                Servicebooking firstBooking = bookings.get(0);
+                room = firstBooking.getReservationID().getRoomID();
+                customer = firstBooking.getReservationID().getReservationguests().stream().findFirst().get().getCustomerID(); // <-- Đảm bảo phương thức getCustomer() tồn tại trong Servicebooking
+            }
+
+            controller.setServiceDetails(room, customer, bookings);
 
             Stage stage = new Stage();
             stage.setTitle("Chi tiết dịch vụ");
@@ -169,6 +176,7 @@ public void setInvoice(Invoice invoice) {
 
         } catch (IOException e) {
             e.printStackTrace();
+
         }
     }
     private void showAlert(Alert.AlertType type, String title, String message) {
