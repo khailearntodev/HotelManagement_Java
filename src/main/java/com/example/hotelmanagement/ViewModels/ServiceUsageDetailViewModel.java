@@ -1,46 +1,81 @@
 package com.example.hotelmanagement.ViewModels;
 
 import com.example.hotelmanagement.Models.Servicebooking;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class ServiceUsageDetailViewModel {
-    private  final IntegerProperty Id = new SimpleIntegerProperty();
-    private final StringProperty serviceName = new SimpleStringProperty();
-    private final IntegerProperty quantity = new SimpleIntegerProperty();
-    private final StringProperty date = new SimpleStringProperty();
-    private final StringProperty formattedPrice = new SimpleStringProperty();
-    private final StringProperty formattedTotal = new SimpleStringProperty();
 
-    public ServiceUsageDetailViewModel(Servicebooking sb) {
-        BigDecimal price = sb.getServiceID().getPrice();
-        int qty = sb.getQuantity();
-        BigDecimal total = price.multiply(BigDecimal.valueOf(qty));
+    private final SimpleIntegerProperty id;
+    private final SimpleStringProperty serviceName;
+    private final SimpleIntegerProperty quantity;
+    private final SimpleStringProperty date;
+    private final SimpleStringProperty formattedPrice;
+    private final SimpleStringProperty formattedTotal;
+    private final BigDecimal totalPrice;
 
-        Id.set(sb.getId());
-        serviceName.set(sb.getServiceID().getServiceName());
-        quantity.set(qty);
-        date.set(sb.getBookingDate().toString());
-        formattedPrice.set(formatCurrency(price));
-        formattedTotal.set(formatCurrency(total));
+    public ServiceUsageDetailViewModel(Servicebooking servicebooking) {
+        this.id = new SimpleIntegerProperty(servicebooking.getId());
+        this.serviceName = new SimpleStringProperty(servicebooking.getServiceID().getServiceName());
+        this.quantity = new SimpleIntegerProperty(servicebooking.getQuantity());
+
+        Instant bookingInstant = servicebooking.getBookingDate();
+        LocalDateTime bookingLocalDateTime = null;
+        if (bookingInstant != null) {
+            bookingLocalDateTime = LocalDateTime.ofInstant(bookingInstant, ZoneId.systemDefault());
+        }
+        this.date = new SimpleStringProperty(formatDateTime(bookingLocalDateTime));
+        BigDecimal price = servicebooking.getServiceID().getPrice();
+        this.formattedPrice = new SimpleStringProperty(formatCurrency(price));
+        BigDecimal total = price.multiply(BigDecimal.valueOf(servicebooking.getQuantity()));
+        this.totalPrice = total;
+        this.formattedTotal = new SimpleStringProperty(formatCurrency(total));
+    }
+    public SimpleIntegerProperty IdProperty() {
+        return id;
     }
 
-    private String formatCurrency(BigDecimal value) {
-        NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        return format.format(value);
+    public SimpleStringProperty serviceNameProperty() {
+        return serviceName;
     }
 
-    public IntegerProperty IdProperty() { return Id; }
-    public StringProperty serviceNameProperty() { return serviceName; }
-    public IntegerProperty quantityProperty() { return quantity; }
-    public StringProperty dateProperty() { return date; }
-    public StringProperty formattedPriceProperty() { return formattedPrice; }
-    public StringProperty formattedTotalProperty() { return formattedTotal; }
+    public SimpleIntegerProperty quantityProperty() {
+        return quantity;
+    }
+
+    public SimpleStringProperty dateProperty() {
+        return date;
+    }
+
+    public SimpleStringProperty formattedPriceProperty() {
+        return formattedPrice;
+    }
+
+    public SimpleStringProperty formattedTotalProperty() {
+        return formattedTotal;
+    }
+    //endregion
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    private String formatCurrency(BigDecimal amount) {
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return currencyFormatter.format(amount);
+    }
+    private String formatDateTime(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return "";
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        return dateTime.format(formatter);
+    }
 }

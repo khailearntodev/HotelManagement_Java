@@ -14,10 +14,12 @@
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 
 <?import javafx.scene.layout.VBox?>
-<?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
-<?import io.github.palexdev.materialfx.controls.MFXProgressSpinner?>
 <?import io.github.palexdev.materialfx.controls.MFXSlider?>
-<AnchorPane prefHeight="660.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.InvoiceController">
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.scene.text.Font?>
+<AnchorPane fx:id="rootPane" prefHeight="660.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.InvoiceController">
     <padding>
         <Insets top="15" right="20" bottom="20" left="20" />
     </padding>
@@ -29,32 +31,41 @@
         </MFXComboBox>
     </HBox>
 
-    <HBox alignment="CENTER_LEFT" spacing="15" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="55.0">
+    <HBox alignment="TOP_LEFT" spacing="15" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="55.0">
         <MFXComboBox fx:id="entriesComboBox"  maxHeight="20.0" prefWidth="100.0" promptText="Số phiếu" floatMode="DISABLED">
         </MFXComboBox>
         <MFXComboBox fx:id="ComboBox"  maxHeight="20.0" prefWidth="100.0" promptText="Tất cả" floatMode="DISABLED">
         </MFXComboBox>
-        <VBox>
-            <MFXSlider fx:id="minValue" id="customSlider" >
+        <VBox spacing="2" alignment="CENTER">
+            <TextField maxHeight="15" editable="false" style="-fx-font-size: 14x;" fx:id="minPriceField"/>
+            <MFXSlider fx:id="minValue" min="0" max="100000000"  id="customSlider" >
             </MFXSlider>
             <Label style="-fx-font-size: 14px; " text="Tối thiểu" />
         </VBox>
-        <VBox>
-            <MFXSlider fx:id="maxValue" id="customSlider" >
+        <VBox spacing="2" alignment="CENTER">
+            <TextField maxHeight="15" editable="false -fx-font-size: 14x;" fx:id="maxPriceField"/>
+            <MFXSlider fx:id="maxValue" min="0" max="100000000" id="customSlider" >
             </MFXSlider>
             <Label style="-fx-font-size: 14px; " text="Tối đa" />
         </VBox>
         <Region HBox.hgrow="ALWAYS" />
-        <HBox spacing="5" alignment="CENTER_LEFT">
-            <Label text="🔍" style="-fx-font-size: 16px;" />
-            <TextField fx:id="filterTextField"
-                       promptText="Tìm kiếm"
-                       prefHeight="30.0" HBox.hgrow="ALWAYS" minWidth="300.0"
-                       style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-background-color: #ffffff; -fx-border-color: #cccccc;" />
-        </HBox>
+
+        <MFXTextField fx:id="filterTextField" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="300.0" promptText="Tìm kiếm">
+            <leadingIcon>
+                <StackedFontIcon iconSize="16">
+                    <FontIcon iconLiteral="fa-search" wrappingWidth="18.142857551574707" StackedFontIcon.iconSize="0.7">
+                        <font>
+                            <Font size="14.0" />
+                        </font></FontIcon>
+                </StackedFontIcon>
+            </leadingIcon>
+            <HBox.margin>
+                <Insets top="10.0" />
+            </HBox.margin>
+        </MFXTextField>
     </HBox>
 
-    <TableView fx:id="invoiceTable" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="105.0" AnchorPane.bottomAnchor="0">
+    <TableView fx:id="invoiceTable" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="110.0" AnchorPane.bottomAnchor="0">
         <columns>
             <TableColumn fx:id="invoiceIdColumn" prefWidth="80" text="ID" />
             <TableColumn fx:id="nameClientColumn" prefWidth="230" text="Tên khách hàng" />

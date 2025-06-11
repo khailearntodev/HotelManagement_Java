@@ -30,7 +30,18 @@ public class ReservationDAO {
     // Tìm Reservation theo ID
     public Reservation findById(int id) {
         try (Session session = HibernateUtils.getSession()) {
-            return session.get(Reservation.class, id);
+            return session.createQuery(
+                            "SELECT r FROM Reservation r " +
+                                    "JOIN FETCH r.roomID ro " +
+                                    "JOIN FETCH ro.roomTypeID rt " +
+                                    "LEFT JOIN FETCH r.servicebookings sb " +
+                                    "LEFT JOIN FETCH sb.serviceID " +
+                                    "LEFT JOIN FETCH r.reservationguests rg " +
+                                    "LEFT JOIN FETCH rg.customerID " +
+                                    "WHERE r.id = :id AND r.isDeleted = false",
+                            Reservation.class)
+                    .setParameter("id", id)
+                    .uniqueResultOptional().orElse(null);
         }
     }
     public Reservation findByIdForServiceBK(int id) {
