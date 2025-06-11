@@ -1,30 +1,32 @@
 package com.example.hotelmanagement.Views;
 
 import com.example.hotelmanagement.DTO.ServiceDisplay;
-import com.example.hotelmanagement.ViewModels.ServiceManagementViewModel; // Import your ViewModel
+import com.example.hotelmanagement.ViewModels.ServiceManagementViewModel;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.collections.ObservableList; // Keep this for JavaFX ObservableList
-import javafx.scene.control.cell.PropertyValueFactory;
-// import java.awt.event.ActionEvent; // This import is for AWT ActionEvent, likely not needed for JavaFX
-
-import javafx.event.ActionEvent; // Correct import for JavaFX ActionEvent
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 
 import java.math.BigDecimal;
+import java.net.URL;
+import javafx.scene.layout.AnchorPane;
+
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 
 public class ServiceManagementController {
 
-    @FXML private TextField filterTextField;
+    @FXML private MFXTextField filterTextField;
     @FXML private TableView<ServiceDisplay> serviceTableView;
     @FXML private TableColumn<ServiceDisplay, String> colMaDichVu;
     @FXML private TableColumn<ServiceDisplay, String> colTenDichVu;
     @FXML private TableColumn<ServiceDisplay, BigDecimal> colGiaDichVu;
     @FXML private TableColumn<ServiceDisplay, Void> colAction;
 
-    // Khai báo ImageView cho tab Sửa
     @FXML private ImageView editServiceImageView;
     @FXML private TextField imageLinkEditTextField;
     @FXML private TextField maDichVuEditTextField;
@@ -39,24 +41,42 @@ public class ServiceManagementController {
     @FXML private TextField giaDichVuAddTextField;
     @FXML private Button addServiceButton;
     @FXML private Button cancelAddButton;
-    @FXML private Button findImageAddButton; // Đã có sẵn
+    @FXML private Button findImageAddButton;
 
     @FXML private TabPane serviceTabPane;
+    @FXML private AnchorPane rootPane;
 
     private final ServiceManagementViewModel viewModel = new ServiceManagementViewModel();
 
+    private FilteredList<ServiceDisplay> filteredList;
+    private SortedList<ServiceDisplay> sortedList;
+
     @FXML
     public void initialize() {
+        URL cssUrl = getClass().getResource("/CSS/style.css");
+        if (cssUrl != null && rootPane != null) {
+            rootPane.getStylesheets().add(cssUrl.toExternalForm());
+        } else if (rootPane == null) {
+            System.err.println("RootPane not initialized for CSS linking.");
+        } else {
+            System.err.println("CSS file not found: /CSS/style.css");
+        }
+
         viewModel.loadServices();
-        serviceTableView.setItems(viewModel.getServiceList());
+
+        filteredList = new FilteredList<>(viewModel.getMasterServiceList(), p -> true);
+
+        sortedList = new SortedList<>(filteredList);
+        sortedList.comparatorProperty().bind(serviceTableView.comparatorProperty());
+
+        serviceTableView.setItems(sortedList);
         colMaDichVu.setCellValueFactory(cellData -> cellData.getValue().maDichVuProperty().asObject().asString());
         colTenDichVu.setCellValueFactory(cellData -> cellData.getValue().tenDichVuProperty());
         colGiaDichVu.setCellValueFactory(cellData -> cellData.getValue().giaDichVuProperty());
 
         setupRowClick();
-        //setupFilter();
+        setupFilter();
 
-        // Đặt ảnh mặc định hoặc xóa ảnh khi khởi tạo (tùy chọn)
         clearImageView(addServiceImageView);
         clearImageView(editServiceImageView);
     }
@@ -65,20 +85,38 @@ public class ServiceManagementController {
         serviceTableView.setOnMouseClicked((MouseEvent event) -> {
             ServiceDisplay selected = serviceTableView.getSelectionModel().getSelectedItem();
             if (selected != null) {
-                serviceTabPane.getSelectionModel().select(0); // Chuyển sang tab "Sửa dịch vụ"
+                serviceTabPane.getSelectionModel().select(1);
+
                 maDichVuEditTextField.setText(String.valueOf(selected.getMaDichVu()));
                 tenDichVuEditTextField.setText(selected.getTenDichVu());
                 giaDichVuEditTextField.setText(String.valueOf(selected.getGiaDichVu()));
                 imageLinkEditTextField.setText(selected.getImageLink());
-                // Tải ảnh khi chọn một hàng
                 loadImageFromUrl(selected.getImageLink(), editServiceImageView);
             }
         });
     }
 
+    @FXML
     private void setupFilter() {
         filterTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            // TODO: Implement filtering logic here.
+            filteredList.setPredicate(service -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (String.valueOf(service.getMaDichVu()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                if (service.getTenDichVu().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                if (String.valueOf(service.getGiaDichVu()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
         });
     }
 
@@ -86,12 +124,13 @@ public class ServiceManagementController {
     private void onAddService() {
         String ten = tenDichVuAddTextField.getText();
         String giaText = giaDichVuAddTextField.getText();
-        String image = imageLinkAddTextField.getText(); // Lấy link ảnh
+        String image = imageLinkAddTextField.getText();
 
         try {
             BigDecimal gia = new BigDecimal(giaText);
-            viewModel.addService(ten, gia, image); // Truyền link ảnh vào ViewModel
+            viewModel.addService(ten, gia, image);
             clearAddForm();
+            filterTextField.clear();
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Lỗi nhập liệu", "Giá dịch vụ phải là một số hợp lệ.");
         }
@@ -104,18 +143,16 @@ public class ServiceManagementController {
             try {
                 String newTen = tenDichVuEditTextField.getText();
                 BigDecimal newGia = new BigDecimal(giaDichVuEditTextField.getText());
-                String newImage = imageLinkEditTextField.getText(); // Lấy link ảnh mới
-
+                String newImage = imageLinkEditTextField.getText();
                 selected.setTenDichVu(newTen);
                 selected.setGiaDichVu(newGia);
-                selected.setImageLink(newImage); // Cập nhật link ảnh cho đối tượng
+                selected.setImageLink(newImage);
 
-                boolean success = viewModel.updateService(selected); // ViewModel cần xử lý việc cập nhật link ảnh
+                boolean success = viewModel.updateService(selected);
 
                 if (success) {
                     showAlert(Alert.AlertType.INFORMATION,"Thành công", "Cập nhật dịch vụ thành công");
-                    viewModel.loadServices();
-                    // Không cần clearEditForm() ở đây nếu muốn giữ lại thông tin sau khi cập nhật thành công
+                    filterTextField.clear();
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Thất bại", "Không thể cập nhật dịch vụ.");
                 }
@@ -141,18 +178,18 @@ public class ServiceManagementController {
         } else {
             clearImageView(editServiceImageView);
         }
+
+        filterTextField.clear();
     }
 
     private void clearAddForm() {
         tenDichVuAddTextField.clear();
         giaDichVuAddTextField.clear();
         imageLinkAddTextField.clear();
-        clearImageView(addServiceImageView); // Xóa ảnh trong ImageView
+        clearImageView(addServiceImageView);
     }
 
     private void clearEditForm() {
-        // Không xóa maDichVuEditTextField vì nó disable và chứa mã của dịch vụ đang chọn
-        // maDichVuEditTextField.clear();
         tenDichVuEditTextField.clear();
         giaDichVuEditTextField.clear();
         imageLinkEditTextField.clear();
@@ -167,29 +204,24 @@ public class ServiceManagementController {
         alert.showAndWait();
     }
 
-    // Phương thức tải ảnh từ URL và hiển thị lên ImageView
     private void loadImageFromUrl(String url, ImageView imageView) {
         if (imageView == null) return;
 
         if (url != null && !url.trim().isEmpty()) {
             try {
-                // Tham số thứ 2 'true' để tải ảnh ở chế độ nền (background loading)
-                // Tham số thứ 3 và 4 là requestedWidth và requestedHeight (0 để giữ kích thước gốc)
-                // Tham số thứ 5 'true' để giữ tỉ lệ, 'false' để bỏ qua
-                // Tham số thứ 6 'true' để làm mịn ảnh khi co giãn
                 Image image = new Image(url, true);
-
                 image.errorProperty().addListener((observable, oldValue, newValue) -> {
-                    if (newValue) { // Nếu có lỗi khi tải ảnh
+                    if (newValue) {
                         System.err.println("Lỗi khi tải ảnh từ URL: " + url + " - " + image.getException().getMessage());
-
                         clearImageView(imageView);
+                        showAlert(Alert.AlertType.WARNING, "Lỗi tải ảnh", "Không thể tải ảnh từ URL đã cung cấp. Vui lòng kiểm tra lại đường dẫn.");
                     }
                 });
 
                 if (image.isError()) {
                     System.err.println("Lỗi ngay khi tạo Image từ URL: " + url + " - " + image.getException().getMessage());
                     clearImageView(imageView);
+                    showAlert(Alert.AlertType.WARNING, "Lỗi tải ảnh", "URL hình ảnh không đúng định dạng hoặc không thể truy cập.");
                 } else {
                     imageView.setImage(image);
                 }
@@ -225,10 +257,4 @@ public class ServiceManagementController {
         String imageUrl = imageLinkEditTextField.getText();
         loadImageFromUrl(imageUrl, editServiceImageView);
     }
-
-    // Phương thức updateService bạn đã có, không cần thay đổi tên gọi từ FXML
-    // @FXML
-    // private void updateService(ActionEvent event) {
-    //     onUpdateService();
-    // }
 }

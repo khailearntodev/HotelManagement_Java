@@ -19,7 +19,19 @@ public class InvoiceDAO {
     // Tìm hóa đơn theo ID
     public Invoice findById(int id) {
         try (Session session = HibernateUtils.getSession()) {
-            return session.get(Invoice.class, id);
+            return session.createQuery(
+                            "SELECT i FROM Invoice i " +
+                                    "LEFT JOIN FETCH i.reservations r " + // Tải tất cả Reservations của Invoice
+                                    "LEFT JOIN FETCH r.roomID ro " +      // Tải Room của mỗi Reservation
+                                    "LEFT JOIN FETCH ro.roomTypeID rt " + // Tải RoomType của mỗi Room
+                                    "LEFT JOIN FETCH r.servicebookings sb " + // Tải Servicebookings của mỗi Reservation
+                                    "LEFT JOIN FETCH sb.serviceID s " +  // Tải Service của mỗi Servicebooking
+                                    "LEFT JOIN FETCH r.reservationguests rg " + // Tải ReservationGuests của mỗi Reservation
+                                    "LEFT JOIN FETCH rg.customerID c " + // Tải Customer của mỗi ReservationGuest
+                                    "WHERE i.id = :id AND i.isDeleted = false",
+                            Invoice.class)
+                    .setParameter("id", id)
+                    .uniqueResultOptional().orElse(null);
         }
     }
 
@@ -85,7 +97,7 @@ public class InvoiceDAO {
                     .list();
         }
     }
-    public Invoice getInvoiceWithDetails(int id) {
+    /*public Invoice getInvoiceWithDetails(int id) {
         try (Session session = HibernateUtils.getSession()) {
             return session.createQuery(
                             "SELECT i FROM Invoice i " +
@@ -98,6 +110,24 @@ public class InvoiceDAO {
                                     "WHERE i.id = :id", Invoice.class
                     ).setParameter("id", id)
                     .uniqueResult();
+        }
+    }*/
+    public Invoice getInvoiceWithDetails(int id) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                            "SELECT DISTINCT i FROM Invoice i " +
+                                    "LEFT JOIN FETCH i.employeeID " +
+                                    "LEFT JOIN FETCH i.reservations r " + // Tải tất cả Reservations của Invoice
+                                    "LEFT JOIN FETCH r.roomID ro " +      // Tải Room của mỗi Reservation
+                                    "LEFT JOIN FETCH ro.roomTypeID rt " + // Tải RoomType của mỗi Room (nếu cần trong UI)
+                                    "LEFT JOIN FETCH r.servicebookings sb " + // Tải Servicebookings của mỗi Reservation
+                                    "LEFT JOIN FETCH sb.serviceID s " +  // Tải Service của mỗi Servicebooking
+                                    "LEFT JOIN FETCH r.reservationguests rg " + // Tải ReservationGuests của mỗi Reservation
+                                    "LEFT JOIN FETCH rg.customerID c " + // Tải Customer của mỗi ReservationGuest
+                                    "WHERE i.id = :id AND i.isDeleted = false", // Đảm bảo điều kiện xóa mềm nếu có
+                            Invoice.class)
+                    .setParameter("id", id)
+                    .uniqueResultOptional().orElse(null);
         }
     }
     public List<Invoice> findByMonthAndYear(int month, int year) {

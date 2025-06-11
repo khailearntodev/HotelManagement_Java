@@ -26,7 +26,14 @@ public class CustomerDAO {
     // Tìm khách hàng theo ID
     public Customer findById(int id) {
         try (Session session = HibernateUtils.getSession()) {
-            return session.get(Customer.class, id);
+            return session.createQuery(
+                            "SELECT c FROM Customer c " +
+                                    "LEFT JOIN FETCH c.customerTypeID " +
+                                    "LEFT JOIN FETCH c.reservationguests rg " +
+                                    "LEFT JOIN FETCH rg.reservationID " +
+                                    "WHERE c.id = :id AND c.isDeleted = false", Customer.class)
+                    .setParameter("id", id)
+                    .uniqueResultOptional().orElse(null);
         }
     }
 
