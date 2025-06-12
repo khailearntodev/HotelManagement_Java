@@ -12,14 +12,25 @@ public class ReservationGuestDAO {
     // Lấy tất cả Reservationguest chưa bị xóa
     public List<Reservationguest> getAll() {
         try (Session session = HibernateUtils.getSession()) {
-            return session.createQuery("FROM Reservationguest WHERE isDeleted = false", Reservationguest.class).list();
+            return session.createQuery(
+                    "SELECT rg FROM Reservationguest rg " +
+                            "LEFT JOIN FETCH rg.reservationID " +
+                            "LEFT JOIN FETCH rg.customerID " +
+                            "WHERE rg.isDeleted = false", Reservationguest.class
+            ).list();
         }
     }
 
     // Tìm Reservationguest theo ID
     public Reservationguest findById(int id) {
         try (Session session = HibernateUtils.getSession()) {
-            return session.get(Reservationguest.class, id);
+            return session.createQuery(
+                            "SELECT rg FROM Reservationguest rg " +
+                                    "LEFT JOIN FETCH rg.reservationID " + // Nếu cần tải Reservation
+                                    "LEFT JOIN FETCH rg.customerID " +    // Nếu cần tải Customer
+                                    "WHERE rg.id = :id AND rg.isDeleted = false", Reservationguest.class)
+                    .setParameter("id", id)
+                    .uniqueResultOptional().orElse(null);
         }
     }
 

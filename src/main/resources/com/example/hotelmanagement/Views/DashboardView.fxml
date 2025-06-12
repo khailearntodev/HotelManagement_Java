@@ -171,13 +171,13 @@
                         </HBox>
                         <TableView fx:id="bookingTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="675.0" style="-fx-background-color: #FFFFFF;">
                             <columns>
-                                <TableColumn fx:id="bookingIdColumn" prefWidth="90" text="Mã đặt" />
-                                <TableColumn fx:id="customerNameColumn" prefWidth="120" text="Tên khách hàng" />
-                                <TableColumn fx:id="roomTypeColumn" prefWidth="120" sortable="false" text="Loại phòng" />
-                                <TableColumn fx:id="roomNumberColumn" prefWidth="85" text="Số phòng" />
-                                <TableColumn fx:id="checkInDateColumn" prefWidth="90" text="CheckIn" />
-                                <TableColumn fx:id="checkOutDateColumn" prefWidth="90" text="CheckOut" />
-                                <TableColumn fx:id="statusColumn" prefWidth="200" sortable="false" text="Trạng thái" />
+                                <TableColumn fx:id="bookingIdColumn" reorderable="false" resizable="false" prefWidth="90" text="Mã đặt" />
+                                <TableColumn fx:id="customerNameColumn" reorderable="false" resizable="false" prefWidth="120" text="Tên khách hàng" />
+                                <TableColumn fx:id="roomTypeColumn" reorderable="false" resizable="false" prefWidth="120" sortable="false" text="Loại phòng" />
+                                <TableColumn fx:id="roomNumberColumn" reorderable="false" resizable="false" prefWidth="85" text="Số phòng" />
+                                <TableColumn fx:id="checkInDateColumn" reorderable="false" resizable="false" prefWidth="90" text="CheckIn" />
+                                <TableColumn fx:id="checkOutDateColumn" reorderable="false" resizable="false" prefWidth="90" text="CheckOut" />
+                                <TableColumn fx:id="statusColumn" reorderable="false" resizable="false" prefWidth="200" sortable="false" text="Trạng thái" />
                             </columns>
                      <VBox.margin>
                         <Insets left="5.0" />

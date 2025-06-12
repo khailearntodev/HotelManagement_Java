@@ -16,6 +16,10 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.scene.text.Font?>
 <GridPane hgap="15" vgap="15" maxHeight="660" maxWidth="1060" minHeight="660" minWidth="1023.0" prefHeight="660" prefWidth="1040.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1"
           xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.ServiceManagementController">
     <columnConstraints>
@@ -38,10 +42,20 @@
                 <Insets top="10" />
             </VBox.margin>
             <center>
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label style="-fx-font-size: 20px;" text="🔍" />
-                    <TextField fx:id="filterTextField" prefHeight="35.0" HBox.hgrow="ALWAYS" promptText="Tìm kiếm dịch vụ" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-background-color: #ffffff; -fx-border-color: #cccccc;" />
-                </HBox>
+
+                <MFXTextField fx:id="filterTextField" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="460.0" promptText="Tìm kiếm khách hàng">
+                    <leadingIcon>
+                        <StackedFontIcon iconSize="16">
+                            <FontIcon iconLiteral="fa-search" wrappingWidth="18.142857551574707" StackedFontIcon.iconSize="0.7">
+                                <font>
+                                    <Font size="14.0" />
+                                </font></FontIcon>
+                        </StackedFontIcon>
+                    </leadingIcon>
+                    <HBox.margin>
+                        <Insets top="10.0" />
+                    </HBox.margin>
+                </MFXTextField>
             </center>
         </BorderPane>
         <TableView fx:id="serviceTableView" prefHeight="560.0" VBox.vgrow="ALWAYS">

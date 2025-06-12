@@ -99,31 +99,6 @@
                      <Cursor fx:constant="HAND" />
                   </cursor>
                </ToggleButton>
-               <ToggleButton fx:id="btnTienNghi" minWidth="-Infinity" mnemonicParsing="false" onAction="#onToggleSelected" prefHeight="62.0" prefWidth="230.0" stylesheets="@../../../../../CSS/style.css" toggleGroup="$menuGroup">
-                  <graphic>
-                     <HBox prefHeight="54.0" prefWidth="800.0">
-                        <children>
-                           <StackedFontIcon iconSize="48">
-                              <FontIcon iconLiteral="fa-bath" StackedFontIcon.iconSize="0.5" />
-                              <HBox.margin>
-                                 <Insets left="10.0" />
-                              </HBox.margin>
-                           </StackedFontIcon>
-                           <Text fill="#0033ff" text="TIỆN NGHI" wrappingWidth="92.6">
-                              <HBox.margin>
-                                 <Insets left="19.0" top="10.0" />
-                              </HBox.margin>
-                              <font>
-                                 <Font name="Arial Bold" size="16.0" />
-                              </font>
-                           </Text>
-                        </children>
-                     </HBox>
-                  </graphic>
-                  <cursor>
-                     <Cursor fx:constant="HAND" />
-                  </cursor>
-               </ToggleButton>
                <ToggleButton fx:id="btnDichVu" minWidth="-Infinity" mnemonicParsing="false" onAction="#onToggleSelected" prefHeight="62.0" prefWidth="230.0" stylesheets="@../../../../../CSS/style.css" toggleGroup="$menuGroup">
                   <graphic>
                      <HBox prefHeight="54.0" prefWidth="800.0">

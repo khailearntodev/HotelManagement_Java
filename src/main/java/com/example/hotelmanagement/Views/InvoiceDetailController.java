@@ -2,9 +2,7 @@ package com.example.hotelmanagement.Views;
 
 import com.example.hotelmanagement.DAO.InvoiceDAO;
 import com.example.hotelmanagement.Main;
-import com.example.hotelmanagement.Models.Invoice;
-import com.example.hotelmanagement.Models.Reservation;
-import com.example.hotelmanagement.Models.Servicebooking;
+import com.example.hotelmanagement.Models.*;
 import com.example.hotelmanagement.ViewModels.InvoiceDetailViewModel;
 import com.example.hotelmanagement.ViewModels.InvoiceViewModel;
 import com.example.hotelmanagement.ViewModels.SelectRoomForCheckOutViewModel;
@@ -19,10 +17,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
 import com.example.hotelmanagement.DTO.InvoiceDetail;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +34,7 @@ import java.util.stream.Collectors;
 
 public class InvoiceDetailController {
 
+    @FXML private AnchorPane rootPane;
     @FXML private Label invoiceNoLabel;
     @FXML private Label paymentDateLabel;
     @FXML private MFXButton closeButton;
@@ -58,6 +63,12 @@ public class InvoiceDetailController {
     private Invoice invoice = new Invoice();
     @FXML
     public void initialize() {
+        URL cssUrl = getClass().getResource("/CSS/invoicedetail.css");
+        if (cssUrl != null) {
+            rootPane.getStylesheets().add(cssUrl.toExternalForm());
+        } else {
+            System.err.println("CSS file not found: /CSS/style.css");
+        }
         closeButton.setOnAction(event -> {
             Stage stage = (Stage) closeButton.getScene().getWindow();
             if (stage != null) {
@@ -92,7 +103,7 @@ public class InvoiceDetailController {
                 viewButton.setStyle("-fx-background-color: #007bff; -fx-text-fill: white; -fx-cursor: hand; -fx-padding: 3 8; -fx-font-size: 11px;");
                 viewButton.setOnAction(event -> {
                     InvoiceDetailViewModel rowData = getTableView().getItems().get(getIndex());
-                    Reservation reservation = rowData.getReservation(); // ← Bạn cần lưu Reservation trong ViewModel!
+                    Reservation reservation = rowData.getReservation();
 
                     List<Servicebooking> bookings = new ArrayList<>(reservation.getServicebookings());
                     openServiceDetail(bookings);
@@ -123,7 +134,14 @@ public void setInvoice(Invoice invoice) {
     customerNameLabel.setText(invoice.getCustomerName());
     customerAddress.setText(invoice.getCustomerAddres());
     employeeNameLabel.setText(invoice.getEmployeeID().getFullName());
-    paymentDateLabel.setText(invoice.getIssueDate().toString());
+    Instant issueInstant = invoice.getIssueDate();
+    if (issueInstant != null) {
+        LocalDateTime localDateTime = issueInstant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
+        paymentDateLabel.setText(localDateTime.format(formatter));
+    } else {
+        paymentDateLabel.setText("N/A");
+    }
     totalDueLabel.setText(invoice.getTotalAmount().toString());
 
     List<InvoiceDetailViewModel> viewModels = invoice.getReservations().stream()
@@ -140,7 +158,16 @@ public void setInvoice(Invoice invoice) {
             Parent root = loader.load();
 
             ServiceDetailController controller = loader.getController();
-            controller.setServiceDetails(bookings);
+
+            Room room = null;
+            Customer customer = null;
+            if (bookings != null && !bookings.isEmpty()) {
+                Servicebooking firstBooking = bookings.get(0);
+                room = firstBooking.getReservationID().getRoomID();
+                customer = firstBooking.getReservationID().getReservationguests().stream().findFirst().get().getCustomerID(); // <-- Đảm bảo phương thức getCustomer() tồn tại trong Servicebooking
+            }
+
+            controller.setServiceDetails(room, customer, bookings);
 
             Stage stage = new Stage();
             stage.setTitle("Chi tiết dịch vụ");
@@ -149,6 +176,7 @@ public void setInvoice(Invoice invoice) {
 
         } catch (IOException e) {
             e.printStackTrace();
+
         }
     }
     private void showAlert(Alert.AlertType type, String title, String message) {

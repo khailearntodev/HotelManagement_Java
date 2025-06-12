@@ -17,33 +17,31 @@
     <VBox prefHeight="450.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <HBox alignment="CENTER_LEFT" prefHeight="50.0" style="-fx-background-color: #E0C7C7;" VBox.vgrow="NEVER">
-            <children>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label text="CHI TIẾT SỬ DỤNG DỊCH VỤ">
-                    <font>
-                        <Font name="System Bold" size="22.0"/>
-                    </font>
-                </Label>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Label text="✖" >
-                    <font>
-                        <Font name="System Bold" size="24.0"/>
-                    </font>
-                    <padding>
-                        <Insets right="20.0"/>
-                    </padding>
-                    <style>
-                        -fx-cursor: hand;
-                    </style>
-                </Label>
-            </children>
             <VBox.margin>
                 <Insets bottom="10.0"/>
             </VBox.margin>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="CHI TIẾT SỬ DỤNG DỊCH VỤ">
+                <font>
+                    <Font name="System Bold" size="22.0"/>
+                </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="✖">
+                <font>
+                    <Font name="System Bold" size="24.0"/>
+                </font>
+                <padding>
+                    <Insets right="20.0"/>
+                </padding>
+                <style>
+                    -fx-cursor: hand;
+                </style>
+            </Label>
         </HBox>
         <HBox prefHeight="58.0" prefWidth="200.0">
             <VBox prefWidth="190.0">
-                <Label text="Số phòng" textFill="GRAY">
+                <Label  text="Số phòng" textFill="GRAY">
                     <font>
                         <Font name="Arial" size="12.0"/>
                     </font>
@@ -56,7 +54,7 @@
                     <VBox.margin>
                         <Insets left="20.0" top="5.0"/>
                     </VBox.margin>
-                    <Label text="P101" textFill="BLACK">
+                    <Label fx:id="roomNumberLabel"  textFill="BLACK">
                         <font>
                             <Font name="Arial" size="14.0"/>
                         </font>
@@ -67,7 +65,7 @@
                 </StackPane>
             </VBox>
             <VBox prefWidth="350.0">
-                <Label text="Tên khách hàng" textFill="GRAY">
+                <Label  text="Tên khách hàng" textFill="GRAY">
                     <font>
                         <Font name="Arial" size="12.0"/>
                     </font>
@@ -80,7 +78,7 @@
                     <VBox.margin>
                         <Insets left="20.0" top="5.0"/>
                     </VBox.margin>
-                    <Label text="Nguyễn Văn A" textFill="BLACK">
+                    <Label fx:id="customerNameLabel"  textFill="BLACK">
                         <font>
                             <Font name="Arial" size="14.0"/>
                         </font>
@@ -120,13 +118,18 @@
             <VBox.margin>
                 <Insets top="10.0"/>
             </VBox.margin>
-            <Label text="Tổng chi phí dịch vụ: 1,234,567 VND">
+            <Label text="Tổng chi phí dịch vụ">
                 <font>
                     <Font name="System Bold" size="18.0"/>
                 </font>
                 <HBox.margin>
                     <Insets right="20.0"/>
                 </HBox.margin>
+            </Label>
+            <Label fx:id="totalServiceCostLabel" textFill="goldenrod" >
+                <font>
+                    <Font name="System Bold" size="18.0"/>
+                </font>
             </Label>
         </HBox>
     </VBox>
