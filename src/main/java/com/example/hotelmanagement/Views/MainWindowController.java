@@ -20,6 +20,7 @@ import javafx.util.Duration;
 
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.URL;
 
 public class MainWindowController{
 
@@ -94,10 +95,16 @@ public class MainWindowController{
             //FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             FXMLLoader loader = new FXMLLoader(Main.class.getResource(fxmlPath));
             Parent view = loader.load();
-
-            contentContainer.getChildren().clear();
-            contentContainer.getChildren().add(view);
-
+            if (fxmlPath.equals("/com/example/hotelmanagement/Views/ReservationView.fxml")) {
+                URL cssURL = getClass().getResource("/CSS/reservation-style.css");
+                if (cssURL != null) {
+                    view.getStylesheets().add(cssURL.toExternalForm());
+                } else {
+                    System.err.println("CSS not found at /CSS/reservation-style.css");
+                }
+            }
+                contentContainer.getChildren().clear();
+                contentContainer.getChildren().add(view);
         } catch (IOException e) {
             e.printStackTrace();
         }

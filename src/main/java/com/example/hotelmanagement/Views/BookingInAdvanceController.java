@@ -216,6 +216,15 @@ public class BookingInAdvanceController implements Initializable {
                 return;
             }
 
+            if (!phoneNumberTextField.getText().matches("\\d+")) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Lỗi");
+                alert.setHeaderText(null);
+                alert.setContentText("Số điện thoại phải là chuỗi số");
+                alert.showAndWait();
+                return;
+            }
+
             try {
                 FXMLLoader bookingNotefxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingInAdvanceInvoiceView.fxml"));
                 Parent root = bookingNotefxmlLoader.load();

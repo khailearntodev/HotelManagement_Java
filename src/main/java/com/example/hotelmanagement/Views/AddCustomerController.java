@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -214,7 +215,7 @@ public class AddCustomerController implements Initializable {
         customer.setGender(genderToggle.getUserData().toString().equals("true"));
         customer.setIdentityType(idToggle.getUserData().toString());
         customer.setCustomerTypeID(customerType);
-        customer.setDateOfBirth(dob.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        customer.setDateOfBirth(dob.atStartOfDay(ZoneOffset.UTC).toInstant());
 
         setInfoTextFieldDisable(true);
         messageLabel.setVisible(false);
