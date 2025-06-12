@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
 <AnchorPane prefHeight="450.0" prefWidth="800.0" style="-fx-border-color: black; -fx-border-width: 2;"
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.ServiceDetailController">
     <VBox prefHeight="450.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
@@ -27,17 +28,14 @@
                 </font>
             </Label>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label text="✖">
+            <MFXButton fx:id="closeButton" style="-fx-background-color: transparent;" text="✖">
                 <font>
-                    <Font name="System Bold" size="24.0"/>
+                    <Font size="24.0"/>
                 </font>
-                <padding>
-                    <Insets right="20.0"/>
-                </padding>
-                <style>
-                    -fx-cursor: hand;
-                </style>
-            </Label>
+                <HBox.margin>
+                    <Insets right="10.0"/>
+                </HBox.margin>
+            </MFXButton>
         </HBox>
         <HBox prefHeight="58.0" prefWidth="200.0">
             <VBox prefWidth="190.0">

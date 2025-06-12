@@ -5,7 +5,9 @@ import com.example.hotelmanagement.Utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public class InvoiceDAO {
 
@@ -97,21 +99,22 @@ public class InvoiceDAO {
                     .list();
         }
     }
-    /*public Invoice getInvoiceWithDetails(int id) {
-        try (Session session = HibernateUtils.getSession()) {
-            return session.createQuery(
-                            "SELECT i FROM Invoice i " +
-                                    "LEFT JOIN FETCH i.employeeID " +
-                                    "LEFT JOIN FETCH i.reservations r " +
-                                    "LEFT JOIN FETCH r.roomID ro " +
-                                    "LEFT JOIN FETCH ro.roomTypeID " +
-                                    "LEFT JOIN FETCH r.servicebookings sb " +
-                                    "LEFT JOIN FETCH sb.serviceID " +
-                                    "WHERE i.id = :id", Invoice.class
-                    ).setParameter("id", id)
-                    .uniqueResult();
+    public BigDecimal findDepositAmountByReservationId(int reservationId) {
+        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            Optional<BigDecimal> depositAmount = session.createQuery(
+                            "SELECT p.price FROM Prebooking p " +
+                                    "JOIN p.reservationID r " +
+                                    "WHERE r.id = :reservationId " +
+                                    "AND p.isDeleted = false",
+                            BigDecimal.class)
+                    .setParameter("reservationId", reservationId)
+                    .uniqueResultOptional();
+            return depositAmount.orElse(BigDecimal.ZERO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BigDecimal.ZERO;
         }
-    }*/
+    }
     public Invoice getInvoiceWithDetails(int id) {
         try (Session session = HibernateUtils.getSession()) {
             return session.createQuery(

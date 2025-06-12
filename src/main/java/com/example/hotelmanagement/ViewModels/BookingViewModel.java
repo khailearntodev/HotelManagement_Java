@@ -48,7 +48,7 @@ public class BookingViewModel {
         this.roomDisplay = new Reservation_RoomDisplay(room);
         this.customerList = FXCollections.observableArrayList();
         if (!canEdit) {
-            if (checkOutDate.get() != null) {
+            if (checkOutDate.get() == null) {
                 System.out.println(checkOutDate.get());
                 System.out.println(LocalDate.now());
                 Prebooking preBooking = room.getPrebookings().stream()
@@ -145,7 +145,7 @@ public class BookingViewModel {
         if (preBooking != null) {
             preBooking.setReservationID(reservation);
             PrebookingDAO prebookingDAO = new PrebookingDAO();
-            prebookingDAO.save(preBooking);
+            prebookingDAO.update(preBooking);
         }
 
         Reservation_RoomDisplay roomReservationDisplay = parent.getRooms().stream().filter(e -> e.getId() == room.getId()).findFirst().orElse(null);

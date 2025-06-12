@@ -10,6 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
@@ -35,7 +36,7 @@ public class RoomTypeCardController {
     @FXML
     private Label quantityTextField;
     @FXML
-    private Label descriptionTextArea;
+    private TextArea descriptionTextArea;
     @FXML
     private Label maxOccupancyTextField;
     private RoomTypeViewModel viewModel; // Store the view model
