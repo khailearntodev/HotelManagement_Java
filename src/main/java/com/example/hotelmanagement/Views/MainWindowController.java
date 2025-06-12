@@ -18,6 +18,7 @@ import javafx.stage.StageStyle;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 
@@ -42,7 +43,6 @@ public class MainWindowController{
         tabName.setText(name);
     }
 
-
     @FXML
     public void initialize() {
         try {
@@ -53,10 +53,34 @@ public class MainWindowController{
             barContainer.getChildren().add(slideBar);
             String name = LoginViewModel.employeeName;
             employeeName.setText(name);
+
+            employeeName.setOnMouseClicked(event -> {
+                openEmployeeDetailView();
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private void openEmployeeDetailView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("Views/EmployeeDetailView.fxml"));
+            Parent root = loader.load();
+
+            EmployeeDetailController controller = loader.getController();
+            controller.setReadOnlyMode(true);
+            controller.loadEmployee(LoginViewModel.loggedInEmployee);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Thông tin nhân viên");
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void initializeRolePermissions(int roleId) {
         if (slideBarController != null) {
@@ -112,6 +136,7 @@ public class MainWindowController{
         stage.setIconified(true);
     }
 
+
     @FXML
     public void onLogoutClicked() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -145,5 +170,9 @@ public class MainWindowController{
                 pause.play();
             }
         });
+    }
+
+    public void handleEmployeeNameClick(javafx.scene.input.MouseEvent mouseEvent) {
+        openEmployeeDetailView();
     }
 }

@@ -1,37 +1,38 @@
 package com.example.hotelmanagement.ViewModels;
 
-import com.example.hotelmanagement.DAO.RoomDAO;
-import com.example.hotelmanagement.DAO.ServiceDAO;
-import com.example.hotelmanagement.Models.Room;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.beans.property.SimpleStringProperty;
-import com.example.hotelmanagement.*;
-import com.example.hotelmanagement.DTO.ServiceDisplay;
-import com.example.hotelmanagement.Models.Service;
+import com.example.hotelmanagement.DAO.ServiceDAO; //
+import javafx.collections.FXCollections; //
+import javafx.collections.ObservableList; //
+import com.example.hotelmanagement.DTO.ServiceDisplay; //
+import com.example.hotelmanagement.Models.Service; //
 
-import java.math.BigDecimal;
-import java.util.List;
+import java.math.BigDecimal; //
+import java.util.List; //
 
 public class ServiceManagementViewModel {
 
+    private final ObservableList<ServiceDisplay> masterServices = FXCollections.observableArrayList();
     private final ObservableList<ServiceDisplay> services = FXCollections.observableArrayList();
+
     private final ServiceDAO dao = new ServiceDAO();
 
-    // Change the return type to javafx.collections.ObservableList
     public ObservableList<ServiceDisplay> getServiceList() {
         return services;
     }
 
+    public ObservableList<ServiceDisplay> getMasterServiceList() {
+        return masterServices;
+    }
+
     public void loadServices() {
-        services.clear();
+        masterServices.clear();
         List<Service> list = dao.getAll();
         for (Service s : list) {
-            services.add(new ServiceDisplay(s));
+            masterServices.add(new ServiceDisplay(s));
         }
+        services.setAll(masterServices);
         System.out.println(services.size());
-        System.out.println("Da load services done!");
-    }
+        System.out.println("Da load services done!"); }
 
     public void addService(String name, BigDecimal price, String imageLink) {
         Service s = new Service();
@@ -59,5 +60,4 @@ public class ServiceManagementViewModel {
         if (success) loadServices();
         return success;
     }
-
 }

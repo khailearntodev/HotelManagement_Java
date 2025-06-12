@@ -1,119 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import io.github.palexdev.materialfx.controls.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.InvoiceDetailController">
+<?import java.net.URL?>
 
-    <VBox layoutX="3.0" layoutY="-1.0" prefHeight="800.0" prefWidth="796.0" spacing="15.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="-2.0">
+<AnchorPane fx:id="rootPane" prefHeight="800.0" prefWidth="1000.0" styleClass="root-invoice-detail"
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.hotelmanagement.Views.InvoiceDetailController">
+
+    <VBox layoutX="3.0" layoutY="-1.0" prefHeight="800.0" prefWidth="100.0" spacing="10.0"
+          AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="-2.0">
         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="50.0" />
-        </padding>
+            <Insets bottom="15.0" left="20.0" right="20.0" top="60.0" /> </padding>
 
         <HBox alignment="CENTER_LEFT" spacing="10.0">
             <VBox alignment="CENTER_LEFT" spacing="5.0">
-                <Label style="-fx-background-color: #2356eb; -fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 5 10; -fx-background-radius: 5;" text="U" />
-                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="UIT" />
-                <Label style="-fx-font-size: 12px;" text="Linh Trung" />
-                <Label style="-fx-font-size: 12px;" text="Thu Duc, HCM VN" />
+                <Label styleClass="company-logo-circle" text="U" />
+                <Label styleClass="section-title" text="UIT" />
+                <Label styleClass="info-label" text="Linh Trung" />
+                <Label styleClass="info-label" text="Thu Duc, HCM VN" />
             </VBox>
 
             <Region HBox.hgrow="ALWAYS" />
 
             <VBox alignment="TOP_RIGHT" spacing="5.0">
-                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2356eb;" text="Hóa Đơn" />
-                <HBox spacing="3.0">
-                    <Label style="-fx-font-size: 12px;" text="Mã Hóa đơn:" />
-                    <Label fx:id="invoiceNoLabel" style="-fx-font-size: 12px;" text="F-23520610" />
+                <Label styleClass="header-title" text="Hóa Đơn" />
+                <HBox spacing="5.0">
+                    <Label styleClass="invoice-info-label" text="Mã Hóa đơn:" />
+                    <Label fx:id="invoiceNoLabel" styleClass="invoice-info-value" text="F-23520610" />
                 </HBox>
-                <HBox spacing="3.0">
-                    <Label style="-fx-font-size: 12px;" text="Ngày thanh toán:" />
-                    <Label fx:id="paymentDateLabel" style="-fx-font-size: 12px;" text="17/06/2023" />
+                <HBox spacing="5.0">
+                    <Label styleClass="invoice-info-label" text="Ngày thanh toán:" />
+                    <Label fx:id="paymentDateLabel" styleClass="invoice-info-value" text="17/06/2023" />
                 </HBox>
             </VBox>
         </HBox>
 
-        <Separator />
+        <Separator styleClass="separator" />
 
         <HBox spacing="20.0">
             <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Khách hàng" />
-                <Label fx:id="customerNameLabel" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Công Ty TNHH ABC" />
+                <Label styleClass="section-title" text="Khách hàng" />
+                <Label fx:id="customerNameLabel" styleClass="info-value" text="Công Ty TNHH ABC" />
             </VBox>
             <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Địa chỉ:" />
-                <Label fx:id="customerAddress" style="-fx-font-size: 12px;" text="74 RUE ANATOLE FRANCENATOLE FRANCE" />
+                <Label styleClass="section-title" text="Địa chỉ:" />
+                <Label fx:id="customerAddress" styleClass="info-label" text="74 RUE ANATOLE FRANCENATOLE FRANCE" />
             </VBox>
         </HBox>
 
-        <Separator />
+        <Separator styleClass="separator" />
 
-        <VBox spacing="5.0">
-            <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Chi tiết thuê" />
-            <TableView fx:id="detailTable" maxHeight="1000.0" prefHeight="600.0" style="-fx-border-color: #cccccc;" VBox.vgrow="ALWAYS">
+        <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+            <Label styleClass="section-title" text="Chi tiết thuê" />
+            <TableView fx:id="detailTable" maxHeight="Infinity" prefHeight="400.0" styleClass="table-view" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="soThuTuColumn" prefWidth="30.0" text="STT" />
                     <TableColumn fx:id="soPhongColumn" prefWidth="70.0" text="Số phòng" />
                     <TableColumn fx:id="soNgayThueColumn" prefWidth="70.0" text="Số ngày thuê" />
+                    <TableColumn fx:id="donGiaPhongColumn" prefWidth="80.0" text="Đơn giá thuê" />
+                    <TableColumn fx:id="tienPhongColumn" prefWidth="100.0" text="Thành tiền" />
                     <TableColumn fx:id="phiDichVuColumn" prefWidth="70.0" text="Tiền dịch vụ" />
-                    <TableColumn fx:id="donGiaPhongColumn" prefWidth="80.0" text="Đơn giá phòng" />
-                    <TableColumn fx:id="thanhTienColumn" prefWidth="100.0" text="Thành tiền" />
+                    <TableColumn fx:id="tiencocColumn" prefWidth="70.0" text="Tiền cọc" />
+                    <TableColumn fx:id="tongColumn" prefWidth="70.0" text="Tổng cộng" />
                     <TableColumn fx:id="viewServicesColumn" prefWidth="100.0" text="Xem Dịch vụ" />
                 </columns>
                 <columnResizePolicy>
                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                 </columnResizePolicy>
             </TableView>
-            <HBox spacing="5.0">
-                <Label style="-fx-font-size: 12px; -fx-font-weight: bold;" text="Nhân viên: " />
-                <Label fx:id="employeeNameLabel" style="-fx-font-size: 12px; -fx-font-weight: light;" text="Huy Le " />
+            <HBox spacing="5.0" alignment="CENTER_LEFT">
+                <Label styleClass="info-label" text="Nhân viên: " />
+                <Label fx:id="employeeNameLabel" styleClass="info-value" text="Huy Le " />
             </HBox>
         </VBox>
 
-        <GridPane alignment="BOTTOM_RIGHT" hgap="10.0">
+        <Separator styleClass="separator" />
+
+        <GridPane alignment="BOTTOM_RIGHT" hgap="10.0" vgap="5.0">
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
-            <Label text="Tổng tiền :" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <Label fx:id="totalDueLabel" style="-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: orange;" text="8276.78" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-         <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-         </rowConstraints>
+            <Label styleClass="total-label" text="Tổng tiền :" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label fx:id="totalDueLabel" styleClass="total-value" text="8276.78" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" />
+                <ColumnConstraints hgrow="NEVER" prefWidth="150.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+            </rowConstraints>
         </GridPane>
 
-        <Separator />
+        <Separator styleClass="separator" />
 
-        <HBox alignment="CENTER" spacing="2.0">
-            <VBox>
-                <Label fx:id="companyInfo1Label" style="-fx-font-size: 10px;" text="University Of Information Technology, Capital 1000, SIRET : 90106223200011" />
-                <Label fx:id="companyInfo2Label" style="-fx-font-size: 10px;" text="VAT: FRZ0901062232, Activity Type:58.29C" />
-                <Label fx:id="companyInfo3Label" style="-fx-font-size: 10px;" text="RCS: 901062232 Paris 8" />
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <VBox spacing="3.0">
+                <Label styleClass="footer-info" text="University Of Information Technology, Capital 1000, SIRET : 90106223200011" />
+                <Label styleClass="footer-info" text="VAT: FRZ0901062232, Activity Type:58.29C" />
+                <Label styleClass="footer-info" text="RCS: 901062232 Paris 8" />
             </VBox>
 
             <Region HBox.hgrow="ALWAYS" />
 
-            <VBox>
-                <MFXButton fx:id="payButton" buttonType="RAISED" minHeight="40.0" minWidth="70.0" style="-fx-text-fill: blue;" text="Thanh Toán" />
-            </VBox>
+            <MFXButton fx:id="payButton" buttonType="RAISED" styleClass="mfx-button" text="Thanh Toán" />
         </HBox>
     </VBox>
-    <MFXButton fx:id="closeButton" style="-fx-background-color: transparent;" text="✖" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="6.0">
-        <font>
-            <Font size="24.0"/>
-        </font>
-        <HBox.margin>
-            <Insets right="10.0"/>
-        </HBox.margin>
+
+    <MFXButton fx:id="closeButton" styleClass="close-button" text="✖" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="15.0"> <HBox.margin>
+        <Insets right="10.0"/>
+    </HBox.margin>
     </MFXButton>
-   </AnchorPane>
+
+</AnchorPane>

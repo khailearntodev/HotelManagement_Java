@@ -60,8 +60,6 @@ public class CustomerManagementViewModel {
     private final StringProperty selectedYear = new SimpleStringProperty("Năm");
 
     private final StringProperty realTime = new SimpleStringProperty();
-
-    // Giá trị đặc biệt cho loại khách "Tất cả"
     private final String ALL_TYPE_NAME = "Loại khách";
 
     public CustomerManagementViewModel() {
@@ -158,7 +156,7 @@ public class CustomerManagementViewModel {
     public void loadCustomerTypes() {
         List<Customertype> types = customerTypeDAO.getAll();
         customerTypesNames.clear();
-        customerTypesNames.add(ALL_TYPE_NAME); // Thêm "Loại khách" làm mặc định
+        customerTypesNames.add(ALL_TYPE_NAME);
         if (types != null) {
             for (Customertype type : types) {
                 customerTypesNames.add(type.getTypeName());

@@ -95,16 +95,9 @@ public class EmployeeManagementController implements Initializable {
         cbPosition.setItems(extendedList);
         cbPosition.getSelectionModel().selectFirst();
 
-        cbPosition.valueProperty().addListener((obs, oldVal, newVal) -> {
-            viewModel.setSelectedPosition(newVal);
-            // Gọi filter nếu cần
-        });
-
         cbGender.setItems(FXCollections.observableArrayList("Giới tính", "Nam", "Nữ"));
         cbGender.getSelectionModel().selectFirst();
     }
-
-
 
     private void setupTable() {
         // Table column bindings

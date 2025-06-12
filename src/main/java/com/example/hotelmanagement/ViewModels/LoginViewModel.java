@@ -1,5 +1,8 @@
 package com.example.hotelmanagement.ViewModels;
+import com.example.hotelmanagement.DAO.EmployeeDAO;
 import com.example.hotelmanagement.DAO.UserAccountDAO;
+import com.example.hotelmanagement.DTO.EmployeeManagement_EmployeeDisplay;
+import com.example.hotelmanagement.Models.Employee;
 import com.example.hotelmanagement.Models.Useraccount;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -15,6 +18,7 @@ public class LoginViewModel
     private Useraccount loggedInUser;
     public static int employeeId;
     public static String employeeName;
+    public static EmployeeManagement_EmployeeDisplay loggedInEmployee;
 
     private final StringProperty username = new SimpleStringProperty("");
     private final StringProperty password = new SimpleStringProperty("");
@@ -22,6 +26,8 @@ public class LoginViewModel
     private final StringProperty loginMessage = new SimpleStringProperty();
 
     private final UserAccountDAO userAccountDAO = new UserAccountDAO();
+    private final EmployeeDAO employeeDAO = new EmployeeDAO();
+
 
     // Regex ví dụ: username 3-20 ký tự, password ít nhất 6 ký tự
     private final Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9._-]{3,20}$");
@@ -51,6 +57,7 @@ public class LoginViewModel
     public StringProperty loginMessageProperty() {
         return loginMessage;
     }
+    public int getEmployeeId(){return employeeId; }
 
     public void login() {
         loginMessage.set("");
@@ -101,6 +108,26 @@ public class LoginViewModel
                     if (matchedUser.getEmployeeID() != null) {
                         employeeId = matchedUser.getEmployeeID().getId();
                         employeeName = matchedUser.getEmployeeID().getFullName();
+                        Employee employee = employeeDAO.findById(employeeId);
+
+                        if (employee != null) {
+                            loggedInEmployee = new EmployeeManagement_EmployeeDisplay(
+                                    employee.getId(),
+                                    employee.getFullName(),
+                                    employee.getDateOfBirth(),
+                                    employee.getIdentityNumber(),
+                                    employee.getPhoneNumber(),
+                                    employee.getAddress(),
+                                    employee.getGender(),
+                                    employee.getStartingDate(),
+                                    employee.getEmail(),
+                                    employee.getContractType(),
+                                    employee.getContractDate(),
+                                    employee.getSalaryRate(),
+                                    employee.getAvatar(),
+                                    employee.getPosition()
+                            );
+                        }
                     } else {
                         employeeId = -1;
                         employeeName = "Không xác định";
@@ -115,7 +142,7 @@ public class LoginViewModel
 
 
         loginTask.setOnFailed(evt -> {
-            loginMessage.set("Hệ thống đang bận. Vui lòng thử lại sau.");
+            loginMessage.set("Đổi tên CSDL đi bro.");
         });
 
         new Thread(loginTask).start();

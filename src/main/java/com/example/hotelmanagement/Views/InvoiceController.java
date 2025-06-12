@@ -10,6 +10,7 @@ import com.example.hotelmanagement.Models.Reservation;
 import com.example.hotelmanagement.ViewModels.InvoiceViewModel;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXSlider;
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,11 +20,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.math.BigDecimal;
+import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -33,10 +39,13 @@ public class InvoiceController {
     @FXML private MFXComboBox<String> entriesComboBox;
     @FXML private MFXComboBox<String> ComboBox;
 
+    @FXML private AnchorPane rootPane;
+    @FXML
+    private TextField minPriceField, maxPriceField;
     @FXML private MFXSlider minValue;
     @FXML private MFXSlider maxValue;
 
-    @FXML private TextField filterTextField;
+    @FXML private MFXTextField filterTextField;
 
     @FXML private TableView<Invoice> invoiceTable;
 
@@ -52,6 +61,16 @@ public class InvoiceController {
 
     @FXML
     public void initialize() {
+        URL cssUrl = getClass().getResource("/CSS/style.css");
+        if (cssUrl != null) {
+            rootPane.getStylesheets().add(cssUrl.toExternalForm());
+        } else {
+            System.err.println("CSS file not found: /CSS/style.css");
+        }
+
+        minPriceField.setText("0₫");
+        maxPriceField.setText("100.000.000₫");
+        maxValue.setValue(100000000);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         invoiceTable.setRowFactory(tv -> {
             TableRow<Invoice> row = new TableRow<>();
@@ -91,7 +110,16 @@ public class InvoiceController {
                 }
             }
         });
-        startDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIssueDate().toString()));
+        startDateColumn.setCellValueFactory(cellData -> {
+            Instant issueInstant = cellData.getValue().getIssueDate();
+            if (issueInstant != null) {
+                LocalDate issueDate = issueInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+                return new SimpleStringProperty(issueDate.format(formatter));
+            } else {
+                return new SimpleStringProperty("");
+            }
+        });
+        //startDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIssueDate().toString()));
         invoiceAmountColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalAmount().toPlainString()));
         statusColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getPaymentStatus()));
@@ -129,8 +157,10 @@ public class InvoiceController {
         ComboBox.getSelectionModel().selectFirst();
         ComboBox.valueProperty().addListener((obs, oldVal, newVal) -> viewModel.filterByPaymentStatus(newVal));
 
-        minValue.valueProperty().addListener((obs, oldVal, newVal) -> applyAmountFilter());
-        maxValue.valueProperty().addListener((obs, oldVal, newVal) -> applyAmountFilter());
+        minValue.valueProperty().addListener((obs, oldVal, newVal) -> {applyAmountFilter();
+            minPriceField.setText(String.format("%,.0f₫", newVal.doubleValue()));});
+        maxValue.valueProperty().addListener((obs, oldVal, newVal) -> {applyAmountFilter();
+            maxPriceField.setText(String.format("%,.0f₫", newVal.doubleValue()));});
 
         filterTextField.textProperty().addListener((obs, oldVal, newVal) -> viewModel.filterByKeyword(newVal));
 
@@ -146,6 +176,7 @@ public class InvoiceController {
     }
 
     private void applyAmountFilter() {
+
         BigDecimal min = BigDecimal.valueOf(minValue.getValue());
         BigDecimal max = BigDecimal.valueOf(maxValue.getValue());
         viewModel.filterByAmountRange(min, max);

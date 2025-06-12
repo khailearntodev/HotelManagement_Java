@@ -40,8 +40,8 @@
 
                 <TableView fx:id="rolesTable" minHeight="-Infinity" minWidth="-Infinity" prefHeight="420.0">
                     <columns>
-                        <TableColumn prefWidth="280.0" style="-fx-font-size: 14;" text="Tên quyền" />
-                        <TableColumn prefWidth="100.0" style="-fx-font-size: 14;" text="Xóa">
+                        <TableColumn reorderable="false" resizable="false" prefWidth="280.0" style="-fx-font-size: 14;" text="Tên quyền" />
+                        <TableColumn reorderable="false" resizable="false" prefWidth="100.0" style="-fx-font-size: 14;" text="Xóa">
                         </TableColumn>
                     </columns>
                 </TableView>

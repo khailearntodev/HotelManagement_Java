@@ -298,7 +298,7 @@ public class ReservationController implements Initializable {
 
             private void setupCheckoutButton(Reservation_RoomDisplay p) {
                 btn.setOnAction(e -> {
-                    System.out.println("Click phòng: " + p.getRoomNumber());
+                    System.out.println("Click thanh toán phòng: " + p.getRoomNumber());
                     Room room = new RoomDAO().findById(p.getId());
 
                     if (room != null) {
@@ -312,55 +312,35 @@ public class ReservationController implements Initializable {
                             }
                             List<Reservation> reservations = new ArrayList<>();
                             reservations.add(activeReservation);
-                            for (Reservation res : reservations) {
-                                res.setCheckOutDate(java.time.Instant.now());
-                                reservationDAO.update(res);
-                            }
+                            activeReservation.setCheckOutDate(java.time.Instant.now());
                             InvoiceDetailViewModel invoiceDetailVM = new InvoiceDetailViewModel(reservations);
-
-                            Invoice invoice = new Invoice();
-                            Employee employee = new EmployeeDAO().findById(2);
-                            invoice.setEmployeeID(employee);
-                            invoice.setIssueDate(java.time.Instant.now());
-                            invoice.setTotalAmount(invoiceDetailVM.getTongTien().get());
-                            invoice.setCustomerName(reservations.getFirst().getReservationguests().getClass().getName());
-                            invoice.setCustomerAddres(reservations.getFirst().getReservationguests().getClass().getName());
-                            invoice.setInvoiceType(2);
-                            invoice.setPaymentStatus("Chưa thanh toán");
-
-                            InvoiceDAO invoiceDAO = new InvoiceDAO();
-                            boolean saveSuccessful = invoiceDAO.save(invoice);
-
-                            if (!saveSuccessful) {
-                                System.err.println("Lỗi: Không thể lưu hóa đơn vào cơ sở dữ liệu. Vui lòng kiểm tra log.");
-                                return;
+                            if (!activeReservation.getReservationguests().isEmpty()) {
+                                //Customer customer = activeReservation.getReservationguests().stream().findFirst().get().getCustomerID();
+                                //invoiceDetailVM.getInvoice().get().setCustomerName(customer.getFullName());
+                                //invoiceDetailVM.getInvoice().get().setCustomerAddres(customer.getCustomerAddress());
+                                invoiceDetailVM.getInvoice().get().setCustomerName(reservations.getFirst().getReservationguests().getClass().getName());
+                                invoiceDetailVM.getInvoice().get().setCustomerAddres(reservations.getFirst().getReservationguests().getClass().getName());
+                            } else {
+                                invoiceDetailVM.getInvoice().get().setCustomerName("Khách lẻ");
+                                invoiceDetailVM.getInvoice().get().setCustomerAddres("");
                             }
-
-
-                            RoomDAO roomDAO = new RoomDAO();
-                            for (Reservation res : reservations) {
-                                res.setCheckOutDate(java.time.Instant.now());
-                                res.setInvoiceID(invoice);
-                                reservationDAO.update(res);
-                                room.setStatus(1);
-                                roomDAO.update(room);
-                            }
-
-                            Invoice fullInvoice = invoiceDAO.getInvoiceWithDetails(invoice.getId());
+                            invoiceDetailVM.getInvoice().get().setInvoiceType(2);
+                            invoiceDetailVM.getInvoice().get().setPaymentStatus("Chưa thanh toán");
 
                             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/InvoiceDetailView.fxml"));
                             Parent root = fxmlLoader.load();
                             InvoiceDetailController controller = fxmlLoader.getController();
-                            controller.setInvoice(fullInvoice);
+                            controller.setViewModelForCreation(invoiceDetailVM);
 
                             Scene scene = new Scene(root);
-                            scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm());
-
+                            // scene.getStylesheets().add(getClass().getResource("/CSS/reservation-style.css").toExternalForm()); // CSS đã được load trong FXML rồi
                             Stage stage = new Stage();
                             stage.initStyle(StageStyle.UNDECORATED);
                             stage.initModality(Modality.APPLICATION_MODAL);
                             stage.setScene(scene);
                             stage.showAndWait();
+                            viewModel.loadFromModel();
+                            applyFilter();
 
                         } catch (IOException ex) {
                             ex.printStackTrace();
@@ -373,7 +353,6 @@ public class ReservationController implements Initializable {
                 configureButton(btn, 87, "Thanh toán");
                 btn.getStyleClass().add("checkout-button-table-view");
             }
-
             private void setupConfirmButton(Room r) {
                 btn.setOnAction(e -> {
                     try {

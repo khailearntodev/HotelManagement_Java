@@ -60,13 +60,13 @@
         <!-- Table -->
         <TableView fx:id="tableEmployees" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="1060.0" VBox.vgrow="ALWAYS" style="-fx-font-size: 14px;">
             <columns>
-                <TableColumn fx:id="colId" prefWidth="160" text="Mã nhân viên"/>
-                <TableColumn fx:id="colName" prefWidth="220" text="Tên nhân viên" />
-                <TableColumn fx:id="colChucVu" prefWidth="130" text="Chức vụ" />
-                <TableColumn fx:id="colNgayTuyen" prefWidth="130" text="Ngày tuyển" />
-                <TableColumn fx:id="colHopDong" prefWidth="150" text="Loại hợp đồng" />
-                <TableColumn fx:id="colHanHopDong" prefWidth="130" text="Hạn hợp đồng" />
-                <TableColumn fx:id="colHeSoLuong" prefWidth="130" text="Hệ số lương" />
+                <TableColumn fx:id="colId" reorderable="false" resizable="false" prefWidth="160" text="Mã nhân viên"/>
+                <TableColumn fx:id="colName" reorderable="false" resizable="false" prefWidth="220" text="Tên nhân viên" />
+                <TableColumn fx:id="colChucVu" reorderable="false" resizable="false" prefWidth="130" text="Chức vụ" />
+                <TableColumn fx:id="colNgayTuyen" reorderable="false" resizable="false" prefWidth="130" text="Ngày tuyển" />
+                <TableColumn fx:id="colHopDong" reorderable="false" resizable="false" prefWidth="150" text="Loại hợp đồng" />
+                <TableColumn fx:id="colHanHopDong" reorderable="false" resizable="false" prefWidth="130" text="Hạn hợp đồng" />
+                <TableColumn fx:id="colHeSoLuong" reorderable="false" resizable="false" prefWidth="140" text="Hệ số lương" />
             </columns>
         </TableView>
 

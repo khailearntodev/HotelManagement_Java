@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
@@ -12,56 +11,67 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
-
 <?import javafx.scene.layout.VBox?>
-<?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
-<?import io.github.palexdev.materialfx.controls.MFXProgressSpinner?>
 <?import io.github.palexdev.materialfx.controls.MFXSlider?>
-<AnchorPane prefHeight="660.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.InvoiceController">
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.scene.text.Font?>
+<AnchorPane fx:id="rootPane" prefHeight="660.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.InvoiceController">
     <padding>
         <Insets top="15" right="20" bottom="20" left="20" />
     </padding>
 
-    <HBox alignment="CENTER_LEFT" spacing="10" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="5.0">
+    <HBox alignment="CENTER_LEFT" spacing="15" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
         <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="HÓA ĐƠN" />
         <Region HBox.hgrow="ALWAYS" />
-        <MFXComboBox fx:id="nCustomCombo" floatMode="DISABLED" promptText="Tất cả" prefWidth="180.0">
-        </MFXComboBox>
+        <MFXComboBox fx:id="nCustomCombo" floatMode="DISABLED" promptText="Loại hóa đơn" prefWidth="200.0" />
     </HBox>
 
-    <HBox alignment="CENTER_LEFT" spacing="15" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="55.0">
-        <MFXComboBox fx:id="entriesComboBox"  maxHeight="20.0" prefWidth="100.0" promptText="Số phiếu" floatMode="DISABLED">
+    <HBox alignment="CENTER_LEFT" spacing="20" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="60.0">
+        <MFXComboBox fx:id="entriesComboBox" prefWidth="120.0" promptText="Số phiếu" floatMode="DISABLED">
+            <HBox.margin>
+                <Insets top="15.0" />
+            </HBox.margin>
         </MFXComboBox>
-        <MFXComboBox fx:id="ComboBox"  maxHeight="20.0" prefWidth="100.0" promptText="Tất cả" floatMode="DISABLED">
+        <MFXComboBox fx:id="ComboBox" prefWidth="120.0" promptText="Tất cả" floatMode="DISABLED">
+            <HBox.margin>
+                <Insets top="15.0" />
+            </HBox.margin>
         </MFXComboBox>
-        <VBox>
-            <MFXSlider fx:id="minValue" id="customSlider" >
-            </MFXSlider>
-            <Label style="-fx-font-size: 14px; " text="Tối thiểu" />
+        <VBox spacing="5" alignment="CENTER">
+            <Label style="-fx-font-size: 14px;" text="Tối thiểu" />
+            <TextField fx:id="minPriceField" prefWidth="100.0" editable="false" style="-fx-font-size: 14px;" />
+            <MFXSlider fx:id="minValue" min="0" max="100000000" prefWidth="150.0" />
         </VBox>
-        <VBox>
-            <MFXSlider fx:id="maxValue" id="customSlider" >
-            </MFXSlider>
-            <Label style="-fx-font-size: 14px; " text="Tối đa" />
+        <VBox spacing="5" alignment="CENTER">
+            <Label style="-fx-font-size: 14px;" text="Tối đa" />
+            <TextField fx:id="maxPriceField" prefWidth="100.0" editable="false" style="-fx-font-size: 14px;" />
+            <MFXSlider fx:id="maxValue" min="0" max="100000000" prefWidth="150.0" />
         </VBox>
         <Region HBox.hgrow="ALWAYS" />
-        <HBox spacing="5" alignment="CENTER_LEFT">
-            <Label text="🔍" style="-fx-font-size: 16px;" />
-            <TextField fx:id="filterTextField"
-                       promptText="Tìm kiếm"
-                       prefHeight="30.0" HBox.hgrow="ALWAYS" minWidth="300.0"
-                       style="-fx-background-radius: 15; -fx-border-radius: 15; -fx-background-color: #ffffff; -fx-border-color: #cccccc;" />
-        </HBox>
+        <MFXTextField fx:id="filterTextField" floatMode="ABOVE" prefHeight="35.0" prefWidth="350.0" promptText="Tìm kiếm">
+            <leadingIcon>
+                <StackedFontIcon iconSize="16">
+                    <FontIcon iconLiteral="fa-search" wrappingWidth="18.0">
+                        <font><Font size="14.0" /></font>
+                    </FontIcon>
+                </StackedFontIcon>
+            </leadingIcon>
+            <HBox.margin>
+                <Insets top="15.0" />
+            </HBox.margin>
+        </MFXTextField>
     </HBox>
 
-    <TableView fx:id="invoiceTable" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="105.0" AnchorPane.bottomAnchor="0">
+    <TableView fx:id="invoiceTable" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="130.0" AnchorPane.bottomAnchor="10.0">
         <columns>
-            <TableColumn fx:id="invoiceIdColumn" prefWidth="80" text="ID" />
-            <TableColumn fx:id="nameClientColumn" prefWidth="230" text="Tên khách hàng" />
-            <TableColumn fx:id="startDateColumn" prefWidth="120" text="Ngày tạo" />
-            <TableColumn fx:id="invoiceAmountColumn" prefWidth="180" text="Trị giá" />
-            <TableColumn fx:id="invoiceTypes" prefWidth="210" text="Loại hóa đơn" />
-            <TableColumn fx:id="statusColumn" prefWidth="210" text="Trạng thái" />
+            <TableColumn fx:id="invoiceIdColumn" prefWidth="80" text="ID" sortable="true" />
+            <TableColumn fx:id="nameClientColumn" prefWidth="250" text="Tên khách hàng" sortable="true" />
+            <TableColumn fx:id="startDateColumn" prefWidth="130" text="Ngày tạo" sortable="true" />
+            <TableColumn fx:id="invoiceAmountColumn" prefWidth="180" text="Trị giá" sortable="true" />
+            <TableColumn fx:id="invoiceTypes" prefWidth="220" text="Loại hóa đơn" sortable="true" />
+            <TableColumn fx:id="statusColumn" prefWidth="220" text="Trạng thái" sortable="true" />
         </columns>
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
