@@ -14,7 +14,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -44,12 +44,9 @@ public class BookingInAdvanceInvoiceViewModel {
     }
 
     public void saveInvoice() {
-        //
-        Employee e = new EmployeeDAO().findById(2);
-        //
-
+        Employee e = new EmployeeDAO().findById(LoginViewModel.employeeId);
         Invoice invoice = new Invoice();
-        invoice.setIssueDate(preBookingInvoiceDisplay.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant());
+        invoice.setIssueDate(preBookingInvoiceDisplay.getInvoiceDate().atZone(ZoneOffset.UTC).toInstant());
         invoice.setInvoiceType(1);
         invoice.setTotalAmount(preBookingInvoiceDisplay.getTotalPrice());
         invoice.setCustomerName(preBookingInvoiceDisplay.getName());
@@ -68,9 +65,9 @@ public class BookingInAdvanceInvoiceViewModel {
         p.setReservationID(null);
         p.setRoomID(room);
         p.setPhoneNumber(preBookingInvoiceDisplay.getPhoneNumber());
-        p.setCheckInDate(preBookingInvoiceDisplay.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        p.setCheckOutDate(preBookingInvoiceDisplay.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        p.setBookingDate(preBookingInvoiceDisplay.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant());
+        p.setCheckInDate(preBookingInvoiceDisplay.getStartDate().atStartOfDay(ZoneOffset.UTC).toInstant());
+        p.setCheckOutDate(preBookingInvoiceDisplay.getEndDate().atStartOfDay(ZoneOffset.UTC).toInstant());
+        p.setBookingDate(preBookingInvoiceDisplay.getInvoiceDate().atZone(ZoneOffset.UTC).toInstant());
         p.setPrice(preBookingInvoiceDisplay.getTotalPrice());
         p.setIsDeleted(false);
         PrebookingDAO pDao = new PrebookingDAO();

@@ -13,6 +13,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -38,9 +39,9 @@ public class BookingInAdvanceViewModel {
         List<Integer> reservedRoomIds = new PrebookingDAO().getAll().stream()
                 .filter(r -> !r.getIsDeleted())
                 .filter(r ->
-                        ( !r.getCheckInDate().isBefore(checkInDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) && !r.getCheckOutDate().isAfter(checkOutDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) ) ||
-                                ( !r.getCheckOutDate().isBefore(checkInDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) && !r.getCheckOutDate().isAfter(checkOutDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) ) ||
-                                ( !r.getCheckInDate().isAfter(checkInDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) && !r.getCheckOutDate().isBefore(checkOutDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) )
+                        ( !r.getCheckInDate().isBefore(checkInDate.atStartOfDay(ZoneOffset.UTC).toInstant()) && !r.getCheckOutDate().isAfter(checkOutDate.atStartOfDay(ZoneOffset.UTC).toInstant()) ) ||
+                                ( !r.getCheckOutDate().isBefore(checkInDate.atStartOfDay(ZoneOffset.UTC).toInstant()) && !r.getCheckOutDate().isAfter(checkOutDate.atStartOfDay(ZoneOffset.UTC).toInstant()) ) ||
+                                ( !r.getCheckInDate().isAfter(checkInDate.atStartOfDay(ZoneOffset.UTC).toInstant()) && !r.getCheckOutDate().isBefore(checkOutDate.atStartOfDay(ZoneOffset.UTC).toInstant()) )
                 )
                 .map(p -> p.getRoomID().getId())
                 .toList();
@@ -48,9 +49,9 @@ public class BookingInAdvanceViewModel {
         List<Integer> rentedRoomIds = new ReservationDAO().getAll().stream()
                 .filter(r -> !r.getIsDeleted())
                 .filter(r ->
-                        (!r.getCheckInDate().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(checkInDate) && !r.getCheckInDate().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(checkOutDate)) ||
-                                (!r.getCheckOutDate().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(checkInDate) && !r.getCheckOutDate().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(checkOutDate)) ||
-                                (!r.getCheckInDate().atZone(ZoneId.systemDefault()).toLocalDate().isAfter(checkInDate) && !r.getCheckOutDate().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(checkOutDate))
+                        (!r.getCheckInDate().atZone(ZoneOffset.UTC).toLocalDate().isBefore(checkInDate) && !r.getCheckInDate().atZone(ZoneOffset.UTC).toLocalDate().isAfter(checkOutDate)) ||
+                                (!r.getCheckOutDate().atZone(ZoneOffset.UTC).toLocalDate().isBefore(checkInDate) && !r.getCheckOutDate().atZone(ZoneOffset.UTC).toLocalDate().isAfter(checkOutDate)) ||
+                                (!r.getCheckInDate().atZone(ZoneOffset.UTC).toLocalDate().isAfter(checkInDate) && !r.getCheckOutDate().atZone(ZoneOffset.UTC).toLocalDate().isBefore(checkOutDate))
                 )
                 .map(p -> p.getRoomID().getId())
                 .toList();

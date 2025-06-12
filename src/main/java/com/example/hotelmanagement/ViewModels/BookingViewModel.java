@@ -48,9 +48,7 @@ public class BookingViewModel {
         this.roomDisplay = new Reservation_RoomDisplay(room);
         this.customerList = FXCollections.observableArrayList();
         if (!canEdit) {
-            if (checkOutDate.get() != null) {
-                System.out.println(checkOutDate.get());
-                System.out.println(LocalDate.now());
+            if (checkOutDate.get() == null) {
                 Prebooking preBooking = room.getPrebookings().stream()
                         .filter(e -> e.getReservationID() == null)
                         .filter(e -> Objects.equals(e.getRoomID().getId(), room.getId()))
@@ -90,16 +88,14 @@ public class BookingViewModel {
                 customerDAO.update(guest);
             }
         }
-        //
-        Employee employee = new Employee();
+
         EmployeeDAO employeeDAO = new EmployeeDAO();
-        employee = employeeDAO.findById(2);
-        //
+        Employee employee = employeeDAO.findById(LoginViewModel.employeeId);
         reservation.setRoomID(room);
         reservation.setBasePrice(room.getRoomTypeID().getBasePrice());
         reservation.setEmployeeID(employee);
-        reservation.setCheckInDate(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        reservation.setCheckOutDate(checkOutDate.get().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        reservation.setCheckInDate(LocalDate.now().atStartOfDay(ZoneOffset.UTC).toInstant());
+        reservation.setCheckOutDate(checkOutDate.get().atStartOfDay(ZoneOffset.UTC).toInstant());
         reservation.setPrice(room.getRoomTypeID().getBasePrice().multiply(maxBonus));
         reservation.setTotal(null);
         reservation.setNote(note);
@@ -122,7 +118,7 @@ public class BookingViewModel {
             if (item.isSelected()) {
                 Servicebooking serviceBooking = new Servicebooking();
                 serviceBooking.setReservationID(reservation);
-                serviceBooking.setBookingDate(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                serviceBooking.setBookingDate(LocalDate.now().atStartOfDay(ZoneOffset.UTC).toInstant());
                 serviceBooking.setQuantity(item.getQuantity());
                 serviceBooking.setServiceID(item.getService());
                 serviceBooking.setStatus("Chưa xử lý");
@@ -145,7 +141,7 @@ public class BookingViewModel {
         if (preBooking != null) {
             preBooking.setReservationID(reservation);
             PrebookingDAO prebookingDAO = new PrebookingDAO();
-            prebookingDAO.save(preBooking);
+            prebookingDAO.update(preBooking);
         }
 
         Reservation_RoomDisplay roomReservationDisplay = parent.getRooms().stream().filter(e -> e.getId() == room.getId()).findFirst().orElse(null);
