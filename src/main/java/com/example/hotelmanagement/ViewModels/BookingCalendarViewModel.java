@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Objects;
@@ -37,14 +38,14 @@ public class BookingCalendarViewModel {
         var allPrebookings = new PrebookingDAO().getAll().stream()
                 .filter(p -> !p.getIsDeleted())
                 .filter(p -> Objects.equals(p.getRoomID().getId(), room.getId()))
-                .filter(p -> !p.getCheckInDate().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(LocalDate.now()))
+                .filter(p -> !p.getCheckInDate().atZone(ZoneOffset.UTC).toLocalDate().isBefore(LocalDate.now()))
                 .collect(Collectors.toList());
 
         Set<LocalDate> result = new HashSet<>();
 
         for (var booking : allPrebookings) {
-            LocalDate start = booking.getCheckInDate().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate end = booking.getCheckOutDate().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate start = booking.getCheckInDate().atZone(ZoneOffset.UTC).toLocalDate();
+            LocalDate end = booking.getCheckOutDate().atZone(ZoneOffset.UTC).toLocalDate();
 
             for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
                 result.add(date);
