@@ -31,13 +31,13 @@ public class RoomTypeCardController {
     @FXML
     private Label quantityLabel;
     @FXML
-    private MFXTextField priceTextField;
+    private Label priceTextField;
     @FXML
-    private MFXTextField quantityTextField;
+    private Label quantityTextField;
     @FXML
-    private TextArea descriptionTextArea;
+    private Label descriptionTextArea;
     @FXML
-    private MFXTextField maxOccupancyTextField;
+    private Label maxOccupancyTextField;
     private RoomTypeViewModel viewModel; // Store the view model
 
     private Consumer<RoomTypeViewModel> onCardClick; // Callback for click event
@@ -54,16 +54,12 @@ public class RoomTypeCardController {
 
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         priceTextField.setText(currencyFormat.format(viewModel.getBasePrice()));
-        priceTextField.setEditable(false);
 
         quantityTextField.setText("N/A");
-        quantityTextField.setEditable(false);
 
         descriptionTextArea.setText(viewModel.getDescription());
-        descriptionTextArea.setEditable(false);
 
         maxOccupancyTextField.setText(String.valueOf(viewModel.getMaxOccupancy()));
-        maxOccupancyTextField.setEditable(false);
 
         String base64Image = viewModel.getImage();
         if (base64Image != null && !base64Image.isEmpty()) {

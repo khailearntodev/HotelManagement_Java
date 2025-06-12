@@ -25,6 +25,7 @@ public class AddRoomController implements Initializable {
     private RoomService roomService;
     private Consumer<Boolean> onAddCallback; // Callback to notify parent on add success/failure
     private Roomtype selectedRoomType;
+    private Consumer<Boolean> onUpdateCallback; // Callback for parent controller
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -68,7 +69,7 @@ public class AddRoomController implements Initializable {
         Room newRoom = new Room();
         newRoom.setRoomNumber(roomNumber);
         newRoom.setRoomTypeID(selectedRoomType); // Assign the stored Roomtype object
-        newRoom.setNote(roomNote.isEmpty() ? null : roomNote); // Set null if empty string
+        newRoom.setNote(roomNote.isEmpty() ? "" : roomNote); // Set null if empty string
         newRoom.setStatus(1); // Default to 1: Còn trống
         newRoom.setCleaningStatus(0); // Default to 0: Sạch
         newRoom.setIsDeleted(false); // Default to false

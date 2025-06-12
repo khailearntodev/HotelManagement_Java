@@ -12,6 +12,7 @@ import io.github.palexdev.materialfx.controls.MFXTableColumn; // For Room Table
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,6 +23,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -40,9 +42,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer; // For callback
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 public class EditRoomTypeController implements Initializable {
 
+    public MFXButton addRoomButton;
     @FXML
     private ImageView roomTypeImageView;
     @FXML
@@ -70,9 +75,31 @@ public class EditRoomTypeController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.roomTypeService = new RoomTypeService();
         this.roomService = new RoomService(); // Initialize RoomService
+        setupNumericInputValidation();
 
         // Setup columns for roomsTableView
         setupRoomsTable();
+    }
+    private void setupNumericInputValidation() {
+        // TextFormatter for basePriceField (allows digits and one decimal point)
+        Pattern decimalPattern = Pattern.compile("\\d*\\.?\\d*");
+        UnaryOperator<TextFormatter.Change> decimalFilter = change -> {
+            if (decimalPattern.matcher(change.getControlNewText()).matches()) {
+                return change;
+            }
+            return null;
+        };
+        basePriceField.setTextFormatter(new TextFormatter<>(decimalFilter));
+
+        // TextFormatter for maxOccupancyField (allows only digits)
+        Pattern integerPattern = Pattern.compile("\\d*");
+        UnaryOperator<TextFormatter.Change> integerFilter = change -> {
+            if (integerPattern.matcher(change.getControlNewText()).matches()) {
+                return change;
+            }
+            return null;
+        };
+        maxOccupancyField.setTextFormatter(new TextFormatter<>(integerFilter));
     }
 
     /**
@@ -406,5 +433,44 @@ public class EditRoomTypeController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleAddRoom() {
+        if (currentRoomType == null) {
+            showAlert(AlertType.WARNING, "Lỗi", "Vui lòng chọn loại phòng trước khi thêm phòng.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/AddRoom.fxml"));
+            Parent addRoomRoot = loader.load();
+            AddRoomController addRoomController = loader.getController();
+
+            // Pass the current Roomtype object to the AddRoomController
+            addRoomController.setUpRoomTypeName(currentRoomType);
+
+            // Set a callback to refresh the rooms table when a new room is added
+            addRoomController.setOnAddCallback(success -> {
+                if (success) {
+                    loadRoomsForRoomType(currentRoomType.getId()); // Refresh the rooms list
+                    if (onUpdateCallback != null) {
+                        onUpdateCallback.accept(true); // Notify parent of success
+                    }
+                } else {
+                    showAlert(AlertType.ERROR, "Thêm phòng thất bại", "Có lỗi xảy ra khi thêm phòng.");
+                }
+            });
+
+            Stage addRoomStage = new Stage();
+            addRoomStage.setTitle("Thêm phòng mới");
+            addRoomStage.setScene(new Scene(addRoomRoot));
+            addRoomStage.initModality(Modality.APPLICATION_MODAL);
+            addRoomStage.showAndWait();
+
+        } catch (IOException e) {
+            showAlert(AlertType.ERROR, "Lỗi tải cửa sổ", "Không thể tải cửa sổ thêm phòng.");
+            e.printStackTrace();
+        }
     }
 }

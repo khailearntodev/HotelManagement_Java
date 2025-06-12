@@ -12,24 +12,32 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label; // Import Label for error messages
+import javafx.scene.control.SplitPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -42,6 +50,14 @@ public class RoomTypeController implements Initializable {
     public Label statusLabel;
     public MFXButton editDetailsButton;
     public MFXTableView<RoomViewModel> roomListTable;
+    public SplitPane splitPane1;
+    public SplitPane splitPane2;
+    public ImageView roomTypeImageView;
+    public VBox statusIndicatorVBox;
+    public Label typeNameLabel;
+    public Label priceTextField;
+    public Label maxOccupancyTextField;
+    public Label descriptionTextArea;
     @FXML
     private FlowPane roomCardsContainer; // This fx:id matches the FlowPane in ManageRoomType.fxml
 
@@ -55,11 +71,25 @@ public class RoomTypeController implements Initializable {
         this.roomTypeService = new RoomTypeService();
 
         this.roomService = new RoomService(); // Initialize RoomService
+        splitPane1.lookupAll(".split-pane-divider").stream()
+                .forEach(div ->  div.setMouseTransparent(true) );
 
+        splitPane2.lookupAll(".split-pane-divider").stream()
+                .forEach(div ->  div.setMouseTransparent(true) );
 
         // Load the RoomType cards into the FlowPane
         loadRoomTypeCards();
         setupRoomsTable();
+    }
+    /**
+     * Helper method to disable resizing for all dividers in a SplitPane.
+     */
+    private void disableSplitPaneDividers(SplitPane splitPane) {
+        if (splitPane != null) {
+            for (SplitPane.Divider divider : splitPane.getDividers()) {
+
+            }
+        }
     }
     /**
      * Sets up the columns for the roomsTableView.
@@ -297,8 +327,25 @@ public class RoomTypeController implements Initializable {
         RoomService roomService = new RoomService();
         long roomsCount = roomService.countTotalRoomsByRoomTypeId(roomType.getId());
         long availableRoomCount = roomService.countAvailableRoomsByRoomTypeId(roomType.getId());
+        boolean isThereRoom = (roomsCount - availableRoomCount != 0);
         roomTypeNameLabel.setText(roomType.getTypeName());
         emptyRoomsLabel.setText(String.format("Còn trống: %d/%d phòng", (roomsCount - availableRoomCount), roomsCount));
+        statusLabel.setText(isThereRoom? "Còn phòng": "Hết phòng");
+        statusIndicatorVBox.setStyle(String.format("-fx-background-color: %s", isThereRoom? "green": "red"));
+        String base64Image = roomType.getImage();
+        if (base64Image != null && !base64Image.isEmpty()) {
+            try {
+                byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
+                Image image = new Image(new ByteArrayInputStream(decodedBytes));
+                roomTypeImageView.setImage(image);
+            } catch (IllegalArgumentException e) {
+                System.err.println("Invalid Base64 image string for Roomtype: " + roomType.getTypeName());
+                roomTypeImageView.setImage(null);
+            }
+        }
+        priceTextField.setText(roomType.getBasePrice() + "");
+        maxOccupancyTextField.setText(roomType.getMaxOccupancy() + "");
+        descriptionTextArea.setText(roomType.getDescription());
         loadRoomsForRoomType(roomType.getId());
     }
     private void loadRoomsForRoomType(Integer roomTypeId) {
@@ -381,6 +428,21 @@ public class RoomTypeController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("AddRoomType.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
+            AddRoomTypeController addRoomTypeController = loader.getController();
+            addRoomTypeController.setOnAddCallback((success) ->{
+                if (success) {
+                    loadRoomTypeCards(); // Refresh the list of cards
+                    // After update, re-display the updated details in the side panel
+                    if (this.currentlyDisplayedRoomType != null && this.currentlyDisplayedRoomType.getId() != null) {
+                        Roomtype a = roomTypeService.getRoomTypeById(this.currentlyDisplayedRoomType.getId());
+                        if(a != null){
+                            displayRoomTypeDetails(a);
+                        }
+                    }
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Thêm thất bại", "Có lỗi xảy ra khi thêm loại phòng.");
+                }
+            });
 
     //        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Views/MainWindow.fxml"));
     //        Scene scene = new Scene(fxmlLoader.load(), 1360, 820);

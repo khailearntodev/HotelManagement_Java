@@ -18,6 +18,7 @@
 }
 .button-border{
     -fx-border-radius: 20;
+    -fx-margin: 5px 2px;
 }
 .toggle-button:selected {
     -fx-background-color: #e6f0ff;
@@ -75,3 +76,24 @@
     -fx-border-width: 1;
     -fx-background-radius: 10;
 }
+.split-pane-divider {
+    -fx-padding: 0; /* Remove padding around the divider */
+    -fx-background-color: transparent; /* Make the background transparent */
+    -fx-border-width: 0; /* Remove any borders */
+}
+
+/* Optional: Remove hover/drag visual feedback if any */
+.split-pane-divider:hover {
+    -fx-background-color: transparent; /* Ensure no background appears on hover */
+    -fx-opacity: 1; /* Keep opacity consistent */
+    -fx-cursor: default; /* Change cursor to default, not resize */
+}
+.horizontal-separator-line{
+-fx-min-height: 1px;    /* Minimum height of the line */
+    -fx-pref-height: 1px;   /* Preferred height (thickness) of the line */
+    -fx-max-height: 1px;    /* Maximum height of the line */
+    -fx-background-color: #cccccc; /* Color of the line (e.g., light gray) */
+    -fx-hgrow: always;      /* Makes the Region grow horizontally to fill available width */
+    -fx-margin: 5px 2px;    /* Optional: Add vertical margin to give some space around the line */
+}
+

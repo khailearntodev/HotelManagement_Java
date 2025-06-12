@@ -4,11 +4,13 @@ import com.example.hotelmanagement.Models.Roomtype;
 import com.example.hotelmanagement.Services.RoomTypeService;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -21,6 +23,9 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Base64;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 public class AddRoomTypeController implements Initializable {
 
@@ -41,11 +46,39 @@ public class AddRoomTypeController implements Initializable {
 
     private RoomTypeService roomTypeService;
     private File selectedImageFile; // To store the selected image file
+    private Consumer<Boolean> onAddCallback; // Callback to notify parent controller
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialize your RoomTypeService
         this.roomTypeService = new RoomTypeService();
+        setupNumericInputValidation();
+    }
+
+    private void setupNumericInputValidation() {
+        // TextFormatter for basePriceField (allows digits and one decimal point)
+        Pattern decimalPattern = Pattern.compile("\\d*\\.?\\d*");
+        UnaryOperator<TextFormatter.Change> decimalFilter = change -> {
+            if (decimalPattern.matcher(change.getControlNewText()).matches()) {
+                return change;
+            }
+            return null;
+        };
+        basePriceField.setTextFormatter(new TextFormatter<>(decimalFilter));
+
+        // TextFormatter for maxOccupancyField (allows only digits)
+        Pattern integerPattern = Pattern.compile("\\d*");
+        UnaryOperator<TextFormatter.Change> integerFilter = change -> {
+            if (integerPattern.matcher(change.getControlNewText()).matches()) {
+                return change;
+            }
+            return null;
+        };
+        maxOccupancyField.setTextFormatter(new TextFormatter<>(integerFilter));
+    }
+
+    public void setOnAddCallback(Consumer<Boolean> onAddCallback) {
+        this.onAddCallback = onAddCallback;
     }
 
     /**
@@ -78,15 +111,15 @@ public class AddRoomTypeController implements Initializable {
      * Validates input, creates a Roomtype object, and saves it via the service.
      */
     @FXML
-    private void handleAddRoomType() {
+    private void handleAddRoomType(ActionEvent actionEvent) {
         // 1. Validate Input
         String typeName = roomTypeNameField.getText();
         String basePriceText = basePriceField.getText();
         String description = descriptionField.getText();
         String maxOccupancyText = maxOccupancyField.getText(); // Get text from new field
 
-        if (typeName.isEmpty() || basePriceText.isEmpty() || description.isEmpty() || maxOccupancyText.isEmpty()) {
-            showAlert(AlertType.WARNING, "Thiếu thông tin", "Vui lòng điền đầy đủ tất cả các trường.");
+        if (typeName.isEmpty() || basePriceText.isEmpty() || maxOccupancyText.isEmpty()) {
+            showAlert(AlertType.WARNING, "Thiếu thông tin", "Vui lòng điền đầy đủ tất cả các trường, với đơn giá là số thực và số khách tối đa là số nguyên.");
             return;
         }
 
@@ -143,14 +176,24 @@ public class AddRoomTypeController implements Initializable {
             if (success) {
                 showAlert(AlertType.INFORMATION, "Thành công", "Đã thêm loại phòng mới thành công!");
                 clearFields(); // Clear the form after successful addition
-                // Optionally close the window if this dialog is opened modally
-                // ((Stage) addRoomTypeButton.getScene().getWindow()).close();
+                if (onAddCallback != null) {
+                    onAddCallback.accept(true); // Notify parent of success
+                }
+                // Close the current window (dialog)
+                Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+                stage.close();
             } else {
                 showAlert(AlertType.ERROR, "Lỗi", "Không thể thêm loại phòng. Vui lòng kiểm tra nhật ký lỗi.");
+                if (onAddCallback != null) {
+                    onAddCallback.accept(false); // Notify parent of success
+                }
             }
         } catch (RuntimeException e) {
             showAlert(AlertType.ERROR, "Lỗi cơ sở dữ liệu", "Đã xảy ra lỗi khi lưu loại phòng: " + e.getMessage());
             e.printStackTrace();
+            if (onAddCallback != null) {
+                onAddCallback.accept(false); // Notify parent of success
+            }
         }
     }
 
