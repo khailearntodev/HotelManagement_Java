@@ -3,6 +3,7 @@ package com.example.hotelmanagement.Views;
 import com.example.hotelmanagement.ViewModels.RoomTypeViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -44,6 +45,8 @@ public class RoomTypeCardController {
     private Consumer<RoomTypeViewModel> onCardClick; // Callback for click event
 
     private Consumer<RoomTypeViewModel> onDeleteClick;
+    // Define the pseudo-class for selection
+    private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
     public void setRoomtypeData(RoomTypeViewModel viewModel) {
         this.viewModel = viewModel; // Store the view model
         if (viewModel == null) {
@@ -89,6 +92,17 @@ public class RoomTypeCardController {
                 }
             });
         }
+        setSelected(false);
+    }
+    /**
+     * Toggles the 'selected' pseudo-class on the root of the card.
+     * This method will be called by the parent controller to highlight/unhighlight.
+     * @param selected True to highlight, false to unhighlight.
+     */
+    public void setSelected(boolean selected) {
+        if (roomCardRoot != null) {
+            roomCardRoot.pseudoClassStateChanged(SELECTED_PSEUDO_CLASS, selected);
+        }
     }
 
     /**
@@ -106,6 +120,8 @@ public class RoomTypeCardController {
         quantityTextField.setText("");
         descriptionTextArea.setText("");
         maxOccupancyTextField.setText("");
+
+        setSelected(false);
     }
 
     public void handleDeleteRoomtype(Consumer<RoomTypeViewModel> onDeleteClick) {

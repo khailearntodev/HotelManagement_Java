@@ -123,7 +123,7 @@ public class RoomDAO {
             // No JOIN FETCH needed here as we are only counting, not returning Room objects
             // Assuming 'status' 0 means available and 'cleaningStatus' 0 means clean.
             Query<Long> query = session.createQuery(
-                    "SELECT COUNT(r) FROM Room r WHERE r.roomTypeID.id = :roomTypeId AND r.isDeleted = false AND r.status = 0 AND r.cleaningStatus = 0", Long.class);
+                    "SELECT COUNT(r) FROM Room r WHERE r.roomTypeID.id = :roomTypeId AND r.isDeleted = false AND r.status = 1 AND r.cleaningStatus = 0", Long.class);
             query.setParameter("roomTypeId", roomTypeId);
             return query.uniqueResult();
         } catch (Exception e) {
