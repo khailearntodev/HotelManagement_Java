@@ -142,7 +142,7 @@ public class LoginViewModel
 
 
         loginTask.setOnFailed(evt -> {
-            loginMessage.set("Hệ thống đang bận. Vui lòng thử lại sau.");
+            loginMessage.set("Đổi tên CSDL đi bro.");
         });
 
         new Thread(loginTask).start();
