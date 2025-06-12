@@ -116,11 +116,11 @@ public class PrebookingDAO {
                     "FROM PREBOOKING p " +
                     "JOIN ROOM r ON p.RoomID = r.RoomID " +
                     "JOIN ROOMTYPE rt ON rt.RoomTypeID = r.RoomTypeID " +
-                    "WHERE p.IsDeleted = 0 AND p.ReservationID = NULL " +
+                    "WHERE p.IsDeleted = 0 AND p.ReservationID IS NULL " +
                     "ORDER BY p.CheckInDate DESC";
 
             List<Object[]> rows = session.createNativeQuery(sql).list();
-            System.out.println("Số dòng từ DB (Prebooking/Reservation): " + rows.size());
+            //System.out.println("Số dòng từ DB (Prebooking/Reservation): " + rows.size());
             List<Dashboard_BookingDisplay> result = new ArrayList<>();
 
             for (Object[] row : rows) {

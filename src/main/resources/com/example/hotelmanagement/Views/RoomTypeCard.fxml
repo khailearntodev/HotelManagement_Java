@@ -10,24 +10,24 @@
 <?import javafx.scene.text.Font?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
-<VBox fx:id="roomCardRoot" alignment="CENTER" prefHeight="200.0" prefWidth="220.0" style="-fx-border-color: purple; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.RoomTypeCardController">
+<VBox fx:id="roomCardRoot" alignment="CENTER" prefHeight="300.0" prefWidth="200.0" minHeight="300.0" minWidth="200.0" style="-fx-border-color: purple; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.RoomTypeCardController">
     <children>
         <ImageView fx:id="roomTypeImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-        <Label fx:id="typeNameLabel" alignment="CENTER" prefHeight="17.0" prefWidth="198.0" text="Ten">
+        <Label fx:id="typeNameLabel" alignment="CENTER" prefHeight="17.0" prefWidth="198.0" text="Tên">
             <font>
                 <Font name="System Bold" size="17.0" />
             </font>
         </Label>
         <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
-                <Label fx:id="priceLabel" prefHeight="17.0" prefWidth="102.0" text="Gia">
+                <Label fx:id="priceLabel" prefHeight="17.0" prefWidth="102.0" text="Giá">
                     <font>
-                        <Font size="15.0" />
+                        <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-                <Label fx:id="quantityLabel" text="So luong">
+                <Label fx:id="quantityLabel" text="Số lượng">
                     <font>
-                        <Font size="15.0" />
+                        <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
             </children>
@@ -37,12 +37,12 @@
         </HBox>
         <HBox prefHeight="23.0" prefWidth="200.0">
             <children>
-                <MFXTextField fx:id="priceTextField" minHeight="23.0" prefHeight="23.0" prefWidth="95.0">
+                <Label fx:id="priceTextField" minHeight="23.0" prefHeight="23.0" prefWidth="95.0">
                     <HBox.margin>
                         <Insets right="10.0" />
                     </HBox.margin>
-                </MFXTextField>
-                <MFXTextField fx:id="quantityTextField" minHeight="23.0" prefHeight="23.0" prefWidth="105.0" />
+                </Label>
+                <Label fx:id="quantityTextField" minHeight="23.0" prefHeight="23.0" prefWidth="105.0" />
             </children>
             <padding>
                 <Insets left="10.0" right="10.0" />
@@ -50,32 +50,40 @@
         </HBox>
         <VBox prefHeight="200.0" prefWidth="100.0">
             <children>
-                <Label text="Mo ta" />
-                <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" />
+                <Label text="Mô tả">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <Label fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" />
             </children>
         </VBox>
         <HBox prefHeight="100.0" prefWidth="200.0">
             <children>
-                <Label prefHeight="17.0" prefWidth="99.0" text="So khach toi da" />
-                <MFXTextField fx:id="maxOccupancyTextField" minHeight="23.0" prefHeight="23.0" prefWidth="108.0">
+                <Label prefHeight="17.0" prefWidth="99.0" text="Số khách tối đa">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <Label fx:id="maxOccupancyTextField" minHeight="23.0" prefHeight="23.0" prefWidth="108.0">
                     <HBox.margin>
                         <Insets left="22.0" />
                     </HBox.margin>
-                </MFXTextField>
+                </Label>
             </children>
             <padding>
                 <Insets top="10.0" />
             </padding>
         </HBox>
-        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" spacing="10">
-            <children>
-                <MFXButton fx:id="deleteButton" text="Xóa" style="-fx-background-color: #F44336; -fx-text-fill: white;" />
-                <!-- You might add an "Sửa" button here too if you want it directly on the card -->
-            </children>
-            <VBox.margin>
-                <Insets top="10.0" />
-            </VBox.margin>
-        </HBox>
+<!--        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="200.0" spacing="10">-->
+<!--            <children>-->
+<!--                <MFXButton fx:id="deleteButton" text="Xóa" style="-fx-background-color: #F44336; -fx-text-fill: white;" />-->
+<!--                &lt;!&ndash; You might add an "Sửa" button here too if you want it directly on the card &ndash;&gt;-->
+<!--            </children>-->
+<!--            <VBox.margin>-->
+<!--                <Insets top="10.0" />-->
+<!--            </VBox.margin>-->
+<!--        </HBox>-->
     </children>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
