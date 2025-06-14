@@ -88,7 +88,7 @@ public class InvoiceDetailViewModel {
         RoomDAO roomDAO = new RoomDAO();
 
         for (InvoiceDetailViewModel detail : reservationDetails) {
-            Reservation res = detail.getReservation();
+            Reservation res = detail.   getReservation();
             res.setInvoiceID(invoice.get());
             res.setTotal(this.tienPhong.get());
             reservationDAO.update(res);

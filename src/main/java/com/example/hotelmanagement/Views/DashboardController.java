@@ -176,6 +176,5 @@ public class DashboardController {
         });
         btnRefresh.setOnAction(e -> viewModel.loadDashboardData());
         btnExportPNG.setOnAction(e -> viewModel.exportSnapshot(dashboardPane));
-
     }
 }

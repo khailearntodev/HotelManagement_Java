@@ -28,7 +28,6 @@ public class LoginViewModel
     private final UserAccountDAO userAccountDAO = new UserAccountDAO();
     private final EmployeeDAO employeeDAO = new EmployeeDAO();
 
-
     // Regex ví dụ: username 3-20 ký tự, password ít nhất 6 ký tự
     private final Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9._-]{3,20}$");
     //private final Pattern passwordPattern = Pattern.compile("^.{6,}$");

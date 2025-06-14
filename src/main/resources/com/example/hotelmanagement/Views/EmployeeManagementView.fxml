@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import org.kordamp.ikonli.javafx.*?>
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="660.0" prefWidth="1060.0" style="-fx-background-color: #FAFAFA;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.EmployeeManagementController">
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
+<?import javafx.scene.text.Font?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="1060.0" style="-fx-background-color: #FAFAFA;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.EmployeeManagementController">
 
 
     <VBox spacing="16" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
@@ -58,15 +64,15 @@
         </HBox>
 
         <!-- Table -->
-        <TableView fx:id="tableEmployees" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="1060.0" VBox.vgrow="ALWAYS" style="-fx-font-size: 14px;">
+        <TableView fx:id="tableEmployees" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="1060.0" style="-fx-font-size: 14px;" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colId" reorderable="false" resizable="false" prefWidth="160" text="Mã nhân viên"/>
-                <TableColumn fx:id="colName" reorderable="false" resizable="false" prefWidth="220" text="Tên nhân viên" />
-                <TableColumn fx:id="colChucVu" reorderable="false" resizable="false" prefWidth="130" text="Chức vụ" />
-                <TableColumn fx:id="colNgayTuyen" reorderable="false" resizable="false" prefWidth="130" text="Ngày tuyển" />
-                <TableColumn fx:id="colHopDong" reorderable="false" resizable="false" prefWidth="150" text="Loại hợp đồng" />
-                <TableColumn fx:id="colHanHopDong" reorderable="false" resizable="false" prefWidth="130" text="Hạn hợp đồng" />
-                <TableColumn fx:id="colHeSoLuong" reorderable="false" resizable="false" prefWidth="140" text="Hệ số lương" />
+                <TableColumn fx:id="colId" prefWidth="160" reorderable="false" resizable="false" text="Mã nhân viên" />
+                <TableColumn fx:id="colName" prefWidth="220" reorderable="false" resizable="false" text="Tên nhân viên" />
+                <TableColumn fx:id="colChucVu" prefWidth="130" reorderable="false" resizable="false" text="Chức vụ" />
+                <TableColumn fx:id="colNgayTuyen" prefWidth="130" reorderable="false" resizable="false" text="Ngày tuyển" />
+                <TableColumn fx:id="colHopDong" prefWidth="150" reorderable="false" resizable="false" text="Loại hợp đồng" />
+                <TableColumn fx:id="colHanHopDong" prefWidth="130" reorderable="false" resizable="false" text="Hạn hợp đồng" />
+                <TableColumn fx:id="colHeSoLuong" prefWidth="140" reorderable="false" resizable="false" text="Hệ số lương" />
             </columns>
         </TableView>
 
@@ -76,7 +82,7 @@
                 <graphic>
                     <HBox alignment="CENTER" spacing="8">
                         <StackedFontIcon iconSize="22">
-                            <FontIcon fill="WHITE" iconLiteral="fa-print" wrappingWidth="20.928571701049805" StackedFontIcon.iconSize="0.7" />
+                            <FontIcon fill="WHITE" iconLiteral="fa-trash" wrappingWidth="20.928571701049805" StackedFontIcon.iconSize="0.7" />
                         </StackedFontIcon>
                         <!--                        <Label text="Xóa nhân viên"/>-->
                     </HBox>

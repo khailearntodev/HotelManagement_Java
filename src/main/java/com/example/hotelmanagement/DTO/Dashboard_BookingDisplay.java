@@ -5,14 +5,14 @@ import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
 
 public class Dashboard_BookingDisplay {
-    private String bookingId;
-    private String customerName;
-    private int roomNumber;
-    private String roomType;
-    private int status;
-    private Instant checkInDate;
-    private Instant checkOutDate;
-    private String sourceType;
+    private final String bookingId;
+    private final String customerName;
+    private final int roomNumber;
+    private final String roomType;
+    private final int status;
+    private final Instant checkInDate;
+    private final Instant checkOutDate;
+    private final String sourceType;
 
     public Dashboard_BookingDisplay(String bookingId, String customerName, int roomNumber,
                                     String roomType, int status, Instant checkInDate,

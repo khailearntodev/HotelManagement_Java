@@ -319,10 +319,10 @@ public class ReservationController implements Initializable {
                                 //invoiceDetailVM.getInvoice().get().setCustomerName(customer.getFullName());
                                 //invoiceDetailVM.getInvoice().get().setCustomerAddres(customer.getCustomerAddress());
                                 invoiceDetailVM.getInvoice().get().setCustomerName(reservations.getFirst().getReservationguests().getClass().getName());
-                                invoiceDetailVM.getInvoice().get().setCustomerAddres(reservations.getFirst().getReservationguests().getClass().getName());
+                                invoiceDetailVM.getInvoice().get().setCustomerAddress(reservations.getFirst().getReservationguests().getClass().getName());
                             } else {
                                 invoiceDetailVM.getInvoice().get().setCustomerName("Khách lẻ");
-                                invoiceDetailVM.getInvoice().get().setCustomerAddres("");
+                                invoiceDetailVM.getInvoice().get().setCustomerAddress("");
                             }
                             invoiceDetailVM.getInvoice().get().setInvoiceType(2);
                             invoiceDetailVM.getInvoice().get().setPaymentStatus("Chưa thanh toán");

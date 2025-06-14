@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
@@ -60,13 +61,13 @@ public class EmployeeManagementController implements Initializable {
 
             EmployeeDetailController controller = loader.getController();
             controller.loadEmployee(employeeDTO);
-
-            controller.setOnSaveSuccess(() -> viewModel.loadEmployees());
+            controller.setOnSaveSuccess(viewModel::refreshEmployeeList);
 
             employeeDetailStage = new Stage();
             employeeDetailStage.setScene(new Scene(root));
             employeeDetailStage.setTitle("Chi tiết nhân viên");
             employeeDetailStage.initStyle(StageStyle.UNDECORATED);
+            employeeDetailStage.initModality(Modality.APPLICATION_MODAL);
 
             employeeDetailStage.setOnHidden(e -> employeeDetailStage = null);
 
