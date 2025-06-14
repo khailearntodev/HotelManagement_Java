@@ -11,14 +11,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 import lombok.Setter;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -44,12 +48,17 @@ public class EmployeeDetailController {
     @FXML private ImageView imageAvatar;
     @FXML private MFXButton btnViewAccount;
     @Setter private boolean readOnlyMode = false;
+    @FXML private ImageView avatarImageView;
+    @FXML private MFXButton btnUploadAvatar;
+    private File selectedAvatarFile;
+
     private EmployeeDetailViewModel viewModel;
     @Setter private Runnable onSaveSuccess;
     private final Locale vietnamLocale = new Locale("vi", "VN");
     private final DateTimeFormatter vietnameseFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     // Hàm tạo StringConverter cho DatePicker
+
     private StringConverter<LocalDate> getVietnameseDateConverter() {
         return new StringConverter<LocalDate>() {
             @Override
@@ -81,6 +90,7 @@ public class EmployeeDetailController {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Thông tin tài khoản");
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -167,17 +177,50 @@ public class EmployeeDetailController {
         if (viewModel.getAvatar().get() != null && !viewModel.getAvatar().get().isBlank()) {
             try {
                 Image img = new Image(viewModel.getAvatar().get(), true);
-                imageAvatar.setImage(img);
+                avatarImageView.setImage(img);
             } catch (Exception ignored) {}
         }
 
         if (readOnlyMode) {
             btnViewAccount.setDisable(true);
         }
+
+        btnUploadAvatar.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Chọn ảnh đại diện");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+            );
+            File file = fileChooser.showOpenDialog(btnUploadAvatar.getScene().getWindow());
+            if (file != null) {
+                selectedAvatarFile = file;
+                avatarImageView.setImage(new Image(file.toURI().toString()));
+                viewModel.getAvatar().set(file.toURI().toString());
+            }
+        });
+
     }
 
     @FXML
     private void onSave() {
+        String phone = txtPhoneNumber.getText().trim();
+        if (!phone.matches("\\d+")) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Số điện thoại không hợp lệ.");
+            return;
+        }
+
+        String idNumber = txtIdentityNumber.getText().trim();
+        if (!idNumber.matches("\\d+")) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "CMND/CCCD không hợp lệ. Vui lòng nhập tối đa 12 số.");
+            return;
+        }
+
+        String salary = txtSalaryRate.getText().trim();
+        if (!salary.matches("\\d+(\\.\\d+)?")) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Lương phải là số hợp lệ.");
+            return;
+        }
+
         boolean success = viewModel.saveEmployee();
         Alert alert = new Alert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
         alert.setHeaderText(success ? "Thành công" : "Thất bại");
@@ -197,5 +240,12 @@ public class EmployeeDetailController {
         stage.close();
     }
 
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
 }

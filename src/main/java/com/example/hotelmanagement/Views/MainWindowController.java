@@ -1,6 +1,11 @@
 package com.example.hotelmanagement.Views;
 
+import com.example.hotelmanagement.DAO.EmployeeDAO;
+import com.example.hotelmanagement.DTO.EmployeeManagement_EmployeeDisplay;
 import com.example.hotelmanagement.Main;
+import com.example.hotelmanagement.Models.Employee;
+import com.example.hotelmanagement.ViewModels.EmployeeDetailViewModel;
+import com.example.hotelmanagement.ViewModels.EmployeeManagementViewModel;
 import com.example.hotelmanagement.ViewModels.LoginViewModel;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
@@ -13,6 +18,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.animation.PauseTransition;
@@ -70,11 +76,38 @@ public class MainWindowController{
 
             EmployeeDetailController controller = loader.getController();
             controller.setReadOnlyMode(true);
-            controller.loadEmployee(LoginViewModel.loggedInEmployee);
+            //controller.loadEmployee(LoginViewModel.loggedInEmployee);
+
+            EmployeeDAO employeeDAO = new EmployeeDAO();
+            Employee employee = employeeDAO.findById(LoginViewModel.loggedInEmployee.getEmployeeId());
+
+            EmployeeManagement_EmployeeDisplay employeeDTO = new EmployeeManagement_EmployeeDisplay(
+                    employee.getId(),
+                    employee.getFullName(),
+                    employee.getDateOfBirth(),
+                    employee.getIdentityNumber(),
+                    employee.getPhoneNumber(),
+                    employee.getAddress(),
+                    employee.getGender(),
+                    employee.getStartingDate(),
+                    employee.getEmail(),
+                    employee.getContractType(),
+                    employee.getContractDate(),
+                    employee.getSalaryRate(),
+                    employee.getAvatar(),
+                    employee.getPosition()
+            );
+
+            controller.loadEmployee(employeeDTO);
+
+            String name = employee.getFullName();
+            employeeName.setText(name);
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Thông tin nhân viên");
             stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

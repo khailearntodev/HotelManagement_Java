@@ -127,7 +127,7 @@ public class DashboardViewModel {
             boolean matchKeyword = keyword.isEmpty()
                     || booking.getCustomerName().toLowerCase().contains(keyword)
                     || String.valueOf(booking.getRoomNumber()).contains(keyword)
-                    || String.valueOf(booking.getBookingId()).contains(keyword)
+                    || booking.getBookingId().toLowerCase().contains(keyword)
                     || booking.getRoomType().toLowerCase().contains(keyword);
 
             boolean matchStatus = "Tất cả".equals(status)
@@ -179,5 +179,4 @@ public class DashboardViewModel {
     public StringProperty currentTimeProperty() { return currentTime; }
     public StringProperty searchKeywordProperty() { return searchKeyword; }
     public StringProperty selectedStatusProperty() { return selectedStatus; }
-
 }

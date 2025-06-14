@@ -90,7 +90,6 @@ public class LoginController implements Initializable {
                             // Lấy user sau khi login thành công
                             Useraccount currentUser = viewModel.getLoggedInUser();
                             if (currentUser == null) {
-                                // Không nên xảy ra nhưng kiểm tra an toàn
                                 return;
                             }
                             int roleId = currentUser.getRoleID().getId();
