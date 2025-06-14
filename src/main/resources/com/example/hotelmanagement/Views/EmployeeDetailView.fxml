@@ -6,14 +6,13 @@
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
 <AnchorPane prefHeight="700.0" prefWidth="800.0" style=" -fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.EmployeeDetailController">
 
     <Pane layoutX="43.0" layoutY="30.0" prefHeight="637.0" prefWidth="707.0" style="                 -fx-border-radius: 10;                 -fx-background-color: #FFF3F3F3;                 -fx-background-radius: 10;">
@@ -35,12 +34,12 @@
                 </HBox.margin>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
-                <StackedFontIcon iconSize="64" prefHeight="95.0" prefWidth="150.0" style="-fx-border-color: gray;">
-                    <FontIcon iconLiteral="fa-user" wrappingWidth="47.571428298950195" />
-                </StackedFontIcon>
-                <HBox.margin>
-                    <Insets left="10"/>
-                </HBox.margin>
+                <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #B0E0E6;">
+                    <ImageView fx:id="avatarImageView" fitHeight="150.0" fitWidth="150.0" preserveRatio="true" style="-fx-border-color: black; -fx-border-radius: 5; -fx-background-color: #B0E0E6; -fx-border-width: 2;" />
+
+                    <MFXButton fx:id="btnUploadAvatar" prefWidth="100" style="-fx-background-color: transparent; -fx-text-fill: #0055ff;" text="Tải ảnh lên" textFill="#0055ff" underline="true" />
+                </VBox>
+
 
                 <VBox prefHeight="135.0" prefWidth="313.0">
                     <MFXTextField fx:id="txtFullName" floatingText="Họ tên" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0">
@@ -66,8 +65,14 @@
                     </VBox.margin>
                 </VBox>
                 <HBox.margin>
+                    <Insets left="10" />
+                </HBox.margin>
+                <HBox.margin>
                     <Insets left="5.0" top="5.0" />
                 </HBox.margin>
+            <padding>
+               <Insets left="20.0" />
+            </padding>
             </HBox>
          <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="700.0" style="-fx-font-size: 20;" text="Thông Tin Cá Nhân">
             <font>
@@ -100,7 +105,8 @@
                     <MFXDatePicker fx:id="dpStartingDate" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" promptText="Ngày vào làm" style="-fx-border-color: gray;">
                   <VBox.margin>
                      <Insets bottom="10.0" />
-                  </VBox.margin></MFXDatePicker>
+                  </VBox.margin>
+                    </MFXDatePicker>
                <Label text="Hạn hợp đồng" />
                     <MFXDatePicker fx:id="dpContractDate" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="300.0" promptText="Hạn hợp đồng" style="-fx-border-color: gray;">
                   <VBox.margin>
@@ -145,7 +151,7 @@
                   <VBox.margin>
                      <Insets bottom="10.0" left="10.0" top="15.0" />
                   </VBox.margin></MFXTextField>
-               <MFXButton fx:id="btnViewAccount" prefHeight="58.0" prefWidth="330.0" style="-fx-background-color: #2563EB; -fx-text-fill: white;" text="Xem thông tin tài khoản" onAction="#onViewAccount">
+               <MFXButton fx:id="btnViewAccount" onAction="#onViewAccount" prefHeight="58.0" prefWidth="330.0" style="-fx-background-color: #2563EB; -fx-text-fill: white;" text="Xem thông tin tài khoản">
                   <VBox.margin>
                      <Insets top="30.0" />
                   </VBox.margin>

@@ -206,7 +206,7 @@ public class SelectRoomForCheckOutController implements Initializable {
                 invoiceDetailVM.getInvoice().get().setCustomerAddres(customer.getCustomerAddress());
             } else*/ {
                 invoiceDetailVM.getInvoice().get().setCustomerName("JAck");
-                invoiceDetailVM.getInvoice().get().setCustomerAddres("bến tre");
+                invoiceDetailVM.getInvoice().get().setCustomerAddress("bến tre");
             }
             invoiceDetailVM.getInvoice().get().setInvoiceType(2);
             invoiceDetailVM.getInvoice().get().setPaymentStatus("Chưa thanh toán");

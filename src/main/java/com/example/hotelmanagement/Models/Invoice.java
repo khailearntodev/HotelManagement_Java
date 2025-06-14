@@ -37,8 +37,8 @@ public class Invoice {
 
     @Nationalized
     @Lob
-    @Column(name = "CustomerAddres", nullable = false)
-    private String customerAddres;
+    @Column(name = "CustomerAddress", nullable = false)
+    private String customerAddress;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EmployeeID")

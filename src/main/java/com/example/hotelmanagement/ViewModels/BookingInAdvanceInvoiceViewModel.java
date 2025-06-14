@@ -66,7 +66,7 @@ public class BookingInAdvanceInvoiceViewModel {
         invoice.setInvoiceType(1);
         invoice.setTotalAmount(preBookingInvoiceDisplay.getTotalPrice());
         invoice.setCustomerName(preBookingInvoiceDisplay.getName());
-        invoice.setCustomerAddres(preBookingInvoiceDisplay.getAddress());
+        invoice.setCustomerAddress(preBookingInvoiceDisplay.getAddress());
         invoice.setEmployeeID(e);
         invoice.setPaymentStatus("Đã thanh toán");
         invoice.setIsDeleted(false);

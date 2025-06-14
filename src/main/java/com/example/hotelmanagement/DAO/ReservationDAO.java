@@ -190,22 +190,23 @@ public class ReservationDAO {
         }
     }
 
-
     public List<Dashboard_BookingDisplay> getRecentBookingDisplays() {
         try (Session session = HibernateUtils.getSession()) {
-            String sql = "SELECT TOP (10) r.ReservationID, c.FullName, rm.RoomNumber, rmt.TypeName, rm.Status, r.CheckInDate, r.CheckOutDate, 'Reservation' " +
-                    "FROM RESERVATION r " +
-                    "JOIN CUSTOMER c ON r.CustomerID = c.CustomerID " +
-                    "JOIN ROOM rm ON r.RoomID = rm.RoomID " +
-                    "JOIN ROOMTYPE rmt ON rmt.RoomTypeID = rm.RoomTypeID " +
-                    "WHERE r.IsDeleted = 0 " +
-                    "ORDER BY r.CheckInDate DESC";
-
+            String sql = """
+                        SELECT TOP (10) r.ReservationID, c.FullName, rm.RoomNumber, rmt.TypeName, rm.Status, r.CheckInDate, r.CheckOutDate, 'Reservation'
+                        FROM RESERVATION r
+                        JOIN RESERVATIONGUEST rg ON r.ReservationID = rg.ReservationID
+                        JOIN CUSTOMER c ON rg.CustomerID = c.CustomerID
+                        JOIN ROOM rm ON r.RoomID = rm.RoomID
+                        JOIN ROOMTYPE rmt ON rmt.RoomTypeID = rm.RoomTypeID
+                        WHERE r.IsDeleted = 0
+                        ORDER BY r.CheckInDate DESC
+                    """;
             List<Object[]> rows = session.createNativeQuery(sql).list();
             List<Dashboard_BookingDisplay> result = new ArrayList<>();
 
             for (Object[] row : rows) {
-                String id =  row[0].toString();
+                String id = row[0] != null ? row[0].toString() : "N/A";
                 String customerName = (String) row[1];
                 int roomNumber = ((Number) row[2]).intValue();
                 String roomType = (String) row[3];
@@ -230,7 +231,5 @@ public class ReservationDAO {
             return result;
         }
     }
-
-
 }
 

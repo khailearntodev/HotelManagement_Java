@@ -73,6 +73,7 @@ public class CustomerDetailController {
 
         btnSave.setOnAction(e -> {
             if (viewModel != null) {
+                if (!isInputValid()) return;
                 boolean success = viewModel.save();
                 if (success) {
                     disableEditing(true);
@@ -153,4 +154,45 @@ public class CustomerDetailController {
         btnSave.setDisable(disable);
         //btnCancel.setDisable(disable);
     }
+
+    private boolean isInputValid() {
+        String phone = txtSDT.getText().trim();
+        if (!phone.matches("\\d+")) {
+            showAlert("Số điện thoại không hợp lệ.");
+            return false;
+        }
+
+        String cccd = txtCCCD.getText().trim();
+        if (!cccd.matches("\\d{9,12}")) {
+            showAlert("CMND/CCCD không hợp lệ. Vui lòng nhập tối đa 12 số.");
+            return false;
+        }
+
+        String hoTen = txtHoTen.getText().trim();
+        if (hoTen.isBlank()) {
+            showAlert("Họ tên không được để trống.");
+            return false;
+        }
+
+        if (dpNgaySinh.getValue() == null) {
+            showAlert("Vui lòng chọn ngày sinh.");
+            return false;
+        }
+
+        if (genderGroup.getSelectedToggle() == null) {
+            showAlert("Vui lòng chọn giới tính.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Cảnh báo");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }

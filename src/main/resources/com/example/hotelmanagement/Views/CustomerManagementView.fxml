@@ -64,7 +64,7 @@
             <MFXButton fx:id="btnRefresh" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35" prefWidth="120" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-border-color: gray; -fx-border-radius: 5;" text="Refresh">
                 <graphic>
                     <StackedFontIcon iconSize="18" prefHeight="37.0" prefWidth="26.0">
-                        <FontIcon iconLiteral="fa-print" wrappingWidth="28.0" StackedFontIcon.iconSize="0.7" />
+                        <FontIcon iconLiteral="fa-rotate-right" wrappingWidth="28.0" StackedFontIcon.iconSize="0.7" />
                     </StackedFontIcon>
                 </graphic>
             <HBox.margin>

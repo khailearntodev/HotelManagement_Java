@@ -156,7 +156,7 @@ public class InvoiceDetailController {
 
         invoiceNoLabel.setText("Chưa lưu");
         customerNameLabel.setText(invoice.getCustomerName());
-        customerAddress.setText(invoice.getCustomerAddres());
+        customerAddress.setText(invoice.getCustomerAddress());
         employeeNameLabel.setText(invoice.getEmployeeID().getFullName());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
@@ -181,7 +181,7 @@ public class InvoiceDetailController {
 
         invoiceNoLabel.setText(String.valueOf(invoice.getId()));
         customerNameLabel.setText(invoice.getCustomerName());
-        customerAddress.setText(invoice.getCustomerAddres());
+        customerAddress.setText(invoice.getCustomerAddress());
         employeeNameLabel.setText(invoice.getEmployeeID().getFullName());
         Instant issueInstant = invoice.getIssueDate();
         if (issueInstant != null) {

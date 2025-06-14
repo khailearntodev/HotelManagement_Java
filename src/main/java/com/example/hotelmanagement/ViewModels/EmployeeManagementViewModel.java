@@ -71,6 +71,10 @@ public class EmployeeManagementViewModel {
         selectedPosition.set(value);
     }
 
+    public void refreshEmployeeList() {
+        loadEmployees();
+    }
+
     public void loadEmployees() {
         List<Employee> employees = employeeDAO.getAll();
 
@@ -103,7 +107,6 @@ public class EmployeeManagementViewModel {
         positionList.setAll(positions);
     }
 
-
     // Filter nhân viên theo keyword, position, gender
     public void filterEmployees() {
         String kw = searchKeyword.get() == null ? "" : searchKeyword.get().toLowerCase().trim();
@@ -127,7 +130,6 @@ public class EmployeeManagementViewModel {
 
         filteredList.setAll(employeeList.stream().filter(filter).collect(Collectors.toList()));
     }
-
 
     // Xóa nhân viên
     public boolean deleteSelectedEmployee() {
