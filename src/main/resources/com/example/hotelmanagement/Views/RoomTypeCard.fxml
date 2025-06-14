@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="roomCardRoot" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="300.0" minWidth="200.0" prefHeight="300.0" prefWidth="200.0" style="-fx-border-color: purple; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.RoomTypeCardController">
+<VBox fx:id="roomCardRoot" styleClass="room-type-card" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="300.0" minWidth="200.0" prefHeight="300.0" prefWidth="200.0" style="-fx-border-color: purple; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.RoomTypeCardController">
     <children>
         <ImageView fx:id="roomTypeImageView" fitHeight="110.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
         <Label fx:id="typeNameLabel" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="198.0" text="Tên">

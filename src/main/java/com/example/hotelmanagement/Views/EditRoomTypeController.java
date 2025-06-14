@@ -280,7 +280,7 @@ public class EditRoomTypeController implements Initializable {
         statusCol.setPrefWidth(120);
         cleaningStatusCol.setRowCellFactory(room -> new MFXTableRowCell<RoomViewModel, Object>(RoomViewModel::getDisplayCleaningStatus));
         cleaningStatusCol.setPrefWidth(150);
-        actionsCol.setRowCellFactory(roomViewModel -> new MFXTableRowCell<RoomViewModel, Object>(RoomViewModel::getClass) {
+        actionsCol.setRowCellFactory(roomViewModel -> new MFXTableRowCell<RoomViewModel, Object>(item -> null) {
             @Override
             public void update(RoomViewModel item) {
                 super.update(item);
@@ -301,8 +301,10 @@ public class EditRoomTypeController implements Initializable {
 
                     buttonsContainer.getChildren().addAll(editButton, deleteButton);
                     setGraphic(buttonsContainer); // Set the HBox as the graphic for the cell
+                    setText(null);
                 } else {
                     setGraphic(null); // Clear graphic if item is null
+                    setText(null);
                 }
             }
         });
@@ -330,8 +332,14 @@ public class EditRoomTypeController implements Initializable {
                     if (currentRoomType != null && currentRoomType.getId() != null) {
                         loadRoomsForRoomType(currentRoomType.getId());
                     }
+                    if(onUpdateCallback != null){
+                        onUpdateCallback.accept(true);
+                    }
                 } else {
                     showAlert(AlertType.ERROR, "Lỗi", "Không thể xóa mềm phòng. Vui lòng kiểm tra nhật ký lỗi.");
+                    if(onUpdateCallback != null){
+                        onUpdateCallback.accept(false);
+                    }
                 }
             } catch (RuntimeException e) {
                 showAlert(AlertType.ERROR, "Lỗi cơ sở dữ liệu", "Đã xảy ra lỗi khi xóa mềm phòng: " + e.getMessage());
@@ -360,8 +368,14 @@ public class EditRoomTypeController implements Initializable {
                 updateRoomController.setOnUpdateCallback(success -> {
                     if (success) {
                         loadRoomsForRoomType(currentRoomType.getId());
+                        if(onUpdateCallback != null){
+                            onUpdateCallback.accept(true);
+                        }
                     } else {
                         showAlert(AlertType.ERROR, "Cập nhật phòng thất bại", "Có lỗi xảy ra khi cập nhật phòng.");
+                        if(onUpdateCallback != null){
+                            onUpdateCallback.accept(false);
+                        }
                     }
                 });
 
