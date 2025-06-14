@@ -26,17 +26,17 @@
                      <children>
                         <HBox prefHeight="80.0">
                            <children>
-                              <Label text="Quản Lý Loại Phòng" HBox.hgrow="ALWAYS">
+                              <Label prefHeight="25.0" prefWidth="227.0" text="Quản Lý Loại Phòng" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font name="Tahoma Bold" size="20.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="70.0" />
+                                    <Insets left="70.0" top="20.0" bottom="20.0"/>
                                  </HBox.margin>
                               </Label>
-                              <MFXButton alignment="CENTER_RIGHT" contentDisplay="RIGHT"  onAction="#handleAddRoomType"  style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Thêm loại phòng">
+                              <MFXButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" onAction="#handleAddRoomType" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Thêm loại phòng">
                                  <HBox.margin>
-                                    <Insets left="140.0" top="20.0" right="20.0"/>
+                                    <Insets left="80.0" right="20.0" top="20.0" bottom="20.0"/>
                                  </HBox.margin>
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -47,9 +47,9 @@
                               </MFXButton>
                            </children>
                         </HBox>
-                        <ScrollPane fitToWidth="true"  VBox.vgrow="ALWAYS">
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
                            <content>
-                              <FlowPane VBox.vgrow="ALWAYS" fx:id="roomCardsContainer"  style="-fx-background-color: white;" alignment="TOP_LEFT" hgap="50"  vgap="30">
+                              <FlowPane fx:id="roomCardsContainer" alignment="TOP_LEFT" hgap="50" style="-fx-background-color: white;" vgap="30" VBox.vgrow="ALWAYS">
                                  <padding>
                                     <Insets bottom="20" left="20" right="20" top="20" />
                                  </padding>
@@ -63,7 +63,7 @@
                   </VBox>
                </children>
             </StackPane>
-            <SplitPane fx:id="splitPane2" dividerPositions="0.55"  orientation="VERTICAL" SplitPane.resizableWithParent="true">
+            <SplitPane fx:id="splitPane2" dividerPositions="0.55" orientation="VERTICAL" SplitPane.resizableWithParent="true">
                <items>
                   <StackPane>
                      <children>
@@ -71,23 +71,23 @@
                            <children>
                               <HBox>
                                  <children>
-                                    <Label  text="Chi tiết loại phòng" HBox.hgrow="ALWAYS">
+                                    <Label text="Chi tiết loại phòng" HBox.hgrow="ALWAYS">
                                        <font>
                                           <Font name="Arial Bold" size="23.0" />
                                        </font>
                                        <HBox.margin>
-                                          <Insets left="5.0" />
+                                          <Insets left="5.0" top="15.0" bottom="15.0"/>
                                        </HBox.margin>
                                        <padding>
                                           <Insets top="20.0" />
                                        </padding>
                                     </Label>
-                                    <MFXButton fx:id="editDetailsButton"  onAction="#handleEditClick"  rippleColor="#1a2ab9" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Chỉnh sửa">
+                                    <MFXButton fx:id="editDetailsButton" onAction="#handleEditClick" rippleColor="#1a2ab9" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Chỉnh sửa">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                        <HBox.margin>
-                                          <Insets left="110.0" top="15.0" />
+                                          <Insets left="150.0" top="27.0" />
                                        </HBox.margin>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
@@ -108,12 +108,12 @@
                                           <Insets left="10.0" top="10.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <VBox fx:id="statusIndicatorVBox" alignment="CENTER" >
+                                    <VBox fx:id="statusIndicatorVBox" alignment="CENTER">
                                        <HBox.margin>
                                           <Insets left="20.0" top="10.0" />
                                        </HBox.margin>
                                        <padding>
-                                          <Insets bottom="10.0" right="10.0" top="10.0" left="10.0" />
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                        <children>
                                           <Label fx:id="statusLabel" alignment="TOP_CENTER" textFill="#e4dfdf">
@@ -168,14 +168,14 @@
                                                 </Label>
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" >
+                                          <HBox alignment="CENTER_LEFT">
                                              <children>
                                                 <Label text="Số khách tối đa: ">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <Label fx:id="maxOccupancyTextField"  style="-fx-background-color: transparent;" text="0 người">
+                                                <Label fx:id="maxOccupancyTextField" style="-fx-background-color: transparent;" text="0 người">
 
                                                    <HBox.margin>
                                                       <Insets left="5.0" />
@@ -194,7 +194,7 @@
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Label>
-                                          <Label fx:id="descriptionTextArea" alignment="TOP_LEFT"  style="-fx-control-inner-background: transparent; -fx-font-size: 15px;" wrapText="true" VBox.vgrow="ALWAYS">
+                                          <Label fx:id="descriptionTextArea" alignment="TOP_LEFT" style="-fx-control-inner-background: transparent; -fx-font-size: 15px;" wrapText="true" VBox.vgrow="ALWAYS">
                                              <font>
                                                 <Font size="15.0" />
                                              </font>
@@ -213,7 +213,7 @@
                         </VBox>
                      </children>
                   </StackPane>
-                  <StackPane maxWidth="-Infinity" minWidth="-Infinity">
+                  <StackPane style="-fx-background-color: white;" maxWidth="-Infinity" minWidth="-Infinity">
                      <children>
                         <VBox>
                            <children>
@@ -231,7 +231,7 @@
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                        <padding>
-                                          <Insets left="14.0" right="14.0"  top="10.0" bottom="10.0" />
+                                          <Insets bottom="10.0" left="14.0" right="14.0" top="10.0" />
                                        </padding>
                                     </MFXButton>
                                  </children>
