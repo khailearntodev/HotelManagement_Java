@@ -188,9 +188,9 @@ public class UpdateRoomController implements Initializable {
     private String getDisplayCleaningStatus(Integer cleaningStatus) {
         if (cleaningStatus == null) return "Không xác định";
         switch (cleaningStatus) {
-            case 0: return "Bẩn";
-            case 1: return "Dọn dẹp";
-            case 2: return "Sạch sẽ";
+            case 0: return "Sạch";
+            case 1: return "Bẩn";
+            case 2: return "Đang dọn dẹp";
             default: return "Không xác định";
         }
     }
