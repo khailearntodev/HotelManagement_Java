@@ -1,7 +1,7 @@
 
 /* ROOT STYLES - Áp dụng cho toàn bộ Scene */
 .root-invoice-detail {
-    -fx-background-color: #f5f5f5;
+    -fx-background-color: #fff;
     -fx-border-color: #e0e0e0;
     -fx-border-radius: 8px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);
@@ -19,17 +19,17 @@
 }
 
 .header-title {
-    -fx-font-size: 28px;
+    -fx-font-size: 35px;
     -fx-font-weight: bold;
     -fx-text-fill: #2563eb;
 }
 .invoice-info-label {
-    -fx-font-size: 13px;
+    -fx-font-size: 14px;
     -fx-text-fill: #616161;
 }
 
 .invoice-info-value {
-    -fx-font-size: 13px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-text-fill: #424242;
 }
@@ -49,15 +49,33 @@
     -fx-padding: 0 0 5px 0;
 }
 
-.info-label {
-    -fx-font-size: 14px;
-    -fx-text-fill: #616161;
+.info-text-field {
+    -fx-font-size: 13px;
+    -fx-text-fill: #555555;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 10px;
+    -fx-prompt-text-fill: #9a9a9a;
 }
 
-.info-value {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #424242;
+.info-text-field {
+    -fx-border-color: #007bff;
+}
+
+/* Focus effect for TextFields */
+.info-text-field {
+    -fx-border-color: #0056b3;
+    -fx-background-color: #e9f5ff;
+    -fx-border-width: 2px;
+}
+
+.info-text-field:disabled:disabled {
+    -fx-opacity: 0.7;
+    -fx-background-color: #f0f0f0;
+    -fx-text-fill: #888888;
+    -fx-border-color: #e0e0e0;
 }
 
 /* TABLE VIEW */
@@ -74,7 +92,7 @@
 
 .table-view .column-header {
     -fx-background-color: #e0e0e0;
-    -fx-font-size: 13px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: #424242;
 }
@@ -84,9 +102,10 @@
 }
 
 .table-cell {
-    -fx-font-size: 12px;
+    -fx-font-size: 14px;
     -fx-text-fill: #424242;
-    -fx-padding: 8px;
+    -fx-padding: 4px;
+    -fx-alignment: CENTER;
 }
 
 /* TOTAL DUE SECTION */
@@ -97,7 +116,7 @@
 }
 
 .total-value {
-    -fx-font-size: 24px;
+    -fx-font-size: 25px;
     -fx-font-weight: bold;
     -fx-text-fill: #ff9800;
 }

@@ -86,7 +86,7 @@
                     </Label>
                 </StackPane>
             </VBox>
-            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="190.0"
+            <Button fx:id="exportButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="190.0"
                     style="-fx-background-color: #2563EB;" text="Xuất hóa đơn dịch vụ" textFill="WHITE">
                 <font>
                     <Font size="16.0"/>

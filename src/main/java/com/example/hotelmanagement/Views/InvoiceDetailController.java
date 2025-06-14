@@ -7,6 +7,20 @@ import com.example.hotelmanagement.ViewModels.InvoiceDetailViewModel;
 import com.example.hotelmanagement.ViewModels.InvoiceViewModel;
 import com.example.hotelmanagement.ViewModels.LoginViewModel;
 import com.example.hotelmanagement.ViewModels.SelectRoomForCheckOutViewModel;
+import com.itextpdf.io.font.PdfEncodings;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,12 +32,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.beans.property.SimpleStringProperty;
 import com.example.hotelmanagement.DTO.InvoiceDetail;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.time.Instant;
@@ -33,7 +51,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import com.itextpdf.layout.element.Cell;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.awt.image.BufferedImage;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.common.BitMatrix;
+
+import javax.imageio.ImageIO;
 
 
 public class InvoiceDetailController {
@@ -41,33 +71,30 @@ public class InvoiceDetailController {
     @FXML private AnchorPane rootPane;
     @FXML private Label invoiceNoLabel;
     @FXML private Label paymentDateLabel;
-    @FXML private MFXButton closeButton;
-    @FXML private MFXButton payButton;
-    // Customer
-    @FXML private Label customerNameLabel;
-    @FXML private Label customerAddress;
-    LoginViewModel loginVM = new LoginViewModel();
-    // Order Details
+    @FXML private Label employeeNameLabel;
+    @FXML private TextField customerNameField;
+    @FXML private TextField customerAddressField;
     @FXML private TableView<InvoiceDetailViewModel> detailTable;
-    @FXML private TableColumn<InvoiceDetailViewModel, Number> soThuTuColumn;
-    @FXML private TableColumn<InvoiceDetailViewModel, Number> soPhongColumn;
-    @FXML private TableColumn<InvoiceDetailViewModel, Number> soNgayThueColumn;
-    @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> phiDichVuColumn;
+    @FXML private TableColumn<InvoiceDetailViewModel, Integer> soThuTuColumn;
+    @FXML private TableColumn<InvoiceDetailViewModel, Integer> soPhongColumn;
+    @FXML private TableColumn<InvoiceDetailViewModel, Integer> soNgayThueColumn;
     @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> donGiaPhongColumn;
     @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> tienPhongColumn;
+    @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> phiDichVuColumn;
     @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> tiencocColumn;
     @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> tongColumn;
-    @FXML private TableColumn<InvoiceDetailViewModel, String> viewServicesColumn;
-    @FXML private Label employeeNameLabel;
-
-    // Totals
+    @FXML private TableColumn<InvoiceDetailViewModel, Void> viewServicesColumn;
     @FXML private Label totalDueLabel;
-    @FXML private Label totalServiceLabel;
+    @FXML private MFXButton closeButton;
+    @FXML private MFXButton payButton;
+    @FXML private MFXButton payAndPrintButton;
+    @FXML private ImageView qrCodeImageView;
 
-    // Footer
-    private final ObservableList<InvoiceDetailViewModel> detailList = FXCollections.observableArrayList();
-    private Invoice invoice = new Invoice();
-    private InvoiceDetailViewModel viewModel;
+    private Invoice invoice;
+    private InvoiceDAO dao = new InvoiceDAO();
+    private ObservableList<InvoiceDetailViewModel> detailList = FXCollections.observableArrayList();
+    private InvoiceDetailViewModel invoiceDetailViewModelForCreation;
+
     @FXML
     public void initialize() {
         URL cssUrl = getClass().getResource("/CSS/invoicedetail.css");
@@ -76,88 +103,77 @@ public class InvoiceDetailController {
         } else {
             System.err.println("CSS file not found: /CSS/style.css");
         }
-        closeButton.setOnAction(event -> {
-            Stage stage = (Stage) closeButton.getScene().getWindow();
-            if (stage != null) {
-                stage.close();
-            }
-        });
-        payButton.setOnAction(event -> {
-            if (viewModel != null) {
-                viewModel.saveInvoice();
-                showAlert(Alert.AlertType.INFORMATION, "Thành công", "Đã lưu và thanh toán hóa đơn thành công!");
-                this.invoice = viewModel.getInvoice().get();
-                this.viewModel = null;
-                payButton.setText("Đã thanh toán");
-                payButton.setDisable(true);
-            }
-            else if (invoice != null) {
-                if ("Đã thanh toán".equals(invoice.getPaymentStatus())) {
-                    showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Hóa đơn này đã được thanh toán rồi.");
-                    return;
-                }
-                invoice.setPaymentStatus("Đã thanh toán");
-                new InvoiceDAO().update(invoice);
-                showAlert(Alert.AlertType.INFORMATION, "Thông báo", "Cập nhật trạng thái thanh toán thành công!");
-                payButton.setText("Đã thanh toán");
-                payButton.setDisable(true);
-            }
-        });
-        // Cấu hình các cột của TableView
-        soThuTuColumn.setCellValueFactory(data -> data.getValue().soThuTuProperty());
-        soPhongColumn.setCellValueFactory(data -> data.getValue().soPhongProperty());
-        soNgayThueColumn.setCellValueFactory(data -> data.getValue().soNgayThueProperty());
-        phiDichVuColumn.setCellValueFactory(data -> data.getValue().phiDichVuProperty());
-        donGiaPhongColumn.setCellValueFactory(data -> data.getValue().donGiaPhongProperty());
-        tienPhongColumn.setCellValueFactory(data -> data.getValue().tienPhongProperty());
-        tiencocColumn.setCellValueFactory(data -> data.getValue().tienCocProperty());
-        tongColumn.setCellValueFactory(data -> data.getValue().tongCongProperty());
+        soThuTuColumn.setCellValueFactory(cellData -> cellData.getValue().soThuTuProperty().asObject());
+        soPhongColumn.setCellValueFactory(cellData -> cellData.getValue().soPhongProperty().asObject());
+        soNgayThueColumn.setCellValueFactory(cellData -> cellData.getValue().soNgayThueProperty().asObject());
+        donGiaPhongColumn.setCellValueFactory(cellData -> cellData.getValue().donGiaPhongProperty());
+        tienPhongColumn.setCellValueFactory(cellData -> cellData.getValue().tienPhongProperty());
+        phiDichVuColumn.setCellValueFactory(cellData -> cellData.getValue().phiDichVuProperty());
+        tiencocColumn.setCellValueFactory(cellData -> cellData.getValue().tienCocProperty());
+        tongColumn.setCellValueFactory(cellData -> cellData.getValue().tongCongProperty());
+
+        formatCurrencyColumn(donGiaPhongColumn);
         formatCurrencyColumn(tienPhongColumn);
         formatCurrencyColumn(phiDichVuColumn);
         formatCurrencyColumn(tiencocColumn);
         formatCurrencyColumn(tongColumn);
-        formatCurrencyColumn(donGiaPhongColumn);
 
-        viewServicesColumn.setCellFactory(col -> new TableCell<InvoiceDetailViewModel, String>() {
+        detailTable.setItems(detailList);
 
-            private final Button viewButton = new Button("Xem");
+        viewServicesColumn.setCellFactory(param -> new TableCell<>() {
+            private final MFXButton viewButton = new MFXButton("Xem");
 
             {
-                viewButton.setStyle("-fx-background-color: #007bff; -fx-text-fill: white; -fx-cursor: hand; -fx-padding: 3 8; -fx-font-size: 11px;");
                 viewButton.setOnAction(event -> {
-                    InvoiceDetailViewModel rowData = getTableView().getItems().get(getIndex());
-                    Reservation reservation = rowData.getReservation();
-
-                    List<Servicebooking> bookings = new ArrayList<>(reservation.getServicebookings());
+                    InvoiceDetailViewModel detail = getTableView().getItems().get(getIndex());
+                    List<Servicebooking> bookings = detail.getReservation().getServicebookings().stream().toList();
                     openServiceDetail(bookings);
                 });
-
-
             }
 
             @Override
-            protected void updateItem(String item, boolean empty) {
+            protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     setGraphic(null);
                 } else {
                     setGraphic(viewButton);
-
                 }
             }
         });
 
-        detailTable.setItems(detailList);
+        closeButton.setOnAction(event -> closeWindow());
     }
-    //NEw
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
+        this.invoiceDetailViewModelForCreation = null;
+
+        if (invoice != null) {
+            invoiceNoLabel.setText(invoice.getId() != null ? "HD-" + invoice.getId() : "N/A");
+            paymentDateLabel.setText(formatInstantToDateTime(invoice.getIssueDate()));
+            employeeNameLabel.setText(invoice.getEmployeeID() != null ? invoice.getEmployeeID().getFullName() : "N/A");
+
+            customerNameField.setText(invoice.getCustomerName());
+            customerAddressField.setText(invoice.getCustomerAddress());
+
+            totalDueLabel.setText(formatCurrency(invoice.getTotalAmount()));
+
+            loadInvoiceDetails();
+            updateButtonStates();
+            generatePaymentQRCode();
+        }
+    }
+
     public void setViewModelForCreation(InvoiceDetailViewModel viewModel) {
-        this.viewModel = viewModel;
-        this.invoice = viewModel.getInvoice().get(); // Lấy hóa đơn tạm thời để hiển thị
+        this.invoiceDetailViewModelForCreation = viewModel;
+        this.invoice = viewModel.getInvoice().get();
 
         invoiceNoLabel.setText("Chưa lưu");
-        customerNameLabel.setText(invoice.getCustomerName());
-        customerAddress.setText(invoice.getCustomerAddress());
-        employeeNameLabel.setText(invoice.getEmployeeID().getFullName());
+        customerNameField.setText(invoice.getCustomerName() != null ? invoice.getCustomerName() : "");
+        customerAddressField.setText(invoice.getCustomerAddress() != null ? invoice.getCustomerAddress() : "");
+
+        employeeNameLabel.setText(invoice.getEmployeeID() != null ? invoice.getEmployeeID().getFullName() : "N/A");
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
         paymentDateLabel.setText(LocalDateTime.now().format(formatter));
@@ -166,45 +182,157 @@ public class InvoiceDetailController {
         detailList.setAll(viewModel.getReservationDetails());
         detailTable.setItems(detailList);
 
+        payButton.setVisible(true);
+        payButton.setText("Thanh Toán");
+        payButton.setOnAction(event -> handlePayInvoice());
+
+        payAndPrintButton.setVisible(true);
+        payAndPrintButton.setText("Thanh Toán và In Hóa Đơn");
+        payAndPrintButton.setOnAction(event -> handlePayAndPrintInvoice());
+
+        customerNameField.setEditable(true);
+        customerAddressField.setEditable(true);
+    }
+
+
+    private void updateButtonStates() {
+        if (invoice == null) return;
+
         if ("Đã thanh toán".equals(invoice.getPaymentStatus())) {
             payButton.setDisable(true);
-            payButton.setText("Đã thanh toán");
+            payAndPrintButton.setText("In Hóa Đơn");
+            payAndPrintButton.setOnAction(event -> handlePrintInvoice());
+            customerNameField.setEditable(false);
+            customerAddressField.setEditable(false);
         } else {
-            payButton.setDisable(false);
-            payButton.setText("Xác nhận & Thanh toán");
+            payButton.setVisible(true);
+            payButton.setText("Thanh Toán");
+            payButton.setOnAction(event -> handlePayInvoice());
+            payAndPrintButton.setVisible(true);
+            payAndPrintButton.setText("Thanh Toán và In Hóa Đơn");
+            payAndPrintButton.setOnAction(event -> handlePayAndPrintInvoice());
+            customerNameField.setEditable(true);
+            customerAddressField.setEditable(true);
         }
     }
 
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
-        this.viewModel = null;
+    private boolean validateAndUpdateInvoiceCustomerInfo() {
+        String customerName = customerNameField.getText();
+        String customerAddress = customerAddressField.getText();
 
-        invoiceNoLabel.setText(String.valueOf(invoice.getId()));
-        customerNameLabel.setText(invoice.getCustomerName());
-        customerAddress.setText(invoice.getCustomerAddress());
-        employeeNameLabel.setText(invoice.getEmployeeID().getFullName());
-        Instant issueInstant = invoice.getIssueDate();
-        if (issueInstant != null) {
-            LocalDateTime localDateTime = issueInstant.atZone(ZoneId.systemDefault()).toLocalDateTime();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
-            paymentDateLabel.setText(localDateTime.format(formatter));
-        } else {
-            paymentDateLabel.setText("N/A");
+        if (customerName == null || customerName.trim().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Tên khách hàng không được để trống.");
+            return false;
         }
-        totalDueLabel.setText(formatCurrency(invoice.getTotalAmount()));
+        if (customerAddress == null || customerAddress.trim().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Địa chỉ khách hàng không được để trống.");
+            return false;
+        }
 
-        List<InvoiceDetailViewModel> viewModels = invoice.getReservations().stream()
-                .map(InvoiceDetailViewModel::new)
-                .toList();
-        detailList.setAll(viewModels);
-        detailTable.setItems(detailList);
+        if (this.invoice != null) {
+            this.invoice.setCustomerName(customerName.trim());
+            this.invoice.setCustomerAddress(customerAddress.trim());
+        }
+        return true;
+    }
 
-        if ("Đã thanh toán".equals(invoice.getPaymentStatus())) {
-            payButton.setText("Đã thanh toán");
-            payButton.setDisable(true);
-        } else {
-            payButton.setText("Thanh toán");
-            payButton.setDisable(false);
+    @FXML
+    private void handlePayInvoice() {
+        if (!validateAndUpdateInvoiceCustomerInfo()) {
+            return;
+        }
+
+        try {
+            if (this.invoice != null) {
+                this.invoice.setPaymentStatus("Đã thanh toán");
+
+                boolean saveSuccessful = false;
+                if (this.invoice.getId() == null && this.invoiceDetailViewModelForCreation != null) {
+                    this.invoiceDetailViewModelForCreation.saveInvoice();
+                    this.invoice = this.invoiceDetailViewModelForCreation.getInvoice().get();
+                    invoiceNoLabel.setText("HD-" + invoice.getId());
+                    saveSuccessful = true;
+                } else {
+
+                    saveSuccessful = dao.update(this.invoice);
+                }
+
+                if (saveSuccessful) {
+                    showAlert(Alert.AlertType.INFORMATION, "Thành công", "Hóa đơn đã được thanh toán.");
+                    updateButtonStates(); // Cập nhật trạng thái nút sau khi thanh toán
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu hoặc cập nhật hóa đơn vào cơ sở dữ liệu.");
+                }
+            }
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể thanh toán hóa đơn: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handlePayAndPrintInvoice() {
+        if (!validateAndUpdateInvoiceCustomerInfo()) {
+            return;
+        }
+
+        try {
+            if (this.invoice != null) {
+                this.invoice.setPaymentStatus("Đã thanh toán");
+
+                boolean saveSuccessful = false;
+                if (this.invoice.getId() == null && this.invoiceDetailViewModelForCreation != null) {
+                    // Đây là hóa đơn mới
+                    this.invoiceDetailViewModelForCreation.saveInvoice();
+                    this.invoice = this.invoiceDetailViewModelForCreation.getInvoice().get();
+                    invoiceNoLabel.setText("HD-" + invoice.getId());
+                    saveSuccessful = true;
+                } else {
+                    saveSuccessful = dao.update(this.invoice);
+                }
+
+                if (saveSuccessful) {
+                    exportInvoiceToPdf(this.invoice, detailList, rootPane.getScene().getWindow());
+                    showAlert(Alert.AlertType.INFORMATION, "Thành công", "Hóa đơn đã được thanh toán và đang in.");
+                    updateButtonStates();
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu hoặc cập nhật hóa đơn vào cơ sở dữ liệu.");
+                }
+            }
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể thanh toán và in hóa đơn: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handlePrintInvoice() {
+        if (this.invoice != null) {
+            exportInvoiceToPdf(this.invoice, detailList, rootPane.getScene().getWindow());
+            showAlert(Alert.AlertType.INFORMATION, "In Hóa Đơn", "Đang tiến hành in hóa đơn số " + invoice.getId());
+        }
+    }
+
+    private String formatInstantToDateTime(Instant instant) {
+        if (instant == null) {
+            return "N/A";
+        }
+        LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.close();
+    }
+
+    private void loadInvoiceDetails() {
+        if (invoice != null && invoice.getReservations() != null) {
+            List<InvoiceDetailViewModel> viewModels = invoice.getReservations().stream()
+                    .map(InvoiceDetailViewModel::new)
+                    .toList();
+
+            detailList.setAll(viewModels);
         }
     }
 
@@ -237,6 +365,159 @@ public class InvoiceDetailController {
 
         }
     }
+    private void exportInvoiceToPdf(Invoice invoiceToPrint, List<InvoiceDetailViewModel> detailsToPrint, Window parentWindow) {
+        if (invoiceToPrint == null || detailsToPrint == null || detailsToPrint.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Thông báo", "Không có dữ liệu hóa đơn để xuất PDF.");
+            return;
+        }
+
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+            String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+            String fileName = "HoaDon_" + (invoiceToPrint.getId() != null ? invoiceToPrint.getId() : "Moi") + "_" + timeStamp + ".pdf";
+            fileChooser.setInitialFileName(fileName);
+
+            File file = fileChooser.showSaveDialog(parentWindow);
+            if (file == null) {
+                return;
+            }
+
+            PdfWriter writer = new PdfWriter(file);
+            PdfDocument pdfDoc = new PdfDocument(writer);
+            Document document = new Document(pdfDoc, PageSize.A4); // Use A4 page size
+            document.setMargins(50, 50, 50, 50); // Top, Right, Bottom, Left margins
+
+            PdfFont vietnameseFont = PdfFontFactory.createFont(
+                    "c:/windows/fonts/arial.ttf",
+                    PdfEncodings.IDENTITY_H,
+                    PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED
+            );
+
+            PdfFont boldFont = PdfFontFactory.createFont(
+                    "c:/windows/fonts/arialbd.ttf",
+                    PdfEncodings.IDENTITY_H,
+                    PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED
+            );
+
+            // --- HEADER THÔNG TIN CÔNG TY (Placeholder) ---
+            document.add(new Paragraph("KHÁCH SẠN N10")
+                    .setFont(boldFont)
+                    .setFontSize(16)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(5));
+            document.add(new Paragraph("Địa chỉ: 123 Đường XYZ, Quận 1, TP.HCM")
+                    .setFont(vietnameseFont)
+                    .setFontSize(10)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(5));
+            document.add(new Paragraph("Điện thoại: 0123.456.789 | Email: info@khachsanabc.com")
+                    .setFont(vietnameseFont)
+                    .setFontSize(10)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(20));
+
+            // --- TIÊU ĐỀ HÓA ĐƠN ---
+            document.add(new Paragraph("HÓA ĐƠN THANH TOÁN")
+                    .setFont(boldFont)
+                    .setFontSize(24)
+                    .setFontColor(new DeviceRgb(0, 79, 157)) // Màu xanh đậm
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(20));
+
+            // --- THÔNG TIN CHUNG HÓA ĐƠN ---
+            document.add(new Paragraph("Số hóa đơn: " + (invoiceToPrint.getId() != null ? "HD-" + invoiceToPrint.getId() : "Chưa lưu"))
+                    .setFont(vietnameseFont)
+                    .setFontSize(12)
+                    .setMarginBottom(5));
+            document.add(new Paragraph("Ngày thanh toán: " + formatInstantToDateTime(invoiceToPrint.getIssueDate()))
+                    .setFont(vietnameseFont)
+                    .setFontSize(12)
+                    .setMarginBottom(5));
+            document.add(new Paragraph("Nhân viên lập: " + (invoiceToPrint.getEmployeeID() != null ? invoiceToPrint.getEmployeeID().getFullName() : "N/A"))
+                    .setFont(vietnameseFont)
+                    .setFontSize(12)
+                    .setMarginBottom(5));
+            document.add(new Paragraph("Tên khách hàng: " + (invoiceToPrint.getCustomerName() != null ? invoiceToPrint.getCustomerName() : "N/A"))
+                    .setFont(boldFont)
+                    .setFontSize(12)
+                    .setMarginBottom(5));
+            document.add(new Paragraph("Địa chỉ khách hàng: " + (invoiceToPrint.getCustomerAddress() != null ? invoiceToPrint.getCustomerAddress() : "N/A"))
+                    .setFont(vietnameseFont)
+                    .setFontSize(12)
+                    .setMarginBottom(20));
+
+            // --- BẢNG CHI TIẾT DỊCH VỤ/PHÒNG ---
+            float[] columnWidths = {30f, 60f, 60f, 80f, 80f, 80f, 80f, 80f};
+            Table table = new Table(UnitValue.createPercentArray(columnWidths));
+            table.setWidth(UnitValue.createPercentValue(100));
+            table.setMarginBottom(20);
+
+            // Table Headers
+            String[] headers = {"STT", "Số Phòng", "Ngày Thuê", "Đơn Giá Phòng", "Tiền Phòng", "Phí Dịch Vụ", "Tiền Cọc", "Tổng"};
+            for (String header : headers) {
+                table.addHeaderCell(new Cell().add(new Paragraph(header))
+                        .setFont(boldFont)
+                        .setFontSize(10)
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setBackgroundColor(new DeviceRgb(220, 230, 241))
+                        .setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f))
+                        .setPadding(8));
+            }
+
+            // Table Rows
+            int stt = 1;
+            for (InvoiceDetailViewModel detail : detailsToPrint) {
+                table.addCell(new Cell().add(new Paragraph(String.valueOf(stt++)))
+                        .setFont(vietnameseFont).setFontSize(10).setTextAlignment(TextAlignment.CENTER).setPadding(5).setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f)));
+                table.addCell(new Cell().add(new Paragraph(String.valueOf(detail.getSoPhong().get())))
+                        .setFont(vietnameseFont).setFontSize(10).setTextAlignment(TextAlignment.CENTER).setPadding(5).setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f)));
+                table.addCell(new Cell().add(new Paragraph(String.valueOf(detail.getSoNgayThue().get())))
+                        .setFont(vietnameseFont).setFontSize(10).setTextAlignment(TextAlignment.CENTER).setPadding(5).setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f)));
+                table.addCell(new Cell().add(new Paragraph(formatCurrency(detail.getDonGiaPhong().get())))
+                        .setFont(vietnameseFont).setFontSize(10).setTextAlignment(TextAlignment.RIGHT).setPadding(5).setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f)));
+                table.addCell(new Cell().add(new Paragraph(formatCurrency(detail.getTienPhong().get())))
+                        .setFont(vietnameseFont).setFontSize(10).setTextAlignment(TextAlignment.RIGHT).setPadding(5).setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f)));
+                table.addCell(new Cell().add(new Paragraph(formatCurrency(detail.getPhiDichVu().get())))
+                        .setFont(vietnameseFont).setFontSize(10).setTextAlignment(TextAlignment.RIGHT).setPadding(5).setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f)));
+                table.addCell(new Cell().add(new Paragraph(formatCurrency(detail.getTienCoc().get())))
+                        .setFont(vietnameseFont).setFontSize(10).setTextAlignment(TextAlignment.RIGHT).setPadding(5).setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f)));
+                table.addCell(new Cell().add(new Paragraph(formatCurrency(detail.getTongCong().get())))
+                        .setFont(vietnameseFont).setFontSize(10).setTextAlignment(TextAlignment.RIGHT).setPadding(5).setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f)));
+            }
+            document.add(table);
+
+            // --- TỔNG KẾT ---
+            document.add(new Paragraph("Tổng số tiền phải thanh toán: " + formatCurrency(invoiceToPrint.getTotalAmount()))
+                    .setFont(boldFont)
+                    .setFontSize(14)
+                    .setTextAlignment(TextAlignment.RIGHT)
+                    .setMarginBottom(30));
+
+            // --- KÝ TÊN ---
+            document.add(new Paragraph("Khách hàng                                  Nhân viên lập hóa đơn")
+                    .setFont(boldFont)
+                    .setFontSize(12)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(60)); // Khoảng cách cho chữ ký
+
+            document.add(new Paragraph("(Ký và ghi rõ họ tên)                       (Ký và ghi rõ họ tên)")
+                    .setFont(vietnameseFont)
+                    .setFontSize(10)
+                    .setTextAlignment(TextAlignment.CENTER));
+
+
+            document.close();
+            showAlert(Alert.AlertType.INFORMATION, "Thành công", "Đã xuất hóa đơn PDF thành công tại: " + file.getAbsolutePath());
+
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Lỗi khi xuất PDF: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Đã xảy ra lỗi không mong muốn khi xuất PDF: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -262,4 +543,97 @@ public class InvoiceDetailController {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         return currencyFormatter.format(amount);
     }
+    private void generatePaymentQRCode() {
+        if (invoice == null || invoice.getTotalAmount() == null) {
+            qrCodeImageView.setImage(null);
+            return;
+        }
+
+        String bankBin = "970436"; // Mã BIN ngân hàng VIETCOMBANK
+        String accountNumber = "1038172542";
+        String accountName = "LE BUI QUOC HUY";
+        String amount = totalDueLabel.getText()
+                .replace("₫", "")
+                .replace(".", "")
+                .replace(",", "")
+                .replaceAll("\\D", "");
+        String addInfo = "Thanh toan HD " + invoiceNoLabel.getText();
+
+        try {
+            String qrData = createVietQR(bankBin, accountNumber, accountName, Long.parseLong(amount), addInfo);
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            int width = 300;
+            int height = 300;
+
+            BitMatrix bitMatrix = qrCodeWriter.encode(qrData, BarcodeFormat.QR_CODE, width, height);
+            BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bufferedImage.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
+                }
+            }
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", baos);
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            Image qrImage = new Image(bais);
+            qrCodeImageView.setImage(qrImage);
+
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi QR VietQR", "Không thể tạo mã QR VietQR: " + e.getMessage());
+            e.printStackTrace();
+            qrCodeImageView.setImage(null);
+        }
+    }
+    private String buildTLV(String tag, String value) {
+        return tag + String.format("%02d", value.length()) + value;
+    }
+
+    private String createVietQR(String bankBin, String accountNumber, String name, long amount, String addInfo) {
+        StringBuilder qrData = new StringBuilder();
+
+        qrData.append(buildTLV("00", "01")); // Payload Format Indicator
+        qrData.append(buildTLV("01", "12")); // Point of Initiation Method
+
+        // Merchant Account Information - VietQR
+        String guid = buildTLV("00", "A000000727");
+        String service = buildTLV("01", "1");
+
+        String binTag = buildTLV("02", bankBin);
+        String accTag = buildTLV("03", accountNumber);
+        String info38 = guid + service + binTag + accTag;
+        qrData.append(buildTLV("38", info38));
+
+        qrData.append(buildTLV("52", "QRIBFTTA"));
+        qrData.append(buildTLV("53", "704")); // VND
+        qrData.append(buildTLV("54", String.valueOf(amount)));
+        qrData.append(buildTLV("58", "VN"));
+        qrData.append(buildTLV("59", name.toUpperCase()));
+        qrData.append(buildTLV("60", "HANOI")); // hoặc HoChiMinh
+
+        String purpose = buildTLV("05", addInfo.replace(" ", ""));
+        qrData.append(buildTLV("62", purpose));
+
+        // CRC placeholder
+        String dataWithoutCRC = qrData.toString() + "6304";
+        String crc = calculateCRC16(dataWithoutCRC);
+        return dataWithoutCRC + crc;
+    }
+
+    private String calculateCRC16(String str) {
+        byte[] bytes = str.getBytes();
+        int crc = 0xFFFF;
+        for (byte b : bytes) {
+            crc ^= (b & 0xFF) << 8;
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 0x8000) != 0)
+                    crc = (crc << 1) ^ 0x1021;
+                else
+                    crc <<= 1;
+            }
+        }
+        crc &= 0xFFFF;
+        return String.format("%04X", crc);
+    }
+
 }
