@@ -34,7 +34,7 @@
                 <Insets top="15.0" />
             </HBox.margin>
         </MFXComboBox>
-        <MFXComboBox fx:id="ComboBox" prefWidth="120.0" promptText="Tất cả" floatMode="DISABLED">
+        <MFXComboBox fx:id="ComboBox" prefWidth="150.0" promptText="Tất cả" floatMode="DISABLED">
             <HBox.margin>
                 <Insets top="15.0" />
             </HBox.margin>

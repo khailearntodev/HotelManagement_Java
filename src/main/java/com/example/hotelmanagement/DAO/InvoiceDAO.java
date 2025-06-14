@@ -133,13 +133,15 @@ public class InvoiceDAO {
                     .uniqueResultOptional().orElse(null);
         }
     }
-    public List<Invoice> findByMonthAndYear(int month, int year) {
-        try (Session session = HibernateUtils.getSession()) {
-            String hql = "FROM Invoice i WHERE MONTH(i.issueDate) = :month AND YEAR(i.issueDate) = :year AND i.isDeleted = false";
-            return session.createQuery(hql, Invoice.class)
-                    .setParameter("month", month)
-                    .setParameter("year", year)
-                    .list();
-        }
+    public List<Invoice> findByMonthAndYear(Session session, int month, int year) {
+        String hql = "SELECT DISTINCT i FROM Invoice i " +
+                "LEFT JOIN FETCH i.reservations r " +
+                "LEFT JOIN FETCH r.roomID rm " +
+                "LEFT JOIN FETCH rm.roomTypeID rt " +
+                "WHERE MONTH(i.issueDate) = :month AND YEAR(i.issueDate) = :year";
+        return session.createQuery(hql, Invoice.class)
+                .setParameter("month", month)
+                .setParameter("year", year)
+                .getResultList();
     }
 }

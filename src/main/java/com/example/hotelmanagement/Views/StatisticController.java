@@ -3,6 +3,20 @@ package com.example.hotelmanagement.Views;
 import com.example.hotelmanagement.DTO.RevenueReportService;
 import com.example.hotelmanagement.Models.RevenueReportDetail;
 import com.example.hotelmanagement.ViewModels.StatisticViewModel;
+import com.itextpdf.io.font.PdfEncodings;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -14,8 +28,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
+import com.itextpdf.layout.element.Cell;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class StatisticController {
 
@@ -79,6 +99,7 @@ public class StatisticController {
         byMonthButton.setOnAction(e -> loadStatisticsByMonth());
         byYearButton.setOnAction(e -> loadStatisticsByYear());
         generateReportButton.setOnAction(e -> generateNewReport());
+        exportButton.setOnAction(event -> export());
     }
 
     private void loadStatisticsByMonth() {
@@ -137,6 +158,143 @@ public class StatisticController {
             }
         } else {
             System.out.println("Vui lòng chọn tháng và năm để tạo báo cáo.");
+        }
+    }
+    void export() {
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+            String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+            String fileName = "BaoCaoDoanhThu_" + timeStamp + ".pdf";
+            fileChooser.setInitialFileName(fileName);
+
+            File file = fileChooser.showSaveDialog(exportButton.getScene().getWindow()); // Get current window
+            if (file == null) {
+                return;
+            }
+
+            PdfWriter writer = new PdfWriter(file);
+            PdfDocument pdfDoc = new PdfDocument(writer);
+            Document document = new Document(pdfDoc, PageSize.A4);
+            document.setMargins(50, 50, 50, 50);
+
+            // Ensure these font paths are correct on the target system
+            PdfFont vietnameseFont = PdfFontFactory.createFont(
+                    "c:/windows/fonts/arial.ttf",
+                    PdfEncodings.IDENTITY_H,
+                    PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED
+            );
+            PdfFont boldFont = PdfFontFactory.createFont(
+                    "c:/windows/fonts/arialbd.ttf",
+                    PdfEncodings.IDENTITY_H,
+                    PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED
+            );
+
+            // Title
+            document.add(new Paragraph("BÁO CÁO DOANH THU KHÁCH SẠN")
+                    .setFont(boldFont)
+                    .setFontSize(20)
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setMarginBottom(10));
+
+            // Report period information
+            String reportPeriod = "";
+            if (monthComboBox.getValue() != null && !monthComboBox.getValue().isEmpty()) {
+                reportPeriod = "Tháng: " + monthComboBox.getValue();
+            }
+            if (yearComboBox.getValue() != null && !yearComboBox.getValue().isEmpty()) {
+                reportPeriod += (reportPeriod.isEmpty() ? "Năm: " : " - Năm: ") + yearComboBox.getValue();
+            }
+            if (!reportPeriod.isEmpty()) {
+                document.add(new Paragraph("Kỳ báo cáo: " + reportPeriod)
+                        .setFont(vietnameseFont)
+                        .setFontSize(12)
+                        .setMarginBottom(10)
+                        .setTextAlignment(TextAlignment.CENTER));
+            }
+
+
+            // --- REVENUE DETAILS TABLE ---
+            float[] columnWidths = {150f, 150f, 150f};
+            Table table = new Table(UnitValue.createPercentArray(columnWidths));
+            table.setWidth(UnitValue.createPercentValue(100));
+            table.setMarginBottom(20);
+
+            String[] headers = {"Loại phòng", "Doanh thu", "Tỷ lệ đóng góp"};
+            for (String header : headers) {
+                table.addHeaderCell(new Cell().add(new Paragraph(header))
+                        .setFont(boldFont).setFontSize(10).setTextAlignment(TextAlignment.CENTER)
+                        .setBackgroundColor(new DeviceRgb(220, 230, 241))
+                        .setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f)).setPadding(8));
+            }
+
+            for (RevenueReportDetail detail : viewModel.getRevenueDetails()) {
+                // Room Type
+                table.addCell(new Cell().add(new Paragraph(detail.getRoomTypeID().getTypeName()))
+                        .setFont(vietnameseFont).setFontSize(10).setTextAlignment(TextAlignment.LEFT).setPadding(5).setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f)));
+
+                // Revenue
+                table.addCell(new Cell().add(new Paragraph(String.format("%,.0f", detail.getRevenue())))
+                        .setFont(vietnameseFont).setFontSize(10).setTextAlignment(TextAlignment.RIGHT).setPadding(5).setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f)));
+
+                // Contribution Percentage
+                double total = 0;
+                try {
+                    total = Double.parseDouble(totalRevenueLabel.getText().replaceAll("[^\\d.]", ""));
+                } catch (NumberFormatException e) {
+                    // Handle case where totalRevenueLabel might not be a valid number yet
+                    System.err.println("Could not parse total revenue for contribution calculation: " + e.getMessage());
+                }
+
+                String contribution = "N/A";
+                if (total > 0) {
+                    double revenue = detail.getRevenue().doubleValue();
+                    double cont = (revenue / total) * 100;
+                    contribution = String.format("%.2f%%", cont);
+                }
+                table.addCell(new Cell().add(new Paragraph(contribution))
+                        .setFont(vietnameseFont).setFontSize(10).setTextAlignment(TextAlignment.RIGHT).setPadding(5).setBorder(new SolidBorder(ColorConstants.BLACK, 0.5f)));
+            }
+            document.add(table);
+
+            // Summary Information
+            document.add(new Paragraph("Tổng doanh thu: " + totalRevenueLabel.getText())
+                    .setFont(boldFont)
+                    .setFontSize(12)
+                    .setTextAlignment(TextAlignment.RIGHT));
+            document.add(new Paragraph("Tổng lượt thuê phòng: " + totalRentalLabel.getText())
+                    .setFont(boldFont)
+                    .setFontSize(12)
+                    .setTextAlignment(TextAlignment.RIGHT));
+            document.add(new Paragraph("Tổng số lượt đặt phòng: " + totalBookingsLabel.getText())
+                    .setFont(boldFont)
+                    .setFontSize(12)
+                    .setTextAlignment(TextAlignment.RIGHT));
+            document.add(new Paragraph("Loại phòng phổ biến: " + popularRoomTypeLabel.getText())
+                    .setFont(boldFont)
+                    .setFontSize(12)
+                    .setTextAlignment(TextAlignment.RIGHT));
+            document.add(new Paragraph("Doanh thu trung bình mỗi lượt thuê: " + averageRevenueLabel.getText())
+                    .setFont(boldFont)
+                    .setFontSize(12)
+                    .setTextAlignment(TextAlignment.RIGHT)
+                    .setMarginBottom(30));
+
+
+            document.add(new Paragraph("Ngày xuất báo cáo: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")))
+                    .setFont(vietnameseFont)
+                    .setFontSize(8)
+                    .setTextAlignment(TextAlignment.CENTER));
+
+            document.close();
+            System.out.println("Thành công: Đã xuất báo cáo doanh thu PDF thành công tại: " + file.getAbsolutePath());
+
+        } catch (IOException e) {
+            System.err.println("Lỗi khi xuất PDF (có thể do không tìm thấy font hoặc file đang mở): " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Đã xảy ra lỗi không mong muốn khi xuất PDF: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

@@ -80,6 +80,7 @@ public class InvoiceDetailViewModel {
         if(tongCong.get().compareTo(BigDecimal.ZERO)<0){
             tongCong.set(BigDecimal.ZERO);
         }
+
     }
 
     public void saveInvoice() {
@@ -93,9 +94,10 @@ public class InvoiceDetailViewModel {
         for (InvoiceDetailViewModel detail : reservationDetails) {
             Reservation res = detail.getReservation();
             res.setInvoiceID(invoice.get());
-            res.setTotal(this.tienPhong.get());
-            reservationDAO.update(res);
 
+            res.setTotal(detail.tienPhong.getValue());
+            System.out.println("tiền thuê "+res.getTotal());
+            reservationDAO.update(res);
             Room room = res.getRoomID();
             room.setStatus(1);
             room.setCleaningStatus(1);

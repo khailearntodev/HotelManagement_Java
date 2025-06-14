@@ -1,7 +1,7 @@
 package com.example.hotelmanagement.Views;
 
-import com.example.hotelmanagement.Models.Customer; // Cần import Customer để lấy tên
-import com.example.hotelmanagement.Models.Room;     // Cần import Room để lấy số phòng
+import com.example.hotelmanagement.Models.Customer;
+import com.example.hotelmanagement.Models.Room;
 import com.example.hotelmanagement.Models.Servicebooking;
 import com.example.hotelmanagement.ViewModels.ServiceUsageDetailViewModel; // Sử dụng ViewModel mới đổi tên
 import com.itextpdf.io.font.PdfEncodings;
