@@ -71,11 +71,7 @@ public class RoomTypeController implements Initializable {
         this.roomTypeService = new RoomTypeService();
 
         this.roomService = new RoomService(); // Initialize RoomService
-        splitPane1.lookupAll(".split-pane-divider").stream()
-                .forEach(div ->  div.setMouseTransparent(true) );
 
-        splitPane2.lookupAll(".split-pane-divider").stream()
-                .forEach(div ->  div.setMouseTransparent(true) );
 
         // Load the RoomType cards into the FlowPane
         loadRoomTypeCards();

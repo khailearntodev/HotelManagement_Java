@@ -167,7 +167,7 @@
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="200.0">
                                              <children>
-                                                <Label text="SL tối đa: ">
+                                                <Label text="Số khách tối đa: ">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>

@@ -1,5 +1,6 @@
 package com.example.hotelmanagement.Views;
 
+import com.example.hotelmanagement.Services.RoomService;
 import com.example.hotelmanagement.ViewModels.RoomTypeViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -45,6 +46,7 @@ public class RoomTypeCardController {
     private Consumer<RoomTypeViewModel> onCardClick; // Callback for click event
 
     private Consumer<RoomTypeViewModel> onDeleteClick;
+    private final RoomService service = new RoomService();
     // Define the pseudo-class for selection
     private static final PseudoClass SELECTED_PSEUDO_CLASS = PseudoClass.getPseudoClass("selected");
     public void setRoomtypeData(RoomTypeViewModel viewModel) {
@@ -59,7 +61,7 @@ public class RoomTypeCardController {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         priceTextField.setText(currencyFormat.format(viewModel.getBasePrice()));
 
-        quantityTextField.setText("N/A");
+        quantityTextField.setText(service.countTotalRoomsByRoomTypeId(viewModel.getId()) + "");
 
         descriptionTextArea.setText(viewModel.getDescription());
 
