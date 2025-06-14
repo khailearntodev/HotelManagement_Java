@@ -18,25 +18,25 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="1060.0" style="-fx-background-color: white;" stylesheets="@../../../../CSS/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.RoomTypeController">
    <children>
-      <SplitPane fx:id="splitPane1" dividerPositions="0.55" prefHeight="160.0" prefWidth="200.0" style="-fx-background-color: white;">
+      <SplitPane fx:id="splitPane1" dividerPositions="0.51" prefHeight="160.0" prefWidth="200.0" style="-fx-background-color: white;">
          <items>
-            <StackPane prefHeight="602.0" prefWidth="856.0" style="fx-background-color: #fff;">
+            <StackPane style="fx-background-color: #fff;">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox>
                      <children>
-                        <HBox prefHeight="80.0" prefWidth="200.0">
+                        <HBox prefHeight="80.0">
                            <children>
-                              <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="217.0" text="Quản Lý Loại Phòng" HBox.hgrow="ALWAYS">
+                              <Label prefHeight="25.0" prefWidth="227.0" text="Quản Lý Loại Phòng" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font name="Tahoma Bold" size="20.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="70.0" />
+                                    <Insets left="70.0" top="20.0" bottom="20.0"/>
                                  </HBox.margin>
                               </Label>
-                              <MFXButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddRoomType" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Thêm loại phòng">
+                              <MFXButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" onAction="#handleAddRoomType" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Thêm loại phòng">
                                  <HBox.margin>
-                                    <Insets left="140.0" top="20.0" />
+                                    <Insets left="80.0" right="20.0" top="20.0" bottom="20.0"/>
                                  </HBox.margin>
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -47,9 +47,9 @@
                               </MFXButton>
                            </children>
                         </HBox>
-                        <ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="560.0" VBox.vgrow="ALWAYS">
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
                            <content>
-                              <FlowPane fx:id="roomCardsContainer" alignment="TOP_LEFT" hgap="50" prefHeight="579.0" prefWidth="545.0" vgap="30">
+                              <FlowPane fx:id="roomCardsContainer" alignment="TOP_LEFT" hgap="50" style="-fx-background-color: white;" vgap="30" VBox.vgrow="ALWAYS">
                                  <padding>
                                     <Insets bottom="20" left="20" right="20" top="20" />
                                  </padding>
@@ -63,31 +63,31 @@
                   </VBox>
                </children>
             </StackPane>
-            <SplitPane fx:id="splitPane2" dividerPositions="0.55" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="660.0" prefWidth="490.0" SplitPane.resizableWithParent="false">
+            <SplitPane fx:id="splitPane2" dividerPositions="0.55" orientation="VERTICAL" SplitPane.resizableWithParent="true">
                <items>
-                  <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="480.0">
+                  <StackPane>
                      <children>
-                        <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="480.0" style="-fx-background-color: white;">
+                        <VBox style="-fx-background-color: white;">
                            <children>
-                              <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="437.0">
+                              <HBox>
                                  <children>
-                                    <Label prefHeight="20.0" prefWidth="205.0" text="Chi tiết loại phòng" HBox.hgrow="ALWAYS">
+                                    <Label text="Chi tiết loại phòng" HBox.hgrow="ALWAYS">
                                        <font>
                                           <Font name="Arial Bold" size="23.0" />
                                        </font>
                                        <HBox.margin>
-                                          <Insets left="5.0" />
+                                          <Insets left="5.0" top="15.0" bottom="15.0"/>
                                        </HBox.margin>
                                        <padding>
                                           <Insets top="20.0" />
                                        </padding>
                                     </Label>
-                                    <MFXButton fx:id="editDetailsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleEditClick" prefHeight="35.0" prefWidth="100.0" rippleColor="#1a2ab9" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Chỉnh sửa">
+                                    <MFXButton fx:id="editDetailsButton" onAction="#handleEditClick" rippleColor="#1a2ab9" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Chỉnh sửa">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                        <HBox.margin>
-                                          <Insets left="110.0" top="15.0" />
+                                          <Insets left="150.0" top="27.0" />
                                        </HBox.margin>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
@@ -98,7 +98,7 @@
                                  </VBox.margin>
                               </HBox>
                               <Region styleClass="horizontal-separator-line" />
-                              <HBox prefHeight="42.0" prefWidth="274.0">
+                              <HBox>
                                  <children>
                                     <Label fx:id="roomTypeNameLabel" text="Tên loại phòng">
                                        <font>
@@ -108,10 +108,13 @@
                                           <Insets left="10.0" top="10.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <VBox fx:id="statusIndicatorVBox" alignment="CENTER" prefHeight="22.0" prefWidth="100.0">
+                                    <VBox fx:id="statusIndicatorVBox" alignment="CENTER">
                                        <HBox.margin>
                                           <Insets left="20.0" top="10.0" />
                                        </HBox.margin>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
                                        <children>
                                           <Label fx:id="statusLabel" alignment="TOP_CENTER" textFill="#e4dfdf">
                                              <font>
@@ -136,7 +139,7 @@
                                     <Insets bottom="10.0" right="10.0" top="10.0" />
                                  </padding>
                               </Label>
-                              <HBox prefHeight="179.0" prefWidth="480.0">
+                              <HBox>
                                  <children>
                                     <ImageView fx:id="roomTypeImageView" fitHeight="161.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
@@ -146,16 +149,16 @@
                                           <Image url="@../../../../Images/icon.png" />
                                        </image>
                                     </ImageView>
-                                    <VBox prefHeight="155.0" prefWidth="210.0" HBox.hgrow="ALWAYS">
+                                    <VBox HBox.hgrow="ALWAYS">
                                        <children>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="200.0">
+                                          <HBox alignment="CENTER_LEFT">
                                              <children>
                                                 <Label text="Giá: ">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <Label fx:id="priceTextField" prefHeight="25.0" prefWidth="130.0" style="-fx-background-color: transparent;" text="0.00 VND">
+                                                <Label fx:id="priceTextField" style="-fx-background-color: transparent;" text="0.00 VND">
                                                    <HBox.margin>
                                                       <Insets left="5.0" />
                                                    </HBox.margin>
@@ -165,14 +168,14 @@
                                                 </Label>
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="200.0">
+                                          <HBox alignment="CENTER_LEFT">
                                              <children>
-                                                <Label text="SL tối đa: ">
+                                                <Label text="Số khách tối đa: ">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <Label fx:id="maxOccupancyTextField" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="0 người">
+                                                <Label fx:id="maxOccupancyTextField" style="-fx-background-color: transparent;" text="0 người">
 
                                                    <HBox.margin>
                                                       <Insets left="5.0" />
@@ -191,7 +194,7 @@
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Label>
-                                          <Label fx:id="descriptionTextArea" alignment="TOP_LEFT" prefHeight="86.0" prefWidth="283.0" style="-fx-control-inner-background: transparent; -fx-font-size: 15px;" wrapText="true" VBox.vgrow="ALWAYS">
+                                          <Label fx:id="descriptionTextArea" alignment="TOP_LEFT" style="-fx-control-inner-background: transparent; -fx-font-size: 15px;" wrapText="true" VBox.vgrow="ALWAYS">
                                              <font>
                                                 <Font size="15.0" />
                                              </font>
@@ -210,17 +213,17 @@
                         </VBox>
                      </children>
                   </StackPane>
-                  <StackPane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="480.0">
+                  <StackPane style="-fx-background-color: white;" maxWidth="-Infinity" minWidth="-Infinity">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
+                        <VBox>
                            <children>
-                              <HBox prefHeight="55.0" prefWidth="314.0" style="-fx-background-color: #fff;">
+                              <HBox style="-fx-background-color: #fff;">
                                  <children>
                                     <MFXButton minHeight="-Infinity" prefHeight="50.0" text="Quản Lý Phòng">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font></MFXButton>
-                                    <MFXButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddRoomClick" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Thêm phòng">
+                                    <MFXButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddRoomClick" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Thêm phòng">
                                        <HBox.margin>
                                           <Insets left="170.0" top="10.0" />
                                        </HBox.margin>
@@ -228,7 +231,7 @@
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                        <padding>
-                                          <Insets right="14.0" />
+                                          <Insets bottom="10.0" left="14.0" right="14.0" top="10.0" />
                                        </padding>
                                     </MFXButton>
                                  </children>
@@ -236,7 +239,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </HBox>
-                              <MFXTableView footerVisible="false" fx:id="roomListTable" prefHeight="298.0" prefWidth="480.0" />
+                              <MFXTableView footerVisible="false" fx:id="roomListTable" VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
                      </children>

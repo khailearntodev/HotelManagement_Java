@@ -64,18 +64,14 @@ public class RoomTypeController implements Initializable {
     private RoomTypeService roomTypeService;
     private RoomService roomService;
     private Roomtype currentlyDisplayedRoomType; // To hold the Roomtype object currently shown in details
-
+    private RoomTypeCardController currentlyHighlightedCardController;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialize the RoomTypeService
         this.roomTypeService = new RoomTypeService();
 
         this.roomService = new RoomService(); // Initialize RoomService
-        splitPane1.lookupAll(".split-pane-divider").stream()
-                .forEach(div ->  div.setMouseTransparent(true) );
 
-        splitPane2.lookupAll(".split-pane-divider").stream()
-                .forEach(div ->  div.setMouseTransparent(true) );
 
         // Load the RoomType cards into the FlowPane
         loadRoomTypeCards();
@@ -127,8 +123,10 @@ public class RoomTypeController implements Initializable {
 
                     buttonsContainer.getChildren().addAll(editButton, deleteButton);
                     setGraphic(buttonsContainer); // Set the HBox as the graphic for the cell
+                    setText(null);
                 } else {
                     setGraphic(null); // Clear graphic if item is null
+                    setText(null);
                 }
             }
         });
@@ -213,6 +211,7 @@ public class RoomTypeController implements Initializable {
      * adding them to the roomCardsContainer (FlowPane).
      */
     private void loadRoomTypeCards() {
+        currentlyHighlightedCardController = null;
         roomCardsContainer.getChildren().clear(); // Clear existing cards before loading new ones
 
         try {
@@ -245,8 +244,7 @@ public class RoomTypeController implements Initializable {
                     // Set the data on the card's controller using the ViewModel
                     cardController.setRoomtypeData(viewModel);
                     // Set the click handler for the card
-                    cardController.setOnCardClick(this::handleRoomTypeCardClick);
-                    //Set the delete handler for the card
+                    cardController.setOnCardClick(clickedViewModel -> { handleRoomTypeCardClick(clickedViewModel, cardController); });                    //Set the delete handler for the card
                     cardController.handleDeleteRoomtype(this::handleDeleteRoomTypeClick);
 
                     // Add the loaded card to our container (FlowPane)
@@ -271,13 +269,17 @@ public class RoomTypeController implements Initializable {
      * Opens the EditRoomType window with the data of the clicked card.
      * @param clickedViewModel The RoomTypeViewModel of the clicked card.
      */
-    private void handleRoomTypeCardClick(RoomTypeViewModel clickedViewModel) {
+    private void handleRoomTypeCardClick(RoomTypeViewModel clickedViewModel, RoomTypeCardController cardController) {
         try {
+            if (currentlyHighlightedCardController != null && currentlyHighlightedCardController != cardController) { currentlyHighlightedCardController.setSelected(false); }
             // Fetch the full Roomtype entity from the database using its ID
             Roomtype roomTypeOptional = roomTypeService.getRoomTypeById(clickedViewModel.getId());
 
             if (roomTypeOptional != null) {
+                cardController.setSelected(true);
+                currentlyHighlightedCardController = cardController;
                 currentlyDisplayedRoomType = roomTypeOptional;
+                editDetailsButton.setDisable(false);
                 displayRoomTypeDetails(currentlyDisplayedRoomType);
 
             } else {
@@ -327,9 +329,9 @@ public class RoomTypeController implements Initializable {
         RoomService roomService = new RoomService();
         long roomsCount = roomService.countTotalRoomsByRoomTypeId(roomType.getId());
         long availableRoomCount = roomService.countAvailableRoomsByRoomTypeId(roomType.getId());
-        boolean isThereRoom = (roomsCount - availableRoomCount != 0);
+        boolean isThereRoom = (availableRoomCount != 0);
         roomTypeNameLabel.setText(roomType.getTypeName());
-        emptyRoomsLabel.setText(String.format("Còn trống: %d/%d phòng", (roomsCount - availableRoomCount), roomsCount));
+        emptyRoomsLabel.setText(String.format("Còn trống: %d/%d phòng", availableRoomCount, roomsCount));
         statusLabel.setText(isThereRoom? "Còn phòng": "Hết phòng");
         statusIndicatorVBox.setStyle(String.format("-fx-background-color: %s", isThereRoom? "green": "red"));
         String base64Image = roomType.getImage();
@@ -369,10 +371,16 @@ public class RoomTypeController implements Initializable {
         }
     }
     private void clearRoomDetails() {
+        if (currentlyHighlightedCardController != null) {
+            currentlyHighlightedCardController.setSelected(false);
+            currentlyHighlightedCardController = null;
+        }
         roomTypeNameLabel.setText("");
         statusLabel.setText("");
         //availableRoomsLabel.setText("Chọn một loại phòng để xem chi tiết");
         editDetailsButton.setDisable(true); // Disable the edit button until a card is selected
+        roomListTable.setItems(FXCollections.observableArrayList());
+
         this.currentlyDisplayedRoomType = null;
     }
     public void handleEditClick() {

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="700.0" minWidth="-Infinity" prefHeight="700.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.EditRoomTypeController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="850.0" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="850.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.EditRoomTypeController">
    <children>
       <ScrollPane>
       <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="600.0">
@@ -164,7 +164,7 @@
                         </Label>
                         <MFXButton fx:id="addRoomButton" onAction="#handleAddRoom" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Thêm phòng">
                            <HBox.margin>
-                              <Insets left="200.0" />
+                              <Insets bottom="10.0" left="200.0" />
                            </HBox.margin>
                            <padding>
                               <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
