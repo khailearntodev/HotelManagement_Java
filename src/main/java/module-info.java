@@ -34,5 +34,7 @@ module com.example.hotelmanagement {
     requires layout;
     requires org.apache.poi.ooxml;
     requires VirtualizedFX;
+    requires com.google.zxing;
+    requires org.json;
 
 }

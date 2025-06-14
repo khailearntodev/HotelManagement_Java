@@ -77,6 +77,9 @@ public class InvoiceDetailViewModel {
         BigDecimal tienThuePhong = giaPhong.multiply(BigDecimal.valueOf(days));
         this.tienPhong.set(tienThuePhong);
         this.tongCong.set(tienThuePhong.add(phiDV).subtract(coc));
+        if(tongCong.get().compareTo(BigDecimal.ZERO)<0){
+            tongCong.set(BigDecimal.ZERO);
+        }
     }
 
     public void saveInvoice() {

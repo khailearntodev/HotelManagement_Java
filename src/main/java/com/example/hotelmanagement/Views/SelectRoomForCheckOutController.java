@@ -182,7 +182,6 @@ public class SelectRoomForCheckOutController implements Initializable {
     public void nextCheckout() {
         if (viewModel.getSelectedRooms().isEmpty()) {
             System.out.println("Vui lòng chọn ít nhất một phòng để thanh toán.");
-            // Có thể thêm Alert ở đây để thông báo cho người dùng
             return;
         }
 
@@ -199,40 +198,24 @@ public class SelectRoomForCheckOutController implements Initializable {
                 reservationDAO.update(res);
             }
             InvoiceDetailViewModel invoiceDetailVM = new InvoiceDetailViewModel(reservations);
-
-            /*if (!reservations.isEmpty() && reservations.get(0).getReservationguests() != null && !reservations.get(0).getReservationguests().isEmpty()) {
-                Customer customer = reservations.get(0).getReservationguests().stream().findFirst().get().getCustomerID();
-                invoiceDetailVM.getInvoice().get().setCustomerName(customer.getFullName());
-                invoiceDetailVM.getInvoice().get().setCustomerAddres(customer.getCustomerAddress());
-            } else*/ {
-                invoiceDetailVM.getInvoice().get().setCustomerName("JAck");
-                invoiceDetailVM.getInvoice().get().setCustomerAddres("bến tre");
-            }
             invoiceDetailVM.getInvoice().get().setInvoiceType(2);
             invoiceDetailVM.getInvoice().get().setPaymentStatus("Chưa thanh toán");
 
 
-            // 2. Load FXML của màn hình chi tiết hóa đơn
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/InvoiceDetailView.fxml"));
             Parent root = fxmlLoader.load();
 
-            // 3. Lấy controller và gọi phương thức mới để truyền ViewModel
             InvoiceDetailController controller = fxmlLoader.getController();
             controller.setViewModelForCreation(invoiceDetailVM); // Sử dụng phương thức mới
 
-            // 4. Hiển thị cửa sổ chi tiết hóa đơn
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
 
-            // Đóng cửa sổ chọn phòng hiện tại
             handleClose(null);
 
-            stage.showAndWait(); // Hiển thị và chờ cho đến khi nó được đóng
-
-            // (Tùy chọn) Reload lại màn hình đặt phòng để cập nhật trạng thái
-            //viewModel.getParent().loadFromModel();
+            stage.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();
