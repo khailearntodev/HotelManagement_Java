@@ -23,13 +23,13 @@ public class InvoiceDAO {
         try (Session session = HibernateUtils.getSession()) {
             return session.createQuery(
                             "SELECT i FROM Invoice i " +
-                                    "LEFT JOIN FETCH i.reservations r " + // Tải tất cả Reservations của Invoice
-                                    "LEFT JOIN FETCH r.roomID ro " +      // Tải Room của mỗi Reservation
-                                    "LEFT JOIN FETCH ro.roomTypeID rt " + // Tải RoomType của mỗi Room
-                                    "LEFT JOIN FETCH r.servicebookings sb " + // Tải Servicebookings của mỗi Reservation
-                                    "LEFT JOIN FETCH sb.serviceID s " +  // Tải Service của mỗi Servicebooking
-                                    "LEFT JOIN FETCH r.reservationguests rg " + // Tải ReservationGuests của mỗi Reservation
-                                    "LEFT JOIN FETCH rg.customerID c " + // Tải Customer của mỗi ReservationGuest
+                                    "LEFT JOIN FETCH i.reservations r " +
+                                    "LEFT JOIN FETCH r.roomID ro " +
+                                    "LEFT JOIN FETCH ro.roomTypeID rt " +
+                                    "LEFT JOIN FETCH r.servicebookings sb " +
+                                    "LEFT JOIN FETCH sb.serviceID s " +
+                                    "LEFT JOIN FETCH r.reservationguests rg " +
+                                    "LEFT JOIN FETCH rg.customerID c " +
                                     "WHERE i.id = :id AND i.isDeleted = false",
                             Invoice.class)
                     .setParameter("id", id)
@@ -133,13 +133,15 @@ public class InvoiceDAO {
                     .uniqueResultOptional().orElse(null);
         }
     }
-    public List<Invoice> findByMonthAndYear(int month, int year) {
-        try (Session session = HibernateUtils.getSession()) {
-            String hql = "FROM Invoice i WHERE MONTH(i.issueDate) = :month AND YEAR(i.issueDate) = :year AND i.isDeleted = false";
-            return session.createQuery(hql, Invoice.class)
-                    .setParameter("month", month)
-                    .setParameter("year", year)
-                    .list();
-        }
+    public List<Invoice> findByMonthAndYear(Session session, int month, int year) {
+        String hql = "SELECT DISTINCT i FROM Invoice i " +
+                "LEFT JOIN FETCH i.reservations r " +
+                "LEFT JOIN FETCH r.roomID rm " +
+                "LEFT JOIN FETCH rm.roomTypeID rt " +
+                "WHERE MONTH(i.issueDate) = :month AND YEAR(i.issueDate) = :year";
+        return session.createQuery(hql, Invoice.class)
+                .setParameter("month", month)
+                .setParameter("year", year)
+                .getResultList();
     }
 }
