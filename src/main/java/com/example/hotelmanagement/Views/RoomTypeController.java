@@ -123,8 +123,10 @@ public class RoomTypeController implements Initializable {
 
                     buttonsContainer.getChildren().addAll(editButton, deleteButton);
                     setGraphic(buttonsContainer); // Set the HBox as the graphic for the cell
+                    setText(null);
                 } else {
                     setGraphic(null); // Clear graphic if item is null
+                    setText(null);
                 }
             }
         });
