@@ -6,6 +6,7 @@ import com.example.hotelmanagement.DAO.PrebookingDAO;
 import com.example.hotelmanagement.DAO.UserAccountDAO;
 import com.example.hotelmanagement.DTO.PreBookingInvoiceDisplay;
 import com.example.hotelmanagement.Models.*;
+import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
@@ -105,25 +106,40 @@ public class BookingInAdvanceInvoiceViewModel {
                 PdfDocument pdf = new PdfDocument(writer);
                 Document doc = new Document(pdf);
 
-                PdfFont vietnameseFont = PdfFontFactory.createFont("C:/Windows/Fonts/arial.ttf",
-                        com.itextpdf.io.font.PdfEncodings.IDENTITY_H);
-                PdfFont boldFont = PdfFontFactory.createFont("C:/Windows/Fonts/arialbd.ttf",
-                        com.itextpdf.io.font.PdfEncodings.IDENTITY_H);
+                PdfFont vietnameseFont = PdfFontFactory.createFont(
+                        "c:/windows/fonts/arial.ttf",
+                        PdfEncodings.IDENTITY_H,
+                        PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED
+                );
 
-                doc.add(new Paragraph("HÓA ĐƠN ĐẶT PHÒNG TRƯỚC")
+                PdfFont boldFont = PdfFontFactory.createFont(
+                        "c:/windows/fonts/arialbd.ttf",
+                        PdfEncodings.IDENTITY_H,
+                        PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED
+                );
+
+                doc.add(new Paragraph("KHÁCH SẠN N10")
                         .setFont(boldFont)
-                        .setFontSize(18)
-                        .setFontColor(ColorConstants.WHITE)
-                        .setBackgroundColor(ColorConstants.BLUE)
+                        .setFontSize(16)
                         .setTextAlignment(TextAlignment.CENTER)
-                        .setMarginBottom(20)
-                        .setPadding(10));
-
-                doc.add(new Paragraph("Khách Sạn UIT")
-                        .setFont(vietnameseFont)
-                        .setFontSize(14)
-                        .setTextAlignment(TextAlignment.RIGHT)
                         .setMarginBottom(5));
+                doc.add(new Paragraph("Địa chỉ: 123 Đường XYZ, Quận 1, TP.HCM")
+                        .setFont(vietnameseFont)
+                        .setFontSize(10)
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setMarginBottom(5));
+                doc.add(new Paragraph("Điện thoại: 0123.456.789 | Email: info@khachsanabc.com")
+                        .setFont(vietnameseFont)
+                        .setFontSize(10)
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setMarginBottom(20));
+
+                doc.add(new Paragraph("HÓA ĐƠN THANH TOÁN ĐẶT TRƯỚC")
+                        .setFont(boldFont)
+                        .setFontSize(24)
+                        .setFontColor(new DeviceRgb(0, 79, 157))
+                        .setTextAlignment(TextAlignment.CENTER)
+                        .setMarginBottom(20));
 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
                 doc.add(new Paragraph("Thời gian in hóa đơn: " + LocalDateTime.now().format(formatter))

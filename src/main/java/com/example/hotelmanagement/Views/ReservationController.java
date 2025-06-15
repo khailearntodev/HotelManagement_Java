@@ -50,8 +50,6 @@ import javafx.util.StringConverter;
 import lombok.Getter;
 import lombok.Setter;
 
-
-
 public class ReservationController implements Initializable {
     @FXML private MFXTextField textfieldSearch;
     @FXML private MFXComboBox<Integer> comboBoxStatus;
@@ -271,6 +269,7 @@ public class ReservationController implements Initializable {
             }
 
             private void setupBookingButton(Room p) {
+                btn.setDisable(p.getCleaningStatus() != 0);
                 btn.setOnAction(ae -> {
                     try {
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/hotelmanagement/Views/BookingView.fxml"));
