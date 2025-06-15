@@ -20,16 +20,19 @@ import javafx.beans.property.SimpleStringProperty;
 import com.example.hotelmanagement.DTO.InvoiceDetail;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 
@@ -51,7 +54,7 @@ public class InvoiceDetailController {
     @FXML private TableColumn<InvoiceDetailViewModel, Number> soNgayThueColumn;
     @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> phiDichVuColumn;
     @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> donGiaPhongColumn;
-    @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> thanhTienColumn;
+    @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> tienPhongColumn;
     @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> tiencocColumn;
     @FXML private TableColumn<InvoiceDetailViewModel, BigDecimal> tongColumn;
     @FXML private TableColumn<InvoiceDetailViewModel, String> viewServicesColumn;
@@ -106,7 +109,14 @@ public class InvoiceDetailController {
         soNgayThueColumn.setCellValueFactory(data -> data.getValue().soNgayThueProperty());
         phiDichVuColumn.setCellValueFactory(data -> data.getValue().phiDichVuProperty());
         donGiaPhongColumn.setCellValueFactory(data -> data.getValue().donGiaPhongProperty());
-        thanhTienColumn.setCellValueFactory(data -> data.getValue().thanhTienProperty());
+        tienPhongColumn.setCellValueFactory(data -> data.getValue().tienPhongProperty());
+        tiencocColumn.setCellValueFactory(data -> data.getValue().tienCocProperty());
+        tongColumn.setCellValueFactory(data -> data.getValue().tongCongProperty());
+        formatCurrencyColumn(tienPhongColumn);
+        formatCurrencyColumn(phiDichVuColumn);
+        formatCurrencyColumn(tiencocColumn);
+        formatCurrencyColumn(tongColumn);
+        formatCurrencyColumn(donGiaPhongColumn);
 
         viewServicesColumn.setCellFactory(col -> new TableCell<InvoiceDetailViewModel, String>() {
 
@@ -152,7 +162,7 @@ public class InvoiceDetailController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
         paymentDateLabel.setText(LocalDateTime.now().format(formatter));
 
-        totalDueLabel.setText(viewModel.getTongTien().get().toString());
+        totalDueLabel.setText(formatCurrency(viewModel.getTongTien().get()));
         detailList.setAll(viewModel.getReservationDetails());
         detailTable.setItems(detailList);
 
@@ -181,7 +191,7 @@ public class InvoiceDetailController {
         } else {
             paymentDateLabel.setText("N/A");
         }
-        totalDueLabel.setText(invoice.getTotalAmount().toString());
+        totalDueLabel.setText(formatCurrency(invoice.getTotalAmount()));
 
         List<InvoiceDetailViewModel> viewModels = invoice.getReservations().stream()
                 .map(InvoiceDetailViewModel::new)
@@ -218,6 +228,7 @@ public class InvoiceDetailController {
 
             Stage stage = new Stage();
             stage.setTitle("Chi tiết dịch vụ");
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root));
             stage.show();
 
@@ -232,5 +243,23 @@ public class InvoiceDetailController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    private void formatCurrencyColumn(TableColumn<InvoiceDetailViewModel, BigDecimal> column) {
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        column.setCellFactory(tc -> new TableCell<>() {
+            @Override
+            protected void updateItem(BigDecimal item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(currencyFormat.format(item));
+                }
+            }
+        });
+    }
+    private String formatCurrency(BigDecimal amount) {
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return currencyFormatter.format(amount);
     }
 }

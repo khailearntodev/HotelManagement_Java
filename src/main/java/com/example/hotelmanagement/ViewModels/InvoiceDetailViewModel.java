@@ -21,7 +21,9 @@ public class InvoiceDetailViewModel {
     private final IntegerProperty soNgayThue = new SimpleIntegerProperty();
     private final ObjectProperty<BigDecimal> phiDichVu = new SimpleObjectProperty<>();
     private final ObjectProperty<BigDecimal> donGiaPhong = new SimpleObjectProperty<>();
-    private final ObjectProperty<BigDecimal> thanhTien = new SimpleObjectProperty<>();
+    private final ObjectProperty<BigDecimal> tienPhong = new SimpleObjectProperty<>(BigDecimal.ZERO);
+    private final ObjectProperty<BigDecimal> tienCoc = new SimpleObjectProperty<>(BigDecimal.ZERO);
+    private final ObjectProperty<BigDecimal> tongCong = new SimpleObjectProperty<>(BigDecimal.ZERO);
 
     @Getter
     private final Reservation reservation;
@@ -38,20 +40,22 @@ public class InvoiceDetailViewModel {
     public InvoiceDetailViewModel(List<Reservation> reservations) {
         this.reservation = null;
         Invoice newInvoice = new Invoice();
-        Employee employee = new EmployeeDAO().findById(loginViewModel.getEmployeeId()); //for test
+        Employee employee = new EmployeeDAO().findById(loginViewModel.getEmployeeId());
         newInvoice.setEmployeeID(employee);
         newInvoice.setIssueDate(java.time.Instant.now());
         invoice.set(newInvoice);
-
-        BigDecimal total = BigDecimal.ZERO;
+        BigDecimal grandTotal = BigDecimal.ZERO;
         for (int i = 0; i < reservations.size(); i++) {
             InvoiceDetailViewModel detail = new InvoiceDetailViewModel(reservations.get(i));
             detail.soThuTu.set(i + 1);
             reservationDetails.add(detail);
-            total = total.add(detail.thanhTien.get());
+            grandTotal = grandTotal.add(detail.tongCong.get());
         }
-        tongTien.set(total);
-        newInvoice.setTotalAmount(total);
+        if(grandTotal.compareTo(BigDecimal.ZERO)<0){
+            grandTotal = BigDecimal.ZERO;
+        }
+        tongTien.set(grandTotal);
+        newInvoice.setTotalAmount(grandTotal);
     }
 
     private void initializeSingleReservation(Reservation reservation) {
@@ -59,15 +63,20 @@ public class InvoiceDetailViewModel {
         long days = ChronoUnit.DAYS.between(reservation.getCheckInDate(), reservation.getCheckOutDate());
         if (days <= 0) days = 1;
         this.soNgayThue.set((int) days);
-        BigDecimal giaPhong = reservation.getRoomID().getRoomTypeID().getBasePrice();
+
+        BigDecimal giaPhong = reservation.getPrice();
+        this.donGiaPhong.set(giaPhong);
+
         BigDecimal phiDV = reservation.getServicebookings().stream()
                 .filter(sb -> "Đã xử lý".equals(sb.getStatus()))
                 .map(sb -> sb.getServiceID().getPrice().multiply(BigDecimal.valueOf(sb.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        this.donGiaPhong.set(giaPhong);
         this.phiDichVu.set(phiDV);
-        this.thanhTien.set(giaPhong.multiply(BigDecimal.valueOf(days)).add(phiDV));
+        BigDecimal coc = new InvoiceDAO().findDepositAmountByReservationId(reservation.getId());
+        this.tienCoc.set(coc);
+        BigDecimal tienThuePhong = giaPhong.multiply(BigDecimal.valueOf(days));
+        this.tienPhong.set(tienThuePhong);
+        this.tongCong.set(tienThuePhong.add(phiDV).subtract(coc));
     }
 
     public void saveInvoice() {
@@ -81,19 +90,23 @@ public class InvoiceDetailViewModel {
         for (InvoiceDetailViewModel detail : reservationDetails) {
             Reservation res = detail.getReservation();
             res.setInvoiceID(invoice.get());
+            res.setTotal(this.tienPhong.get());
             reservationDAO.update(res);
 
             Room room = res.getRoomID();
             room.setStatus(1);
+            room.setCleaningStatus(1);
             roomDAO.update(room);
         }
     }
+    public ObjectProperty<BigDecimal> tienPhongProperty() { return tienPhong; }
+    public ObjectProperty<BigDecimal> tienCocProperty() { return tienCoc; }
+    public ObjectProperty<BigDecimal> tongCongProperty() { return tongCong; }
     public IntegerProperty soThuTuProperty() { return soThuTu; }
     public IntegerProperty soPhongProperty() { return soPhong; }
     public IntegerProperty soNgayThueProperty() { return soNgayThue; }
     public ObjectProperty<BigDecimal> phiDichVuProperty() { return phiDichVu; }
     public ObjectProperty<BigDecimal> donGiaPhongProperty() { return donGiaPhong; }
-    public ObjectProperty<BigDecimal> thanhTienProperty() { return thanhTien; }
 
     public ObservableList<InvoiceDetailViewModel> getReservationDetails() { return reservationDetails; }
     public ObjectProperty<BigDecimal> tongTienProperty() { return tongTien; }
