@@ -4,6 +4,7 @@ import com.example.hotelmanagement.Models.Customer; // Cần import Customer đ�
 import com.example.hotelmanagement.Models.Room;     // Cần import Room để lấy số phòng
 import com.example.hotelmanagement.Models.Servicebooking;
 import com.example.hotelmanagement.ViewModels.ServiceUsageDetailViewModel; // Sử dụng ViewModel mới đổi tên
+import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -21,6 +23,7 @@ public class ServiceDetailController {
     @FXML private Label roomNumberLabel;
     @FXML private Label customerNameLabel;
     @FXML private Label totalServiceCostLabel;
+    @FXML private MFXButton closeButton;
     @FXML private Button exportButton;
 
     @FXML
@@ -36,6 +39,12 @@ public class ServiceDetailController {
 
     @FXML
     public void initialize() {
+        closeButton.setOnAction(event -> {
+            Stage stage = (Stage) closeButton.getScene().getWindow();
+            if (stage != null) {
+                stage.close();
+            }
+        });
         serviceIdColumn.setCellValueFactory(data -> data.getValue().IdProperty().asObject());
         serviceNameColumn.setCellValueFactory(data -> data.getValue().serviceNameProperty());
         quantityColumn.setCellValueFactory(data -> data.getValue().quantityProperty().asObject());
