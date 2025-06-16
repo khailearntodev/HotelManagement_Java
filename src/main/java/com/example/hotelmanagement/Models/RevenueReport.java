@@ -28,8 +28,8 @@ public class RevenueReport {
     @Column(name = "TotalRental", nullable = false, precision = 20)
     private BigDecimal totalRental;
 
-    @Column(name = "TotalRevenue", nullable = false, precision = 20)
-    private BigDecimal totalRevenue;
+    @Column(name = "TotalService", nullable = false, precision = 20)
+    private BigDecimal totalService;
 
     @ColumnDefault("0")
     @Column(name = "IsDeleted", nullable = false)
