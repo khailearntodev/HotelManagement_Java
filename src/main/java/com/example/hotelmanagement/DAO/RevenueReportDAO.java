@@ -79,9 +79,11 @@ public class RevenueReportDAO {
                             RevenueReport.class)
                     .setParameter("month", month)
                     .setParameter("year", year)
+                    .setMaxResults(1)
                     .uniqueResult();
         }
     }
+
 
     public RevenueReport getByYear(int year) {
         try (Session session = HibernateUtils.getSession()) {

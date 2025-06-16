@@ -190,6 +190,26 @@ public class ReservationDAO {
         }
     }
 
+    public List<Reservation> findByMonthAndYear(Session session, int month, int year) {
+        try {
+            return session.createQuery("""
+                SELECT r FROM Reservation r
+                LEFT JOIN FETCH r.servicebookings sb
+                LEFT JOIN FETCH sb.serviceID s
+                WHERE MONTH(r.checkInDate) = :month
+                AND YEAR(r.checkInDate) = :year
+                AND r.isDeleted = false
+                AND r.invoiceID IS NOT NULL
+                """, Reservation.class)
+                    .setParameter("month", month)
+                    .setParameter("year", year)
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
     public List<Dashboard_BookingDisplay> getRecentBookingDisplays() {
         try (Session session = HibernateUtils.getSession()) {
             String sql = """

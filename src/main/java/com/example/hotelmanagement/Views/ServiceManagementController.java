@@ -18,13 +18,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 
+import java.text.NumberFormat; // Import này
+import java.util.Locale;       // Import này
+
 public class ServiceManagementController {
 
     @FXML private MFXTextField filterTextField;
     @FXML private TableView<ServiceDisplay> serviceTableView;
     @FXML private TableColumn<ServiceDisplay, String> colMaDichVu;
     @FXML private TableColumn<ServiceDisplay, String> colTenDichVu;
-    @FXML private TableColumn<ServiceDisplay, BigDecimal> colGiaDichVu;
+    @FXML private TableColumn<ServiceDisplay, BigDecimal> colGiaDichVu; // Kiểu vẫn là BigDecimal
     @FXML private TableColumn<ServiceDisplay, Void> colAction;
 
     @FXML private ImageView editServiceImageView;
@@ -50,7 +53,7 @@ public class ServiceManagementController {
 
     private FilteredList<ServiceDisplay> filteredList;
     private SortedList<ServiceDisplay> sortedList;
-
+    private final NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
     @FXML
     public void initialize() {
         URL cssUrl = getClass().getResource("/CSS/style.css");
@@ -61,7 +64,7 @@ public class ServiceManagementController {
         } else {
             System.err.println("CSS file not found: /CSS/style.css");
         }
-
+        currencyFormatter.setMinimumFractionDigits(0);
         viewModel.loadServices();
 
         filteredList = new FilteredList<>(viewModel.getMasterServiceList(), p -> true);
@@ -72,8 +75,19 @@ public class ServiceManagementController {
         serviceTableView.setItems(sortedList);
         colMaDichVu.setCellValueFactory(cellData -> cellData.getValue().maDichVuProperty().asObject().asString());
         colTenDichVu.setCellValueFactory(cellData -> cellData.getValue().tenDichVuProperty());
-        colGiaDichVu.setCellValueFactory(cellData -> cellData.getValue().giaDichVuProperty());
 
+        colGiaDichVu.setCellValueFactory(cellData -> cellData.getValue().giaDichVuProperty());
+        colGiaDichVu.setCellFactory(column -> new TableCell<ServiceDisplay, BigDecimal>() {
+            @Override
+            protected void updateItem(BigDecimal item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(currencyFormatter.format(item));
+                }
+            }
+        });
         setupRowClick();
         setupFilter();
 
@@ -89,7 +103,7 @@ public class ServiceManagementController {
 
                 maDichVuEditTextField.setText(String.valueOf(selected.getMaDichVu()));
                 tenDichVuEditTextField.setText(selected.getTenDichVu());
-                giaDichVuEditTextField.setText(String.valueOf(selected.getGiaDichVu()));
+                giaDichVuEditTextField.setText(selected.getGiaDichVu().toPlainString()); // Sử dụng toPlainString() để hiển thị số thuần khi chỉnh sửa
                 imageLinkEditTextField.setText(selected.getImageLink());
                 loadImageFromUrl(selected.getImageLink(), editServiceImageView);
             }
@@ -112,7 +126,7 @@ public class ServiceManagementController {
                 if (service.getTenDichVu().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
-                if (String.valueOf(service.getGiaDichVu()).toLowerCase().contains(lowerCaseFilter)) {
+                if (service.getGiaDichVu().toPlainString().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
                 return false;
@@ -152,7 +166,7 @@ public class ServiceManagementController {
 
                 if (success) {
                     showAlert(Alert.AlertType.INFORMATION,"Thành công", "Cập nhật dịch vụ thành công");
-                    filterTextField.clear();
+                    filterTextField.clear(); // Clear filter to show updated list
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Thất bại", "Không thể cập nhật dịch vụ.");
                 }
@@ -171,14 +185,17 @@ public class ServiceManagementController {
 
     @FXML
     private void onCancelEdit() {
-        clearEditForm();
         ServiceDisplay selected = serviceTableView.getSelectionModel().getSelectedItem();
         if (selected != null) {
+            maDichVuEditTextField.setText(String.valueOf(selected.getMaDichVu()));
+            tenDichVuEditTextField.setText(selected.getTenDichVu());
+            giaDichVuEditTextField.setText(selected.getGiaDichVu().toPlainString());
+            imageLinkEditTextField.setText(selected.getImageLink());
             loadImageFromUrl(selected.getImageLink(), editServiceImageView);
         } else {
+            clearEditForm();
             clearImageView(editServiceImageView);
         }
-
         filterTextField.clear();
     }
 
@@ -190,6 +207,7 @@ public class ServiceManagementController {
     }
 
     private void clearEditForm() {
+        maDichVuEditTextField.clear();
         tenDichVuEditTextField.clear();
         giaDichVuEditTextField.clear();
         imageLinkEditTextField.clear();
@@ -217,7 +235,6 @@ public class ServiceManagementController {
                         showAlert(Alert.AlertType.WARNING, "Lỗi tải ảnh", "Không thể tải ảnh từ URL đã cung cấp. Vui lòng kiểm tra lại đường dẫn.");
                     }
                 });
-
                 if (image.isError()) {
                     System.err.println("Lỗi ngay khi tạo Image từ URL: " + url + " - " + image.getException().getMessage());
                     clearImageView(imageView);

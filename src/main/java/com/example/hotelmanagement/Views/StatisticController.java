@@ -46,7 +46,7 @@ public class StatisticController {
     @FXML private MFXButton byYearButton;
     @FXML private MFXButton generateReportButton;
     @FXML private MFXButton exportButton;
-    @FXML private Label totalRevenueLabel;
+    @FXML private Label totalServiceLabel;
     @FXML private Label totalRentalLabel;
     @FXML private Label totalBookingsLabel;
     @FXML private Label popularRoomTypeLabel;
@@ -70,7 +70,7 @@ public class StatisticController {
         monthComboBox.valueProperty().bindBidirectional(viewModel.selectedMonthProperty());
         yearComboBox.valueProperty().bindBidirectional(viewModel.selectedYearProperty());
 
-        totalRevenueLabel.textProperty().bind(viewModel.totalRevenueProperty());
+        totalServiceLabel.textProperty().bind(viewModel.totalRevenueProperty());
         totalRentalLabel.textProperty().bind(viewModel.totalRentalProperty());
         totalBookingsLabel.textProperty().bind(viewModel.totalBookingsProperty());
         popularRoomTypeLabel.textProperty().bind(viewModel.popularRoomTypeProperty());
@@ -82,7 +82,7 @@ public class StatisticController {
         // Tính toán và hiển thị cột tỷ lệ đóng góp
         contributionColumn.setCellValueFactory(data -> {
             try {
-                double total = Double.parseDouble(totalRevenueLabel.getText().replaceAll("[^\\d.]", ""));
+                double total = Double.parseDouble(totalRentalLabel.getText().replaceAll("[^\\d.]", ""));
                 if (total > 0) {
                     double revenue = data.getValue().getRevenue().doubleValue();
                     double contribution = (revenue / total) * 100;
@@ -178,7 +178,6 @@ public class StatisticController {
             Document document = new Document(pdfDoc, PageSize.A4);
             document.setMargins(50, 50, 50, 50);
 
-            // Ensure these font paths are correct on the target system
             PdfFont vietnameseFont = PdfFontFactory.createFont(
                     "c:/windows/fonts/arial.ttf",
                     PdfEncodings.IDENTITY_H,
@@ -197,7 +196,7 @@ public class StatisticController {
                     .setTextAlignment(TextAlignment.CENTER)
                     .setMarginBottom(10));
 
-            // Report period information
+
             String reportPeriod = "";
             if (monthComboBox.getValue() != null && !monthComboBox.getValue().isEmpty()) {
                 reportPeriod = "Tháng: " + monthComboBox.getValue();
@@ -214,7 +213,7 @@ public class StatisticController {
             }
 
 
-            // --- REVENUE DETAILS TABLE ---
+
             float[] columnWidths = {150f, 150f, 150f};
             Table table = new Table(UnitValue.createPercentArray(columnWidths));
             table.setWidth(UnitValue.createPercentValue(100));
@@ -240,9 +239,8 @@ public class StatisticController {
                 // Contribution Percentage
                 double total = 0;
                 try {
-                    total = Double.parseDouble(totalRevenueLabel.getText().replaceAll("[^\\d.]", ""));
+                    total = Double.parseDouble(totalRentalLabel.getText().replaceAll("[^\\d.]", ""));
                 } catch (NumberFormatException e) {
-                    // Handle case where totalRevenueLabel might not be a valid number yet
                     System.err.println("Could not parse total revenue for contribution calculation: " + e.getMessage());
                 }
 
@@ -257,16 +255,15 @@ public class StatisticController {
             }
             document.add(table);
 
-            // Summary Information
-            document.add(new Paragraph("Tổng doanh thu: " + totalRevenueLabel.getText())
+            document.add(new Paragraph("Tổng doanh thu dịch vụ: " + totalServiceLabel.getText())
                     .setFont(boldFont)
                     .setFontSize(12)
                     .setTextAlignment(TextAlignment.RIGHT));
-            document.add(new Paragraph("Tổng lượt thuê phòng: " + totalRentalLabel.getText())
+            document.add(new Paragraph("Tổng doanh thu thuê phòng: " + totalRentalLabel.getText())
                     .setFont(boldFont)
                     .setFontSize(12)
                     .setTextAlignment(TextAlignment.RIGHT));
-            document.add(new Paragraph("Tổng số lượt đặt phòng: " + totalBookingsLabel.getText())
+            document.add(new Paragraph("Tổng lượt thuê phòng: " + totalBookingsLabel.getText())
                     .setFont(boldFont)
                     .setFontSize(12)
                     .setTextAlignment(TextAlignment.RIGHT));

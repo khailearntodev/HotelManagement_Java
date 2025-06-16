@@ -8,6 +8,8 @@ import javafx.collections.ObservableList;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 public class InvoiceViewModel {
     private final ObservableList<Invoice> invoiceList = FXCollections.observableArrayList();
@@ -19,6 +21,8 @@ public class InvoiceViewModel {
     private String currentPaymentStatus = "Tất cả trạng thái";
     private BigDecimal minAmount = BigDecimal.ZERO;
     private BigDecimal maxAmount = new BigDecimal("100000000");
+    private LocalDate currentStartDate = null;
+    private LocalDate currentEndDate = null;
 
     private final InvoiceDAO dao = new InvoiceDAO();
 
@@ -38,6 +42,18 @@ public class InvoiceViewModel {
             match &= "Tất cả trạng thái".equals(currentPaymentStatus) || currentPaymentStatus.equals(inv.getPaymentStatus());
             match &= inv.getCustomerName().toLowerCase().contains(currentKeyword.toLowerCase());
             match &= inv.getTotalAmount().compareTo(minAmount) >= 0 && inv.getTotalAmount().compareTo(maxAmount) <= 0;
+
+            if (currentStartDate != null || currentEndDate != null) {
+                Instant issueInstant = inv.getIssueDate();
+                if (issueInstant == null) {
+                    match = false;
+                } else {
+                    LocalDate invoiceIssueDate = issueInstant.atZone(ZoneId.systemDefault()).toLocalDate();
+                    boolean matchesStartDate = (currentStartDate == null || !invoiceIssueDate.isBefore(currentStartDate));
+                    boolean matchesEndDate = (currentEndDate == null || !invoiceIssueDate.isAfter(currentEndDate));
+                    match &= matchesStartDate && matchesEndDate;
+                }
+            }
             return match;
         });
 
@@ -66,6 +82,11 @@ public class InvoiceViewModel {
 
     public void filterByKeyword(String keyword) {
         this.currentKeyword = keyword;
+        applyAllFilters();
+    }
+    public void filterByIssueDateRange(LocalDate startDate, LocalDate endDate) {
+        this.currentStartDate = startDate;
+        this.currentEndDate = endDate;
         applyAllFilters();
     }
 
