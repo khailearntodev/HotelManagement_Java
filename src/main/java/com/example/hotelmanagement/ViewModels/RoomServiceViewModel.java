@@ -94,7 +94,7 @@ public class RoomServiceViewModel {
         newBooking.setQuantity(quantity.get());
         newBooking.setBookingDate(Instant.now());
         newBooking.setStatus(ServiceBookingDisplay.STATUS_PENDING);
-        newBooking.setIsDeleted(false); // Đảm bảo isDeleted là false khi tạo mới
+        newBooking.setIsDeleted(false);
 
         Servicebooking savedBooking = serviceBookingDAO.saveAndReturn(newBooking);
         if (savedBooking != null && savedBooking.getId() != null) {
@@ -132,8 +132,7 @@ public class RoomServiceViewModel {
                 // tvRoomServices.refresh();
             } else {
                 System.err.println("Lỗi khi hủy dịch vụ qua DAO.");
-                bookingToUpdate.setStatus(ServiceBookingDisplay.STATUS_PENDING); // Rollback
-                // TODO: Hiển thị thông báo lỗi
+                bookingToUpdate.setStatus(ServiceBookingDisplay.STATUS_PENDING);
             }
         }
     }

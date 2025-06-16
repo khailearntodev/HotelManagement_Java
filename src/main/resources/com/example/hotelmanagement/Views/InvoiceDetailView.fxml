@@ -115,24 +115,20 @@
         <Separator styleClass="separator" />
 
         <HBox alignment="CENTER_LEFT" spacing="10.0">
-            <VBox spacing="3.0">
-                <Label styleClass="footer-info" text="University Of Information Technology, Capital 1000, SIRET : 90106223200011" />
-                <Label styleClass="footer-info" text="VAT: FRZ0901062232, Activity Type:58.29C" />
-                <Label styleClass="footer-info" text="RCS: 901062232 Paris 8" />
-            </VBox>
+
 
             <Region HBox.hgrow="ALWAYS" />
 
-            <VBox alignment="CENTER" spacing="5.0">
+            <VBox alignment="TOP_CENTER" spacing="5.0">
                 <Label text="Quét mã QR để thanh toán" styleClass="invoice-info-label">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Label>
-                <ImageView fx:id="qrCodeImageView" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" />
+                <ImageView fx:id="qrCodeImageView" fitHeight="135.0" fitWidth="135.0" pickOnBounds="true" preserveRatio="true" />
             </VBox>
             <VBox spacing="10.0" alignment="CENTER"> <padding>
-                <Insets top="10.0" right="10.0" bottom="10.0" left="10.0" /> </padding>
+                <Insets top="15.0" right="10.0" bottom="10.0" left="10.0" /> </padding>
                 <MFXButton fx:id="payButton" buttonType="RAISED" styleClass="mfx-button" text="Thanh Toán" maxWidth="Infinity"  />
                 <MFXButton fx:id="payAndPrintButton" buttonType="RAISED" styleClass="mfx-button" text="Thanh Toán và in hóa đơn" maxWidth="Infinity"  />
             </VBox>

@@ -2,7 +2,7 @@ package com.example.hotelmanagement.Views;
 
 import com.example.hotelmanagement.DTO.ServiceBookingDisplay;
 import com.example.hotelmanagement.Models.Reservation;
-import com.example.hotelmanagement.Models.Service; // Cần cho MFXComboBox
+import com.example.hotelmanagement.Models.Service;
 import com.example.hotelmanagement.ViewModels.RoomServiceViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -15,6 +15,9 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter; // Import này
+import java.text.NumberFormat;             // Import này
+import java.util.Locale;                   // Import này
 
 public class RoomServiceController {
 
@@ -27,7 +30,7 @@ public class RoomServiceController {
     @FXML private Label lblTitle;
 
     @FXML private TableView<ServiceBookingDisplay> tvRoomServices;
-    @FXML private TableColumn<ServiceBookingDisplay, Integer> colServiceBookingId; // Nếu bạn muốn hiển thị ID
+    @FXML private TableColumn<ServiceBookingDisplay, Integer> colServiceBookingId;
     @FXML private TableColumn<ServiceBookingDisplay, String> colServiceName;
     @FXML private TableColumn<ServiceBookingDisplay, Integer> colQuantity;
     @FXML private TableColumn<ServiceBookingDisplay, LocalDate> colOrderDate;
@@ -37,6 +40,9 @@ public class RoomServiceController {
     private RoomServiceViewModel viewModel;
     private Reservation currentReservation;
 
+    private final NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     public void setReservation(Reservation reservation) {
         this.currentReservation = reservation;
     }
@@ -44,6 +50,7 @@ public class RoomServiceController {
     @FXML
     public void initialize() {
         viewModel = new RoomServiceViewModel();
+        currencyFormatter.setMinimumFractionDigits(0);
 
         closeButton.setOnAction(event -> {
             Stage stage = (Stage) closeButton.getScene().getWindow();
@@ -52,9 +59,8 @@ public class RoomServiceController {
             }
         });
 
-         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
-         spnQuantity.setValueFactory(valueFactory);
-
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
+        spnQuantity.setValueFactory(valueFactory);
 
         tvRoomServices.setItems(viewModel.getRoomServiceBookings());
 
@@ -69,9 +75,21 @@ public class RoomServiceController {
         if (colServiceBookingId != null) colServiceBookingId.setCellValueFactory(data->data.getValue().serviceBookingIdProperty().asObject());
         colServiceName.setCellValueFactory(data->data.getValue().serviceNameProperty());
         colQuantity.setCellValueFactory(data->data.getValue().quantityProperty().asObject());
-        colOrderDate.setCellValueFactory(data->data.getValue().bookingDateProperty());
+        if (colOrderDate != null) {
+            colOrderDate.setCellValueFactory(data -> data.getValue().bookingDateProperty());
+            colOrderDate.setCellFactory(column -> new TableCell<ServiceBookingDisplay, LocalDate>() {
+                @Override
+                protected void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.format(dateFormatter));
+                    }
+                }
+            });
+        }
         colStatus.setCellValueFactory(data->data.getValue().statusProperty());
-
     }
 
     public void setupBindingsAndData() {
@@ -110,14 +128,17 @@ public class RoomServiceController {
         cbService.setConverter(new StringConverter<Service>() {
             @Override
             public String toString(Service service) {
-                return service == null ? "" : service.getServiceName() + " (" + service.getPrice() + ")";
+                return service == null ? "" : service.getServiceName() + " - " + currencyFormatter.format(service.getPrice());
             }
 
             @Override
             public Service fromString(String string) {
                 if (string == null || string.isEmpty()) return null;
                 return viewModel.getAvailableServices().stream()
-                        .filter(s -> (s.getServiceName() + " (" + s.getPrice() + ")").equals(string))
+                        .filter(s -> {
+                            String serviceDisplayName = s.getServiceName() + " - " + currencyFormatter.format(s.getPrice());
+                            return serviceDisplayName.equals(string);
+                        })
                         .findFirst().orElse(null);
             }
         });
