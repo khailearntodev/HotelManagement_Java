@@ -4,6 +4,7 @@ import com.example.hotelmanagement.Models.Permission;
 import com.example.hotelmanagement.Utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import com.example.hotelmanagement.Models.RolePermission;
 
 import java.util.List;
 
@@ -46,4 +47,14 @@ public class PermissionDAO {
             return false;
         }
     }
+
+    public List<Permission> getPermissionsByRoleId(int roleId) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                            "SELECT rp.permission FROM RolePermission rp WHERE rp.role.id = :roleId", Permission.class)
+                    .setParameter("roleId", roleId)
+                    .list();
+        }
+    }
+
 }

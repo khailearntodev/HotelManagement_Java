@@ -135,9 +135,8 @@ public class RoomDAO {
 
     public int countInUseRooms() {
         try (Session session = HibernateUtils.getSession()) {
-            String sql = "SELECT COUNT(*) FROM Reservation re " +
-                    "JOIN Room r ON r.RoomID = re.RoomID " +
-                    "WHERE re.isDeleted = 0 AND r.Status = 2 AND r.isDeleted = 0";
+            String sql = "SELECT COUNT(*) FROM ROOM r " +
+                    "WHERE r.isDeleted = 0 AND r.Status = 2";
             Object result = session.createNativeQuery(sql).getSingleResult();
             return ((Number) result).intValue();
         } catch (Exception e) {

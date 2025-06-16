@@ -32,8 +32,8 @@ public class EmployeeAccountInformationController {
             roleComboBox.setValue(viewModel.selectedRoleNameProperty().getValue());
         });
         viewModel.setEmployeeId(employeeId);
-        System.out.println("Role names in ComboBox: " + roleComboBox.getItems());
-        System.out.println("Selected role name: " + roleComboBox.getValue());
+//        System.out.println("Role names in ComboBox: " + roleComboBox.getItems());
+//        System.out.println("Selected role name: " + roleComboBox.getValue());
 
         bindFields();
     }

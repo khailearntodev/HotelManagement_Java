@@ -78,7 +78,25 @@ public class ConfigViewModel {
 
     public void selectRole(String roleName) {
         selectedRoleName.set(roleName);
+
+        if (!roleToViewsMap.containsKey(roleName)) {
+            int roleId = roles.stream()
+                    .filter(r -> r.getRoleName().equals(roleName))
+                    .map(Role::getId)
+                    .findFirst()
+                    .orElse(-1);
+            if (roleId != -1) {
+                List<Permission> permissions = permissionDAO.getPermissionsByRoleId(roleId);
+                Set<String> permissionNames = permissions.stream()
+                        .map(Permission::getPermissionName)
+                        .collect(Collectors.toSet());
+                roleToViewsMap.put(roleName, permissionNames);
+            } else {
+                roleToViewsMap.put(roleName, new HashSet<>());
+            }
+        }
     }
+
 
     public void setViewAccess(String viewName, boolean hasAccess) {
         if (selectedRoleName.get() == null) return;

@@ -31,12 +31,12 @@
                                     <Font name="Tahoma Bold" size="20.0" />
                                  </font>
                                  <HBox.margin>
-                                    <Insets left="70.0" top="20.0" bottom="20.0"/>
+                                    <Insets bottom="20.0" left="70.0" top="20.0" />
                                  </HBox.margin>
                               </Label>
                               <MFXButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" onAction="#handleAddRoomType" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Thêm loại phòng">
                                  <HBox.margin>
-                                    <Insets left="80.0" right="20.0" top="20.0" bottom="20.0"/>
+                                    <Insets bottom="20.0" left="80.0" right="20.0" top="20.0" />
                                  </HBox.margin>
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -63,7 +63,7 @@
                   </VBox>
                </children>
             </StackPane>
-            <SplitPane fx:id="splitPane2" dividerPositions="0.55" orientation="VERTICAL" SplitPane.resizableWithParent="true">
+            <SplitPane fx:id="splitPane2" dividerPositions="0.55" minHeight="-Infinity" orientation="VERTICAL" SplitPane.resizableWithParent="true">
                <items>
                   <StackPane>
                      <children>
@@ -76,7 +76,7 @@
                                           <Font name="Arial Bold" size="23.0" />
                                        </font>
                                        <HBox.margin>
-                                          <Insets left="5.0" top="15.0" bottom="15.0"/>
+                                          <Insets bottom="15.0" left="5.0" top="15.0" />
                                        </HBox.margin>
                                        <padding>
                                           <Insets top="20.0" />
@@ -213,11 +213,11 @@
                         </VBox>
                      </children>
                   </StackPane>
-                  <StackPane style="-fx-background-color: white;" maxWidth="-Infinity" minWidth="-Infinity">
+                  <StackPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="282.0" prefWidth="520.0" style="-fx-background-color: white;">
                      <children>
                         <VBox>
                            <children>
-                              <HBox style="-fx-background-color: #fff;">
+                              <HBox style="-fx-background-color: #fff; -fx-border-color: black; -fx-border-width: 2 0 0 0;">
                                  <children>
                                     <MFXButton minHeight="-Infinity" prefHeight="50.0" text="Quản Lý Phòng">
                                        <font>
@@ -225,7 +225,7 @@
                                        </font></MFXButton>
                                     <MFXButton alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#handleAddRoomClick" style="-fx-background-color: #1a2ab9; -fx-text-fill: white;" styleClass="button-border" text="Thêm phòng">
                                        <HBox.margin>
-                                          <Insets left="170.0" top="10.0" />
+                                          <Insets left="200.0" top="5.0" />
                                        </HBox.margin>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
@@ -239,7 +239,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </HBox>
-                              <MFXTableView footerVisible="false" fx:id="roomListTable" VBox.vgrow="ALWAYS" />
+                              <MFXTableView footerVisible="false" fx:id="roomListTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="245.0" prefWidth="520.0" VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
                      </children>

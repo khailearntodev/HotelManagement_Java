@@ -8,6 +8,9 @@ import com.example.hotelmanagement.Models.Customer;
 import com.example.hotelmanagement.Models.Customertype;
 import com.example.hotelmanagement.Utils.HibernateUtils;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import lombok.Getter;
 import org.hibernate.Session;
 
 import java.time.Instant;
@@ -18,6 +21,8 @@ import java.time.ZoneId;
 public class CustomerDetailViewModel {
     private final CustomerDAO customerDAO = new CustomerDAO();
     private final CustomerTypeDAO customerTypeDAO = new CustomerTypeDAO();
+    @Getter
+    private final ObservableList<String> customerTypeList = FXCollections.observableArrayList();
 
     private final StringProperty hoTen = new SimpleStringProperty();
     private final ObjectProperty<LocalDate> ngaySinh = new SimpleObjectProperty<>();
@@ -42,6 +47,9 @@ public class CustomerDetailViewModel {
         sdt.set(dto.getPhoneNumber());
         trangThai.set(dto.getStatus());
         gioiTinh.set(dto.getGender());
+        for (Customertype type : customerTypeDAO.getAll()) {
+            customerTypeList.add(type.getTypeName());
+        }
 
         if (dto.getBirthday() != null)
         {

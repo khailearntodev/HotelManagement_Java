@@ -49,6 +49,8 @@ public class CustomerManagementController {
             CustomerDetailController controller = loader.getController();
             controller.loadCustomer(customerDTO);
 
+            controller.setOnSaveSuccess(viewModel::loadCustomers);
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Chi tiết khách hàng");
@@ -59,6 +61,7 @@ public class CustomerManagementController {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     public void initialize() {
