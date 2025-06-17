@@ -50,6 +50,8 @@ public class RevenueReportService {
                 newReport.setMonth(month);
                 newReport.setYear(year);
                 newReport.setIsDeleted(false);
+                newReport.setTotalRental(BigDecimal.ZERO);
+                newReport.setTotalService(BigDecimal.ZERO);
                 session.save(newReport);
             }
 

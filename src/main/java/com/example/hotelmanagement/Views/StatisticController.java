@@ -82,13 +82,14 @@ public class StatisticController {
         // Tính toán và hiển thị cột tỷ lệ đóng góp
         contributionColumn.setCellValueFactory(data -> {
             try {
-                double total = Double.parseDouble(totalRentalLabel.getText().replaceAll("[^\\d.]", ""));
+                double total = Double.parseDouble(totalRentalLabel.getText().replaceAll("\\.", "").replaceAll(" VNĐ", ""));
                 if (total > 0) {
                     double revenue = data.getValue().getRevenue().doubleValue();
                     double contribution = (revenue / total) * 100;
                     return new SimpleObjectProperty<>(String.format("%.2f%%", contribution));
                 }
             } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
             return new SimpleObjectProperty<>("N/A");
         });
