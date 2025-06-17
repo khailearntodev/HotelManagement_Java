@@ -61,8 +61,6 @@ public class DashboardController {
     @FXML
     private MFXButton btnExportPNG;
     @FXML
-    private MFXButton btnRefresh;
-    @FXML
     private AnchorPane dashboardPane;
 
     @FXML
@@ -104,8 +102,24 @@ public class DashboardController {
         bookingTable.setItems(viewModel.getFilteredBookingList());
 
         // === Biểu đồ BarChart (roomChart) ===
+        int maxValue = viewModel.getChartSeries().getData().stream()
+                .mapToInt(data -> data.getYValue().intValue())
+                .max()
+                .orElse(1);
+        roomValueAxis.setUpperBound(maxValue < 5 ? 5 : maxValue + 1);
         roomChart.setLegendVisible(false);
         roomChart.getData().add(viewModel.getChartSeries());
+        roomValueAxis.setAutoRanging(false);
+        roomValueAxis.setLowerBound(0);
+        roomValueAxis.setTickUnit(1);
+
+        roomValueAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(roomValueAxis) {
+            @Override
+            public String toString(Number object) {
+                return String.format("%d", object.intValue());
+            }
+        });
+
         Platform.runLater(() -> {
             for (XYChart.Series<String, Number> series : roomChart.getData()) {
                 for (XYChart.Data<String, Number> data : series.getData()) {
@@ -174,7 +188,6 @@ public class DashboardController {
                 }
             }
         });
-        btnRefresh.setOnAction(e -> viewModel.loadDashboardData());
         btnExportPNG.setOnAction(e -> viewModel.exportSnapshot(dashboardPane));
     }
 }
