@@ -75,7 +75,7 @@ public class EditRoomTypeController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.roomTypeService = new RoomTypeService();
         this.roomService = new RoomService(); // Initialize RoomService
-        setupNumericInputValidation();
+        //setupNumericInputValidation();
 
         // Setup columns for roomsTableView
         setupRoomsTable();

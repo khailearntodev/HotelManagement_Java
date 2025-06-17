@@ -342,8 +342,11 @@ public class RoomTypeController implements Initializable {
                 roomTypeImageView.setImage(image);
             } catch (IllegalArgumentException e) {
                 System.err.println("Invalid Base64 image string for Roomtype: " + roomType.getTypeName());
-                roomTypeImageView.setImage(null);
+                roomTypeImageView.setImage(new Image(getClass().getResource("/Images/icon.png").toExternalForm()));
             }
+        }
+        else{
+            roomTypeImageView.setImage(new Image(getClass().getResource("/Images/icon.png").toExternalForm()));
         }
         priceTextField.setText(roomType.getBasePrice() + "");
         maxOccupancyTextField.setText(roomType.getMaxOccupancy() + "");
@@ -382,6 +385,9 @@ public class RoomTypeController implements Initializable {
         roomListTable.setItems(FXCollections.observableArrayList());
 
         this.currentlyDisplayedRoomType = null;
+        if(roomTypeImageView != null){
+            roomTypeImageView.setImage(new Image(getClass().getResource("/Images/icon.png").toExternalForm()));
+        }
     }
     public void handleEditClick() {
         if (this.currentlyDisplayedRoomType == null) {
