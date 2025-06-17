@@ -137,7 +137,11 @@ public class RoomTypeController implements Initializable {
 
     private void handleDeleteRoom(RoomViewModel item) {
         System.out.println("Attempting to delete Room: " + item.getRoomNumber() + " (ID: " + item.getId() + ")");
-
+        if(!item.getDisplayStatus().equals("Còn trống")){
+            String message = item.getDisplayStatus().equals("Đang được thuê")?"phòng đang được thuê":"phòng được đặt trước";
+            showAlert(Alert.AlertType.ERROR, "Không xóa được phòng " + item.getRoomNumber(), "Không xóa được phòng " + item.getRoomNumber() + " vì " + message);
+            return;
+        }
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle("Xác nhận xóa phòng");
         confirmationAlert.setHeaderText("Bạn có chắc chắn muốn xóa phòng này?");
@@ -342,8 +346,11 @@ public class RoomTypeController implements Initializable {
                 roomTypeImageView.setImage(image);
             } catch (IllegalArgumentException e) {
                 System.err.println("Invalid Base64 image string for Roomtype: " + roomType.getTypeName());
-                roomTypeImageView.setImage(null);
+                roomTypeImageView.setImage(new Image(getClass().getResource("/Images/icon.png").toExternalForm()));
             }
+        }
+        else{
+            roomTypeImageView.setImage(new Image(getClass().getResource("/Images/icon.png").toExternalForm()));
         }
         priceTextField.setText(roomType.getBasePrice() + "");
         maxOccupancyTextField.setText(roomType.getMaxOccupancy() + "");
@@ -382,6 +389,9 @@ public class RoomTypeController implements Initializable {
         roomListTable.setItems(FXCollections.observableArrayList());
 
         this.currentlyDisplayedRoomType = null;
+        if(roomTypeImageView != null){
+            roomTypeImageView.setImage(new Image(getClass().getResource("/Images/icon.png").toExternalForm()));
+        }
     }
     public void handleEditClick() {
         if (this.currentlyDisplayedRoomType == null) {

@@ -16,6 +16,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -46,15 +49,45 @@ public class AddRoomTypeController implements Initializable {
 
     private RoomTypeService roomTypeService;
     private File selectedImageFile; // To store the selected image file
+    private String defaultImageBase64; // To store the Base64 of the default phong.jpg
+
     private Consumer<Boolean> onAddCallback; // Callback to notify parent controller
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialize your RoomTypeService
         this.roomTypeService = new RoomTypeService();
-        setupNumericInputValidation();
+        //setupNumericInputValidation();
+        loadDefaultImage();
     }
+    private void loadDefaultImage() {
+        try {
+            // Get the URL for the default image resource
+            URL imageUrl = getClass().getResource("/Images/phong.jpg");
+            if (imageUrl != null) {
+                // Set the image to the ImageView
+                Image defaultImage = new Image(imageUrl.toExternalForm());
+                roomTypeImageView.setImage(defaultImage);
 
+                // Convert the default image to Base64
+                BufferedImage bImage = ImageIO.read(imageUrl);
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                ImageIO.write(bImage, "png", bos); // Assuming png, adjust if necessary
+                byte[] imageBytes = bos.toByteArray();
+                defaultImageBase64 = Base64.getEncoder().encodeToString(imageBytes);
+
+                System.out.println("Default image loaded and converted to Base64.");
+            } else {
+                System.err.println("Default image resource /Images/icon.png not found.");
+                // Handle case where default image is not found (e.g., set a blank image)
+                roomTypeImageView.setImage(null);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading default image: " + e.getMessage());
+            e.printStackTrace();
+            roomTypeImageView.setImage(null); // Clear image on error
+        }
+    }
     private void setupNumericInputValidation() {
         // TextFormatter for basePriceField (allows digits and one decimal point)
         Pattern decimalPattern = Pattern.compile("\\d*\\.?\\d*");
@@ -104,6 +137,7 @@ public class AddRoomTypeController implements Initializable {
                 e.printStackTrace();
             }
         }
+
     }
 
     /**
@@ -160,6 +194,9 @@ public class AddRoomTypeController implements Initializable {
                 return;
             }
         }
+        else{
+            base64Image = defaultImageBase64;
+        }
 
         // 3. Create Roomtype Object
         Roomtype newRoomType = new Roomtype();
@@ -205,8 +242,7 @@ public class AddRoomTypeController implements Initializable {
         basePriceField.clear();
         descriptionField.clear();
         maxOccupancyField.clear();
-        roomTypeImageView.setImage(null);
-        selectedImageFile = null;
+        loadDefaultImage();
     }
 
     /**
