@@ -203,23 +203,61 @@ public class EmployeeDetailController {
 
     @FXML
     private void onSave() {
+        String fullName = txtFullName.getText().trim();
+        if (fullName.isBlank()) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Họ tên không được để trống.");
+            return;
+        }
+
+        // Ngày sinh
+        if (dpDateOfBirth.getValue() == null) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Vui lòng chọn ngày sinh.");
+            return;
+        }
+        if (dpDateOfBirth.getValue().isAfter(LocalDate.now())) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Ngày sinh không được lớn hơn ngày hiện tại.");
+            return;
+        }
+        if (dpDateOfBirth.getValue().isBefore(LocalDate.of(1900, 1, 1))) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Ngày sinh không hợp lệ (quá xa).");
+            return;
+        }
+
         String phone = txtPhoneNumber.getText().trim();
-        if (!phone.matches("\\d+")) {
-            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Số điện thoại không hợp lệ.");
+        if (!phone.matches("\\d{10,20}")) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Số điện thoại phải là số và có từ 10 đến 20 chữ số.");
             return;
         }
 
-        String idNumber = txtIdentityNumber.getText().trim();
-        if (!idNumber.matches("\\d+")) {
-            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "CMND/CCCD không hợp lệ. Vui lòng nhập tối đa 12 số.");
+        String cccd = txtIdentityNumber.getText().trim();
+        if (!cccd.matches("\\d{9,12}")) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu","CMND/CCCD không hợp lệ. Vui lòng nhập từ 9 - 12 số.");
             return;
         }
 
+        // Lương
         String salary = txtSalaryRate.getText().trim();
         if (!salary.matches("\\d+(\\.\\d+)?")) {
-            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Lương phải là số hợp lệ.");
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Lương phải là số hợp lệ (không được chứa chữ).");
             return;
         }
+        try {
+            if (new BigDecimal(salary).compareTo(BigDecimal.ZERO) < 0) {
+                showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Lương không được âm.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Lương không hợp lệ.");
+            return;
+        }
+
+        // Email (tùy chọn kiểm tra)
+        String email = txtEmail.getText().trim();
+        if (!email.isEmpty() && !email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$")) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Email không hợp lệ.");
+            return;
+        }
+
 
         boolean success = viewModel.saveEmployee();
         Alert alert = new Alert(success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);

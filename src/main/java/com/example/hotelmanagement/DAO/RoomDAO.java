@@ -123,7 +123,7 @@ public class RoomDAO {
             // No JOIN FETCH needed here as we are only counting, not returning Room objects
             // Assuming 'status' 0 means available and 'cleaningStatus' 0 means clean.
             Query<Long> query = session.createQuery(
-                    "SELECT COUNT(r) FROM Room r WHERE r.roomTypeID.id = :roomTypeId AND r.isDeleted = false AND r.status = 0 AND r.cleaningStatus = 0", Long.class);
+                    "SELECT COUNT(r) FROM Room r WHERE r.roomTypeID.id = :roomTypeId AND r.isDeleted = false AND r.status = 1 AND r.cleaningStatus = 0", Long.class);
             query.setParameter("roomTypeId", roomTypeId);
             return query.uniqueResult();
         } catch (Exception e) {
@@ -135,9 +135,8 @@ public class RoomDAO {
 
     public int countInUseRooms() {
         try (Session session = HibernateUtils.getSession()) {
-            String sql = "SELECT COUNT(*) FROM Reservation re " +
-                    "JOIN Room r ON r.RoomID = re.RoomID " +
-                    "WHERE re.isDeleted = 0 AND r.Status = 2 AND r.isDeleted = 0";
+            String sql = "SELECT COUNT(*) FROM ROOM r " +
+                    "WHERE r.isDeleted = 0 AND r.Status = 2";
             Object result = session.createNativeQuery(sql).getSingleResult();
             return ((Number) result).intValue();
         } catch (Exception e) {

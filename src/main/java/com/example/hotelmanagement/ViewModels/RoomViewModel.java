@@ -122,11 +122,11 @@ public class RoomViewModel {
     public String getDisplayCleaningStatus(){
         switch (cleaningStatus.get()){
             case 0:
-                return "Bẩn";
+                return "Sạch";
             case 1:
-                return "Dọn dẹp";
+                return "Bẩn";
             case 2:
-                return "Sạch sẽ";
+                return "Đang dọn dẹp";
         }
         return "Không xác định";
     }

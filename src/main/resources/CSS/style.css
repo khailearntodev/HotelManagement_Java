@@ -97,3 +97,6 @@
     -fx-margin: 5px 2px;    /* Optional: Add vertical margin to give some space around the line */
 }
 
+.room-type-card:selected {
+    -fx-background-color: #FFC0CB;
+}

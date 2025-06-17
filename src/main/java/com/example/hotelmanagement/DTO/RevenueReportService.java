@@ -1,8 +1,6 @@
 package com.example.hotelmanagement.DTO;
 
-import com.example.hotelmanagement.DAO.InvoiceDAO;
-import com.example.hotelmanagement.DAO.RevenueReportDAO;
-import com.example.hotelmanagement.DAO.RevenueReportDetailDAO;
+import com.example.hotelmanagement.DAO.*;
 import com.example.hotelmanagement.Models.*;
 import com.example.hotelmanagement.Utils.HibernateUtils;
 import org.hibernate.Session;
@@ -17,51 +15,78 @@ import java.util.Optional;
 public class RevenueReportService {
 
     private final InvoiceDAO invoiceDAO = new InvoiceDAO();
+    private final ReservationDAO reservationDAO = new ReservationDAO();
+    private final ServiceBookingDAO serviceBookingDAO = new ServiceBookingDAO();
     private final RevenueReportDAO revenueReportDAO = new RevenueReportDAO();
     private final RevenueReportDetailDAO revenueReportDetailDAO = new RevenueReportDetailDAO();
     public boolean generateReport(int month, int year) {
+        Session session = null;
         Transaction tx = null;
-        try (Session session = HibernateUtils.getSession()) {
+
+        try {
+            session = HibernateUtils.getSession();
             tx = session.beginTransaction();
 
-            RevenueReport existingReport = session.createQuery(
+            List<RevenueReport> existingReports = session.createQuery(
                             "FROM RevenueReport WHERE month = :m AND year = :y", RevenueReport.class)
                     .setParameter("m", month)
                     .setParameter("y", year)
-                    .uniqueResult();
+                    .list();
 
-            if (existingReport != null) {
-                System.out.println("Báo cáo cho tháng " + month + "/" + year + " đã tồn tại.");
-                return false;
+            RevenueReport newReport;
+
+            if (!existingReports.isEmpty()) {
+                System.out.println("Báo cáo cho tháng " + month + "/" + year + " đã tồn tại. Đang cập nhật...");
+
+                RevenueReport existingReport = existingReports.get(0);
+
+                session.createQuery("DELETE FROM RevenueReportDetail WHERE reportID.id = :reportId")
+                        .setParameter("reportId", existingReport.getId())
+                        .executeUpdate();
+
+                newReport = existingReport;
+            } else {
+                newReport = new RevenueReport();
+                newReport.setMonth(month);
+                newReport.setYear(year);
+                newReport.setIsDeleted(false);
+                session.save(newReport);
             }
+
 
             List<Invoice> invoicesInPeriod = invoiceDAO.findByMonthAndYear(session, month, year);
             if (invoicesInPeriod.isEmpty()) {
                 System.out.println("Không có dữ liệu hóa đơn cho tháng " + month + "/" + year);
+                tx.rollback();
                 return false;
             }
 
-            BigDecimal totalRevenue = invoicesInPeriod.stream()
-                    .map(Invoice::getTotalAmount)
+            // Lấy reservation theo tháng và năm
+            List<Reservation> reservationsInPeriod = reservationDAO.findByMonthAndYear(session, month, year);
+            if (reservationsInPeriod.isEmpty()) {
+                System.out.println("Không có dữ liệu hóa đơn cho tháng " + month + "/" + year);
+                return false;
+            }
+
+// Tính tổng doanh thu dịch vụ
+            BigDecimal totalServiceRevenue = reservationsInPeriod.stream()
+                    .flatMap(reservation -> serviceBookingDAO.findByReservationId(reservation.getId()).stream())
+                    .filter(sb -> "Đã xử lý".equals(sb.getStatus()))
+                    .map(sb -> sb.getServiceID().getPrice().multiply(BigDecimal.valueOf(sb.getQuantity())))
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            List<Reservation> reservationsInPeriod = invoicesInPeriod.stream()
-                    .flatMap(invoice -> invoice.getReservations().stream())
-                    .collect(Collectors.toList());
+// Tính tổng doanh thu thuê phòng
             BigDecimal totalRental = reservationsInPeriod.stream()
                     .map(Reservation::getTotal)
                     .filter(java.util.Objects::nonNull)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            RevenueReport newReport = new RevenueReport();
-            newReport.setMonth(month);
-            newReport.setYear(year);
-            newReport.setTotalRevenue(totalRevenue);
+// Cập nhật vào báo cáo
+            newReport.setTotalService(totalServiceRevenue);
             newReport.setTotalRental(totalRental);
-            newReport.setIsDeleted(false);
-            session.save(newReport);
+            session.update(newReport);
 
-
+// Tạo chi tiết báo cáo
             Map<Roomtype, List<Reservation>> reservationsByRoomType = reservationsInPeriod.stream()
                     .filter(r -> r.getRoomID() != null && r.getRoomID().getRoomTypeID() != null)
                     .collect(Collectors.groupingBy(r -> r.getRoomID().getRoomTypeID()));
@@ -71,10 +96,9 @@ public class RevenueReportService {
                 List<Reservation> reservationsForType = entry.getValue();
 
                 int totalReservations = reservationsForType.size();
-                // SỬA LỖI: Xử lý các giá trị null có thể có cho Reservation::getTotal tại đây
                 BigDecimal revenueForType = reservationsForType.stream()
                         .map(Reservation::getTotal)
-                        .filter(java.util.Objects::nonNull) // Lọc bỏ các giá trị null
+                        .filter(java.util.Objects::nonNull)
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
 
                 RevenueReportDetail detail = new RevenueReportDetail();
@@ -88,19 +112,33 @@ public class RevenueReportService {
 
             tx.commit();
             return true;
+
         } catch (NullPointerException npe) {
             System.err.println("!!! LỖI DỮ LIỆU: CÓ MỘT RESERVATION KHÔNG CÓ ROOM HOẶC ROOM KHÔNG CÓ ROOMTYPE HOẶC TOTAL NULL TRONG RESERVATION !!!");
             npe.printStackTrace();
-            if (tx != null && tx.isActive()) { // Kiểm tra xem giao dịch có đang hoạt động trước khi hoàn tác
-                tx.rollback();
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception ex) {
+                    System.err.println("Không thể rollback vì session đã đóng.");
+                }
             }
             return false;
         } catch (Exception e) {
-            if (tx != null && tx.isActive()) { // Kiểm tra xem giao dịch có đang hoạt động trước khi hoàn tác
-                tx.rollback();
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception ex) {
+                    System.err.println("Không thể rollback vì session đã đóng.");
+                }
             }
             e.printStackTrace();
             return false;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
+
 }

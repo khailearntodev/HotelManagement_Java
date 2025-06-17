@@ -9,6 +9,7 @@ import com.example.hotelmanagement.Models.Invoice;
 import com.example.hotelmanagement.Models.Reservation;
 import com.example.hotelmanagement.ViewModels.InvoiceViewModel;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,17 +28,20 @@ import javafx.stage.StageStyle;
 
 import java.math.BigDecimal;
 import java.net.URL;
+import java.text.NumberFormat; // Import this
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale; // Import this
 
 public class InvoiceController {
 
     @FXML private MFXComboBox<String> nCustomCombo;
-    @FXML private MFXComboBox<String> entriesComboBox;
     @FXML private MFXComboBox<String> ComboBox;
+    @FXML private MFXDatePicker startDay;
+    @FXML private MFXDatePicker endDay;
 
     @FXML private AnchorPane rootPane;
     @FXML
@@ -119,8 +123,13 @@ public class InvoiceController {
                 return new SimpleStringProperty("");
             }
         });
-        //startDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getIssueDate().toString()));
-        invoiceAmountColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalAmount().toPlainString()));
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        currencyFormatter.setMinimumFractionDigits(0); // Optional: if you don't want decimal places for VND
+
+        invoiceAmountColumn.setCellValueFactory(cellData -> {
+            BigDecimal amount = cellData.getValue().getTotalAmount();
+            return new SimpleStringProperty(currencyFormatter.format(amount));
+        });
         statusColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getPaymentStatus()));
 
@@ -164,22 +173,20 @@ public class InvoiceController {
 
         filterTextField.textProperty().addListener((obs, oldVal, newVal) -> viewModel.filterByKeyword(newVal));
 
-        entriesComboBox.getItems().addAll("10", "25", "50", "Tất cả");
-        //entriesComboBox.getSelectionModel().select("Tất cả");
-        entriesComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal.equals("Tất cả")) {
-                viewModel.setLimit(-1);
-            } else {
-                viewModel.setLimit(Integer.parseInt(newVal));
-            }
-        });
+        startDay.valueProperty().addListener((obs, oldVal, newVal) -> applyDateFilter());
+        endDay.valueProperty().addListener((obs, oldVal, newVal) -> applyDateFilter());
     }
 
     private void applyAmountFilter() {
-
         BigDecimal min = BigDecimal.valueOf(minValue.getValue());
         BigDecimal max = BigDecimal.valueOf(maxValue.getValue());
         viewModel.filterByAmountRange(min, max);
+    }
+
+    private void applyDateFilter() {
+        LocalDate startDate = startDay.getValue();
+        LocalDate endDate = endDay.getValue();
+        viewModel.filterByIssueDateRange(startDate, endDate);
     }
 
     private Label createStyledLabel(String text, String styleClass) {
@@ -215,6 +222,4 @@ public class InvoiceController {
             e.printStackTrace();
         }
     }
-
-
 }
