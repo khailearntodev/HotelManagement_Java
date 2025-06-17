@@ -40,6 +40,9 @@ public class BookingCalendarViewModel {
                 .filter(p -> Objects.equals(p.getRoomID().getId(), room.getId()))
                 .filter(p -> !p.getCheckInDate().atZone(ZoneOffset.UTC).toLocalDate().isBefore(LocalDate.now()))
                 .collect(Collectors.toList());
+        for(var a : allPrebookings) {
+            System.out.println(a.getBookingCode());
+        }
 
         Set<LocalDate> result = new HashSet<>();
 
