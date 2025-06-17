@@ -101,20 +101,24 @@ public class InvoiceDAO {
     }
     public BigDecimal findDepositAmountByReservationId(int reservationId) {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
-            Optional<BigDecimal> depositAmount = session.createQuery(
-                            "SELECT p.price FROM Prebooking p " +
-                                    "JOIN p.reservationID r " +
-                                    "WHERE r.id = :reservationId " +
+            BigDecimal totalAmount = session.createQuery(
+                            "SELECT COALESCE(SUM(i.totalAmount), 0) " +
+                                    "FROM Prebooking p " +
+                                    "JOIN p.invoiceID i " +
+                                    "WHERE p.reservationID.id = :reservationId " +
                                     "AND p.isDeleted = false",
                             BigDecimal.class)
                     .setParameter("reservationId", reservationId)
-                    .uniqueResultOptional();
-            return depositAmount.orElse(BigDecimal.ZERO);
+                    .uniqueResult();
+
+            return totalAmount;
         } catch (Exception e) {
             e.printStackTrace();
             return BigDecimal.ZERO;
         }
     }
+
+
     public Invoice getInvoiceWithDetails(int id) {
         try (Session session = HibernateUtils.getSession()) {
             return session.createQuery(
