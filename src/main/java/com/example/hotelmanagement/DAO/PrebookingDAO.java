@@ -145,10 +145,7 @@ public class PrebookingDAO {
                 );
                 result.add(bd);
             }
-
             return result;
         }
     }
-
-
 }

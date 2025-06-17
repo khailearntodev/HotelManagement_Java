@@ -83,6 +83,10 @@ public class UpdateRoomController implements Initializable {
             showAlert(AlertType.WARNING, "Lỗi nhập liệu", "Số phòng phải là một số nguyên hợp lệ.");
             return;
         }
+        if (!roomService.isRoomNumberUnique(roomNumber, currentRoom.getId())) { // Pass null for currentRoomId as it's a new room
+            showAlert(AlertType.WARNING, "Số phòng đã tồn tại", "Số phòng này đã được sử dụng. Vui lòng chọn số khác.");
+            return;
+        }
 
         // Convert button text status back to integer
         Integer status = getStatusFromDisplayText(statusButton.getText());

@@ -39,15 +39,16 @@ public class ReservationViewModel {
                     .filter(e -> Objects.equals(e.getRoomID().getId(), room.getId()))
                     .filter(e -> !e.getIsDeleted())
                     .filter(e -> {
-                        LocalDate checkIn = e.getCheckInDate()
-                                .atZone(ZoneOffset.UTC)
-                                .toLocalDate();
-                        return !checkIn.isAfter(today);
+                        LocalDate checkIn = e.getCheckInDate().atZone(ZoneOffset.UTC).toLocalDate();
+                        LocalDate checkOut = e.getCheckOutDate().atZone(ZoneOffset.UTC).toLocalDate();
+                        return !checkIn.isAfter(today) && !checkOut.isBefore(today);
                     })
+
                     .min(Comparator.comparing(Prebooking::getCheckInDate))
                     .orElse(null);
 
             if (preBooking != null) {
+                System.out.println(preBooking.getBookingCode());
                 LocalDate checkOutDate = preBooking.getCheckOutDate()
                         .atZone(ZoneOffset.UTC)
                         .toLocalDate();
