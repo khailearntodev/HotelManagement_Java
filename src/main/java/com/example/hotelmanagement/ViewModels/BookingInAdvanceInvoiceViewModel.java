@@ -181,7 +181,7 @@ public class BookingInAdvanceInvoiceViewModel {
                 leftColumn.add(new Paragraph("Nhân viên thanh toán: " + employeeName).setFont(boldFont).setFontSize(12));
                 leftColumn.add(new Paragraph("Hóa đơn từ:").setFont(boldFont).setFontSize(12).setMarginTop(5));
                 leftColumn.add(new Paragraph("Khách sạn N10").setFont(vietnameseFont).setMarginLeft(10));
-                leftColumn.add(new Paragraph("Phường Linh Trung, thành phố Thủ Đức, thành phố Hồ Chí Minh").setFont(vietnameseFont).setMarginLeft(10));
+                leftColumn.add(new Paragraph("123 Đường XYZ, Quận 1, TP.HCM").setFont(vietnameseFont).setMarginLeft(10));
 
                 Div rightColumn = new Div();
 

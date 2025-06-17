@@ -523,8 +523,6 @@ public class ReservationController implements Initializable {
         int totalItems = viewModel.getRooms().size();
         int pageCount = (int) Math.ceil(totalItems * 1.0 / ROWS_PER_PAGE);
         pageCount = Math.max(1, pageCount);
-
-        System.out.println("Updating pagination: total=" + totalItems + ", pages=" + pageCount);
         pagination.setPageCount(pageCount);
     }
 
