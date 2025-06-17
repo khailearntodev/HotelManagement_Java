@@ -50,16 +50,17 @@
                 <Insets top="10.0" />
             </HBox.margin>
         </MFXDatePicker>
-        <MFXComboBox fx:id="ComboBox" prefHeight="35.0" prefWidth="150.0" promptText="Tất cả" floatMode="DISABLED">
-            <HBox.margin>
-                <Insets top="10.0" />
-            </HBox.margin>
-        </MFXComboBox>
+
         <MFXComboBox fx:id="nCustomCombo" floatMode="DISABLED" prefHeight="35.0"  promptText="Loại hóa đơn" prefWidth="150.0" >
             <HBox.margin>
                 <Insets top="10.0" />
             </HBox.margin>
         </MFXComboBox>
+        <MFXButton fx:id="refreshButton" prefHeight="35" text="Bỏ lọc" prefWidth="100" styleClass="normal-button">
+            <HBox.margin>
+                <Insets top="10.0" />
+            </HBox.margin>
+        </MFXButton>
         <Region HBox.hgrow="ALWAYS" />
 
         <VBox spacing="5" alignment="CENTER">

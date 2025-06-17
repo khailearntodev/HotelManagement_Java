@@ -1,7 +1,10 @@
 package com.example.hotelmanagement.Views;
 
 import com.example.hotelmanagement.DTO.ServiceDisplay;
+import com.example.hotelmanagement.Models.Servicebooking;
+import com.example.hotelmanagement.ViewModels.InvoiceDetailViewModel;
 import com.example.hotelmanagement.ViewModels.ServiceManagementViewModel;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,6 +22,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 
 import java.text.NumberFormat; // Import này
+import java.util.List;
 import java.util.Locale;       // Import này
 
 public class ServiceManagementController {
@@ -27,8 +31,8 @@ public class ServiceManagementController {
     @FXML private TableView<ServiceDisplay> serviceTableView;
     @FXML private TableColumn<ServiceDisplay, String> colMaDichVu;
     @FXML private TableColumn<ServiceDisplay, String> colTenDichVu;
-    @FXML private TableColumn<ServiceDisplay, BigDecimal> colGiaDichVu; // Kiểu vẫn là BigDecimal
-    @FXML private TableColumn<ServiceDisplay, Void> colAction;
+    @FXML private TableColumn<ServiceDisplay, BigDecimal> colGiaDichVu;
+    @FXML private TableColumn<ServiceDisplay, Void> colXoaDichVu;
 
     @FXML private ImageView editServiceImageView;
     @FXML private TextField imageLinkEditTextField;
@@ -88,6 +92,45 @@ public class ServiceManagementController {
                 }
             }
         });
+        colXoaDichVu.setCellFactory(param -> new TableCell<>() {
+            private final MFXButton deleteButton = new MFXButton("Xóa");
+
+            {
+                deleteButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 5;");
+                deleteButton.setOnAction(event -> {
+                    ServiceDisplay selectedService = getTableView().getItems().get(getIndex());
+                    if (selectedService != null) {
+                        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                        confirmationAlert.setTitle("Xác nhận xóa");
+                        confirmationAlert.setHeaderText(null);
+                        confirmationAlert.setContentText("Bạn có chắc chắn muốn xóa dịch vụ: " + selectedService.getTenDichVu() + " không?");
+
+                        confirmationAlert.showAndWait().ifPresent(response -> {
+                            if (response == ButtonType.OK) {
+                                boolean success = viewModel.deleteService(selectedService);
+                                if (success) {
+                                    viewModel.getMasterServiceList().remove(selectedService);
+                                    showAlert(Alert.AlertType.INFORMATION, "Thành công", "Xóa dịch vụ thành công.");
+                                } else {
+                                    showAlert(Alert.AlertType.ERROR, "Thất bại", "Xóa dịch vụ thất bại.");
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(deleteButton);
+                }
+            }
+        });
+
         setupRowClick();
         setupFilter();
 
@@ -99,11 +142,11 @@ public class ServiceManagementController {
         serviceTableView.setOnMouseClicked((MouseEvent event) -> {
             ServiceDisplay selected = serviceTableView.getSelectionModel().getSelectedItem();
             if (selected != null) {
-                serviceTabPane.getSelectionModel().select(1);
+                serviceTabPane.getSelectionModel().select(0);
 
                 maDichVuEditTextField.setText(String.valueOf(selected.getMaDichVu()));
                 tenDichVuEditTextField.setText(selected.getTenDichVu());
-                giaDichVuEditTextField.setText(selected.getGiaDichVu().toPlainString()); // Sử dụng toPlainString() để hiển thị số thuần khi chỉnh sửa
+                giaDichVuEditTextField.setText(selected.getGiaDichVu().toPlainString());
                 imageLinkEditTextField.setText(selected.getImageLink());
                 loadImageFromUrl(selected.getImageLink(), editServiceImageView);
             }
@@ -136,28 +179,53 @@ public class ServiceManagementController {
 
     @FXML
     private void onAddService() {
-        String ten = tenDichVuAddTextField.getText();
-        String giaText = giaDichVuAddTextField.getText();
-        String image = imageLinkAddTextField.getText();
+        String ten = tenDichVuAddTextField.getText().trim();
+        String giaText = giaDichVuAddTextField.getText().trim();
+        String image = imageLinkAddTextField.getText().trim();
+
+        if (ten.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi nhập liệu", "Tên dịch vụ không được để trống.");
+            return;
+        }
 
         try {
             BigDecimal gia = new BigDecimal(giaText);
+            if (gia.compareTo(BigDecimal.ZERO) < 0) {
+                showAlert(Alert.AlertType.ERROR, "Lỗi nhập liệu", "Giá dịch vụ không được âm.");
+                return;
+            }
+
             viewModel.addService(ten, gia, image);
             clearAddForm();
             filterTextField.clear();
+
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Lỗi nhập liệu", "Giá dịch vụ phải là một số hợp lệ.");
         }
     }
 
+
     @FXML
     private void onUpdateService() {
         ServiceDisplay selected = serviceTableView.getSelectionModel().getSelectedItem();
         if (selected != null) {
+            String newTen = tenDichVuEditTextField.getText().trim();
+            String giaText = giaDichVuEditTextField.getText().trim();
+
+            if (newTen.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Lỗi nhập liệu", "Tên dịch vụ không được để trống.");
+                return;
+            }
+
             try {
-                String newTen = tenDichVuEditTextField.getText();
-                BigDecimal newGia = new BigDecimal(giaDichVuEditTextField.getText());
-                String newImage = imageLinkEditTextField.getText();
+                BigDecimal newGia = new BigDecimal(giaText);
+                if (newGia.compareTo(BigDecimal.ZERO) < 0) {
+                    showAlert(Alert.AlertType.ERROR, "Lỗi nhập liệu", "Giá dịch vụ không được âm.");
+                    return;
+                }
+
+                String newImage = imageLinkEditTextField.getText().trim();
+
                 selected.setTenDichVu(newTen);
                 selected.setGiaDichVu(newGia);
                 selected.setImageLink(newImage);
@@ -165,8 +233,8 @@ public class ServiceManagementController {
                 boolean success = viewModel.updateService(selected);
 
                 if (success) {
-                    showAlert(Alert.AlertType.INFORMATION,"Thành công", "Cập nhật dịch vụ thành công");
-                    filterTextField.clear(); // Clear filter to show updated list
+                    showAlert(Alert.AlertType.INFORMATION, "Thành công", "Cập nhật dịch vụ thành công");
+                    filterTextField.clear();
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Thất bại", "Không thể cập nhật dịch vụ.");
                 }
@@ -177,6 +245,7 @@ public class ServiceManagementController {
             showAlert(Alert.AlertType.WARNING, "Cập nhật", "Vui lòng chọn dịch vụ cần cập nhật.");
         }
     }
+
 
     @FXML
     private void onCancelAdd() {

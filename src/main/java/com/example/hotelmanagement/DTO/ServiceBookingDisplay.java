@@ -21,7 +21,7 @@ public class ServiceBookingDisplay {
     private final IntegerProperty quantity;
     private final ObjectProperty<LocalDate> bookingDate;
     private final StringProperty status;
-
+    private final BooleanProperty isDeleted = new SimpleBooleanProperty();
     private final BooleanProperty canProcess;
     private final BooleanProperty canCancel;
 
@@ -42,6 +42,11 @@ public class ServiceBookingDisplay {
                 booking.getBookingDate() != null ? booking.getBookingDate().atZone(ZoneId.systemDefault()).toLocalDate() : null
         );
         this.status = new SimpleStringProperty(booking.getStatus());
+
+        if (booking.getServiceID().getIsDeleted() &&
+                (STATUS_PENDING.equals(booking.getStatus()) || STATUS_CANCELLED.equals(booking.getStatus()))) {
+            this.isDeleted.set(true);
+        }
 
         this.canProcess = new SimpleBooleanProperty();
         this.canCancel = new SimpleBooleanProperty();
@@ -81,5 +86,15 @@ public class ServiceBookingDisplay {
         this.status.set(newStatus);
         // Cập nhật lại originalBooking nếu muốn trạng thái đồng bộ ngay lập tức
          this.originalBooking.setStatus(newStatus);
+    }
+    public boolean isDeleted() {
+        return isDeleted.get();
+    }
+    public BooleanProperty isDeletedProperty() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted.set(isDeleted);
     }
 }
