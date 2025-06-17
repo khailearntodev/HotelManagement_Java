@@ -64,6 +64,10 @@ public class AddRoomController implements Initializable {
             showAlert(Alert.AlertType.WARNING, "Lỗi nhập liệu", "Số phòng phải là một số nguyên hợp lệ.");
             return;
         }
+        if (!roomService.isRoomNumberUnique(roomNumber, null)) { // Pass null for currentRoomId as it's a new room
+            showAlert(Alert.AlertType.WARNING, "Số phòng đã tồn tại", "Số phòng này đã được sử dụng. Vui lòng chọn số khác.");
+            return;
+        }
 
         // 2. Create Room Object
         Room newRoom = new Room();

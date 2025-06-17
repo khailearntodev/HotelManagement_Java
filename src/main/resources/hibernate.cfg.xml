@@ -6,10 +6,11 @@
     <session-factory>
         <!-- Kết nối SQL Server -->
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-        <property name="hibernate.connection.url">jdbc:sqlserver://DUCHUY;database=JavaHotelManagement;encrypt=true;trustServerCertificate=true</property>
-        <property name="hibernate.connection.username">duchuy</property>
-        <property name="hibernate.connection.password">123456789</property>
-        <!-- Nho sua CSDL -->
+            <property name="hibernate.connection.url">jdbc:sqlserver://LAPTOP-N267PPCR;database=JavaHotelManagement;encrypt=true;trustServerCertificate=true</property>
+            <property name="hibernate.connection.username">bao12</property>
+            <property name="hibernate.connection.password">YeuEmCMPUNK203</property>
+
+            <!-- Nho sua CSDL -->
 
         <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
         <property name="hibernate.show_sql">true</property>

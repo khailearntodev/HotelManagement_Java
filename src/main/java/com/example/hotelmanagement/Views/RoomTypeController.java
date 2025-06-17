@@ -137,7 +137,11 @@ public class RoomTypeController implements Initializable {
 
     private void handleDeleteRoom(RoomViewModel item) {
         System.out.println("Attempting to delete Room: " + item.getRoomNumber() + " (ID: " + item.getId() + ")");
-
+        if(!item.getDisplayStatus().equals("Còn trống")){
+            String message = item.getDisplayStatus().equals("Đang được thuê")?"phòng đang được thuê":"phòng được đặt trước";
+            showAlert(Alert.AlertType.ERROR, "Không xóa được phòng " + item.getRoomNumber(), "Không xóa được phòng " + item.getRoomNumber() + " vì " + message);
+            return;
+        }
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle("Xác nhận xóa phòng");
         confirmationAlert.setHeaderText("Bạn có chắc chắn muốn xóa phòng này?");
