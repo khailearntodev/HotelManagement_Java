@@ -81,7 +81,7 @@ public class DashboardViewModel {
         LocalDate today = LocalDate.now();
         startClock();
         totalNewBookingToday.set(prebookingDAO.countByDate(today));
-        totalCheckInToday.set(reservationDAO.countCheckInByDate(today)); "ere"
+        totalCheckInToday.set(reservationDAO.countCheckInByDate(today));
         totalCheckOutToday.set(reservationDAO.countCheckOutByDate(today));
         totalRoomInUse.set(roomDAO.countInUseRooms());
 
