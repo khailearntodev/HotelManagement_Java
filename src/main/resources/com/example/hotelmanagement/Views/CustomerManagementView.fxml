@@ -84,7 +84,7 @@
             <columns>
                 <TableColumn fx:id="idNumberColumn" reorderable="false" resizable="false" prefWidth="130" text="Mã khách hàng" />
                 <TableColumn fx:id="nameColumn" reorderable="false" resizable="false" prefWidth="200" text="Tên khách hàng" />
-                <TableColumn fx:id="typeColumn" reorderable="false" resizable="false" prefWidth="140" text="Loại khách" />
+                <TableColumn fx:id="typeColumn" reorderable="false" resizable="false" prefWidth="160" text="Loại khách" />
                 <TableColumn fx:id="birthdayColumn" reorderable="false" resizable="false" prefWidth="120" text="Ngày sinh" />
                 <TableColumn fx:id="identifyColumn" reorderable="false" resizable="false" prefWidth="170" text="CCCD / Passport" />
                 <TableColumn fx:id="phoneColumn" reorderable="false" resizable="false" prefWidth="130" text="SĐT" />

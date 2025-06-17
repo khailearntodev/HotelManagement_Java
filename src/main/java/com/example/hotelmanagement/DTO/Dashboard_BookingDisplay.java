@@ -1,11 +1,14 @@
 package com.example.hotelmanagement.DTO;
 
+import lombok.Setter;
+
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
 
 public class Dashboard_BookingDisplay {
-    private final String bookingId;
+    @Setter
+    private String bookingId;
     private final String customerName;
     private final int roomNumber;
     private final String roomType;

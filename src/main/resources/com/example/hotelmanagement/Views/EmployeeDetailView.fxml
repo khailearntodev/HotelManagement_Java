@@ -13,10 +13,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="800.0" style=" -fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.EmployeeDetailController">
+<AnchorPane prefHeight="750.0" prefWidth="800.0" style=" -fx-background-color: transparent; -fx-border-color: black; -fx-border-width: 1;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.EmployeeDetailController">
 
-    <Pane layoutX="43.0" layoutY="30.0" prefHeight="637.0" prefWidth="707.0" style="                 -fx-border-radius: 10;                 -fx-background-color: #FFF3F3F3;                 -fx-background-radius: 10;">
-        <VBox prefHeight="600.0" prefWidth="700.0">
+    <Pane layoutX="43.0" layoutY="30.0" prefHeight="700.0" prefWidth="700.0" style="                 -fx-border-radius: 10;                 -fx-background-color: #FFF3F3F3;                 -fx-background-radius: 10;">
+        <VBox prefHeight="700.0" prefWidth="700.0">
             <HBox>
                 <Label contentDisplay="CENTER" prefHeight="45.0" prefWidth="721.0" style="-fx-font-size: 28; -fx-font-weight: bold;" text="CHI TIẾT NHÂN VIÊN">
                     <font>
@@ -161,7 +161,7 @@
                </MFXButton>
                     <HBox prefHeight="100.0" prefWidth="200.0">
 
-                        <MFXButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onSave" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #2563EB; -fx-text-fill: white;" text="Lưu">
+                        <MFXButton fx:id="btnSave" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onSave" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #2563EB; -fx-text-fill: white;" text="Lưu">
                      <HBox.margin>
                         <Insets top="10.0" />
                      </HBox.margin>

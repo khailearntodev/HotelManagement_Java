@@ -2,6 +2,7 @@ package com.example.hotelmanagement.Views;
 
 import com.example.hotelmanagement.DAO.RoleDAO;
 import com.example.hotelmanagement.DAO.RolePermissionDAO;
+import com.example.hotelmanagement.DAO.UserAccountDAO;
 import com.example.hotelmanagement.Models.Role;
 import com.example.hotelmanagement.ViewModels.ConfigViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -15,6 +16,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class ConfigController {
@@ -130,14 +133,53 @@ public class ConfigController {
         deleteColumn.setCellFactory(col -> new TableCell<>() {
             private final Button deleteButton = new Button("X");
             private final StackPane centeredPane = new StackPane(deleteButton);
-
             {
-                deleteButton.setOnAction(e -> {
-                    Role role = getTableView().getItems().get(getIndex());
-                    viewModel.deleteRole(role.getRoleName());
-                    refreshRoleTable();
-                    refreshRoleSelector();
+                deleteButton.setOnAction(event -> {
+                    Role selectedRole = rolesTable.getSelectionModel().getSelectedItem();
+                    if (selectedRole == null) {
+                        showAlert(Alert.AlertType.WARNING, "Chưa chọn vai trò nào để xóa.");
+                        return;
+                    }
+
+                    UserAccountDAO userAccountDAO = new UserAccountDAO();
+                    boolean isRoleInUse = userAccountDAO.isRoleInUse(selectedRole.getId());
+
+                    if (isRoleInUse) {
+                        showAlert(Alert.AlertType.WARNING, "Vai trò đang được sử dụng bởi tài khoản người dùng, không thể xóa.");
+                        return;
+                    }
+
+                    Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmAlert.setTitle("Xác nhận");
+                    confirmAlert.setHeaderText("Bạn có chắc chắn muốn xóa vai trò này?");
+                    confirmAlert.setContentText("Vai trò: " + selectedRole.getRoleName());
+
+                    confirmAlert.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            RolePermissionDAO rolePermissionDAO = new RolePermissionDAO();
+                            boolean deletedPermissions = rolePermissionDAO.deleteByRoleId(selectedRole.getId());
+
+                            if (!deletedPermissions) {
+                                showAlert(Alert.AlertType.ERROR, "Không thể xóa quyền liên quan.");
+                                return;
+                            }
+
+                            RoleDAO roleDAO = new RoleDAO();
+                            boolean deletedRole = roleDAO.softDelete(selectedRole.getId());
+
+                            if (deletedRole) {
+                                showAlert(Alert.AlertType.INFORMATION, "Xóa vai trò thành công.");
+                                roleDAO = new RoleDAO();
+                                List<Role> roles = roleDAO.getAll();
+                                rolesTable.getItems().setAll(roles);
+                            } else {
+                                showAlert(Alert.AlertType.ERROR, "Xóa vai trò thất bại.");
+                            }
+                        }
+                    });
                 });
+
+
                 deleteButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
                 centeredPane.setAlignment(Pos.CENTER);
             }
@@ -181,4 +223,12 @@ public class ConfigController {
             viewsCheckboxContainer.getChildren().add(checkBox);
         }
     }
+
+    private void showAlert(Alert.AlertType type, String content) {
+        Alert alert = new Alert(type);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
 }

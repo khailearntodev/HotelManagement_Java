@@ -81,7 +81,7 @@ public class DashboardViewModel {
         LocalDate today = LocalDate.now();
         startClock();
         totalNewBookingToday.set(prebookingDAO.countByDate(today));
-        totalCheckInToday.set(reservationDAO.countCheckInByDate(today));
+        totalCheckInToday.set(reservationDAO.countCheckInByDate(today)); "ere"
         totalCheckOutToday.set(reservationDAO.countCheckOutByDate(today));
         totalRoomInUse.set(roomDAO.countInUseRooms());
 
@@ -106,6 +106,10 @@ public class DashboardViewModel {
             List<Dashboard_BookingDisplay> reservationList = reservationDAO.getRecentBookingDisplays();
             List<Dashboard_BookingDisplay> prebookingList = prebookingDAO.getRecentBookingDisplays();
 
+            for (Dashboard_BookingDisplay item : prebookingList) {
+                item.setBookingId(maskBookingId(item.getBookingId()));
+            }
+
             allBookings.addAll(reservationList);
             allBookings.addAll(prebookingList);
 
@@ -117,6 +121,12 @@ public class DashboardViewModel {
         }
 
         filterBookings();
+    }
+
+    private String maskBookingId(String id) {
+        if (id.length() <= 4) return "****";
+        int start = (id.length() - 4) / 2;
+        return id.substring(0, start) + "****" + id.substring(start + 4);
     }
 
     public void filterBookings() {

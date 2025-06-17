@@ -62,7 +62,6 @@ public class RoleDAO {
         }
     }
 
-    // Xóa mềm Role (soft delete)
     public boolean softDelete(int id) {
         Transaction tx = null;
         try (Session session = HibernateUtils.getSession()) {

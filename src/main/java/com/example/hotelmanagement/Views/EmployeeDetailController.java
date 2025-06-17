@@ -50,6 +50,7 @@ public class EmployeeDetailController {
     @Setter private boolean readOnlyMode = false;
     @FXML private ImageView avatarImageView;
     @FXML private MFXButton btnUploadAvatar;
+    @FXML private MFXButton btnSave;
     private File selectedAvatarFile;
 
     private EmployeeDetailViewModel viewModel;
@@ -183,6 +184,7 @@ public class EmployeeDetailController {
 
         if (readOnlyMode) {
             btnViewAccount.setDisable(true);
+            btnSave.setDisable(true);
         }
 
         btnUploadAvatar.setOnAction(e -> {

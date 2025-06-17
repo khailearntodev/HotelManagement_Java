@@ -142,4 +142,21 @@ public class RolePermissionDAO {
         }
     }
 
+    public boolean deletePermissionsByRoleId(int roleId) {
+        Transaction tx = null;
+        try (Session session = HibernateUtils.getSession()) {
+            tx = session.beginTransaction();
+            session.createQuery("DELETE FROM RolePermission rp WHERE rp.role.id = :roleId")
+                    .setParameter("roleId", roleId)
+                    .executeUpdate();
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }

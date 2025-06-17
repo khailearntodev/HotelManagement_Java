@@ -124,4 +124,15 @@ public class UserAccountDAO {
                     .uniqueResult();
         }
     }
+
+    public boolean isRoleInUse(int roleId) {
+        try (Session session = HibernateUtils.getSession()) {
+            Long count = session.createQuery(
+                            "SELECT COUNT(u) FROM Useraccount u WHERE u.roleID.id = :roleId AND u.isDeleted = false",
+                            Long.class)
+                    .setParameter("roleId", roleId)
+                    .uniqueResult();
+            return count != null && count > 0;
+        }
+    }
 }

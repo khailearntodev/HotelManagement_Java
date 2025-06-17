@@ -35,7 +35,7 @@
 
             <Region HBox.hgrow="ALWAYS" />
 
-            <MFXButton fx:id="btnMinimize" mnemonicParsing="false" onAction="#onButtonMinimize" style="-fx-font-size: 18;" text="—" />
+               <MFXButton fx:id="btnMinimize" mnemonicParsing="false" onAction="#onButtonMinimize" style="-fx-font-size: 18;" text="—" />
 
             <MFXButton fx:id="btnClose" mnemonicParsing="false" onAction="#onCloseButtonClicked" style="-fx-font-size: 18;" text="X" />
          </children>
