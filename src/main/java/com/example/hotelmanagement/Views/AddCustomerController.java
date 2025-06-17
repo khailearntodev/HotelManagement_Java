@@ -206,6 +206,24 @@ public class AddCustomerController implements Initializable {
             return;
         }
 
+        if (phoneNumber.length() < 10) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText(null);
+            alert.setContentText("Số điện thoại phải có ít nhất 10 chữ số");
+            alert.showAndWait();
+            return;
+        }
+
+        if (!dob.isBefore(LocalDate.now())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText(null);
+            alert.setContentText("Ngày sinh phải trước ngày hiện tại");
+            alert.showAndWait();
+            return;
+        }
+
         Customer customer = new Customer();
         customer.setIdentityNumber(cccdTextField.getText());
         customer.setIdentityNumber(identityNumber);
@@ -247,6 +265,14 @@ public class AddCustomerController implements Initializable {
             alert.setTitle("Lỗi");
             alert.setHeaderText(null);
             alert.setContentText("Số Căn cước công dân/Hộ chiếu chỉ được chứa chữ số");
+            alert.showAndWait();
+            return;
+        }
+        if (cccdTextField.getText().length() < 9 || cccdTextField.getText().length() > 12) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText(null);
+            alert.setContentText("Số Căn cước công dân/Hộ chiếu phải có từ 9 đến 12 chữ số");
             alert.showAndWait();
             return;
         }

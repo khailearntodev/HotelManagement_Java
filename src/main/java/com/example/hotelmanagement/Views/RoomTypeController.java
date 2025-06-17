@@ -465,6 +465,7 @@ public class RoomTypeController implements Initializable {
             System.out.println(getClass().getResource("/CSS/style.css"));
             Stage stage = new Stage();
             stage.setTitle("Add Room Type");
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(scene);
             stage.show();
         }catch (IOException e) {
