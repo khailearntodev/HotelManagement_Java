@@ -43,7 +43,7 @@
             </VBox.margin>
             <center>
 
-                <MFXTextField fx:id="filterTextField" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="460.0" promptText="Tìm kiếm khách hàng">
+                <MFXTextField fx:id="filterTextField" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="500.0" promptText="Tìm kiếm dịch vụ">
                     <leadingIcon>
                         <StackedFontIcon iconSize="16">
                             <FontIcon iconLiteral="fa-search" wrappingWidth="18.142857551574707" StackedFontIcon.iconSize="0.7">
@@ -58,7 +58,7 @@
                 </MFXTextField>
             </center>
         </BorderPane>
-        <TableView fx:id="serviceTableView" prefHeight="560.0" VBox.vgrow="ALWAYS">
+        <TableView fx:id="serviceTableView" prefHeight="560.0" VBox.vgrow="ALWAYS" style="-fx-font-size: 14px;">
             <columns>
                 <TableColumn fx:id="colMaDichVu" prefWidth="120" text="Mã dịch vụ" />
                 <TableColumn fx:id="colTenDichVu" prefWidth="220" text="Tên dịch vụ" />
@@ -82,74 +82,93 @@
                     </padding>
                     <Label style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: white;" text="QUẢN LÝ DỊCH VỤ" />
                 </StackPane>
-                <TabPane fx:id="serviceTabPane" VBox.vgrow="ALWAYS">
+                <TabPane fx:id="serviceTabPane" VBox.vgrow="ALWAYS"
+                         style="-fx-tab-min-width: 120px; -fx-tab-max-width: 120px; -fx-tab-min-height: 35px; -fx-tab-max-height: 35px;
+                -fx-background-color: #F0F2F5; -fx-tab-border-color: #D0D0D0; -fx-tab-border-width: 0 0 2 0;
+                -fx-tab-selected-background-color: white; -fx-tab-selected-text-fill: #2563EB;
+                -fx-tab-unselected-text-fill: #555555; -fx-tab-hover-background-color: #E0E2E5;
+                -fx-header-background-color: #F0F2F5; -fx-open-tab-animation: NONE; -fx-close-tab-animation: NONE;">
                     <tabs>
-                        <Tab closable="false" text="Sửa dịch vụ">
-                            <VBox alignment="TOP_CENTER" spacing="15" style="-fx-background-color: white;">
-                                <padding>
-                                    <Insets bottom="20" left="20" right="20" top="20" />
-                                </padding>
-                                <ImageView fx:id="editServiceImageView" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-                                    <VBox.margin>
-                                        <Insets bottom="5.0" />
-                                    </VBox.margin>
-                                </ImageView>
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <TextField fx:id="imageLinkEditTextField" HBox.hgrow="ALWAYS" promptText="Link ảnh" style="-fx-font-size: 14;" />
-                                    <Button fx:id="findImageEditButton" onAction="#onFindImageEdit" style="-fx-background-color: #701c1c; -fx-text-fill: white; -fx-font-size: 13;" text="Xem ảnh" />
-                                </HBox>
-                                <VBox spacing="5" VBox.vgrow="NEVER">
-                                    <Label style="-fx-text-fill: #555555; -fx-font-size: 15;" text="Mã dịch vụ" />
-                                    <TextField fx:id="maDichVuEditTextField" editable="false" style="-fx-background-color: #F1E6E6; -fx-background-radius: 5; -fx-font-size: 15;" />
+                        <!-- Tab Sửa dịch vụ -->
+                        <Tab closable="false">
+                            <graphic>
+                                <Label text="Sửa dịch vụ" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2563EB;" />
+                            </graphic>
+                            <content>
+                                <VBox alignment="TOP_CENTER" spacing="10" style="-fx-background-color: #F8F8F8;">
+                                    <padding>
+                                        <Insets bottom="20" left="20" right="20" top="20" />
+                                    </padding>
+                                    <ImageView fx:id="editServiceImageView" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                        <VBox.margin>
+                                            <Insets bottom="5.0" />
+                                        </VBox.margin>
+                                    </ImageView>
+                                    <HBox alignment="CENTER_LEFT" spacing="10">
+                                        <TextField fx:id="imageLinkEditTextField" HBox.hgrow="ALWAYS" promptText="Link ảnh" style="-fx-font-size: 16;" />
+                                        <Button fx:id="findImageEditButton" onAction="#onFindImageEdit" style="-fx-background-color: #701c1c; -fx-text-fill: white; -fx-font-size: 15;" text="Xem ảnh" />
+                                    </HBox>
+                                    <VBox spacing="5" VBox.vgrow="NEVER">
+                                        <Label style="-fx-text-fill: #555555; -fx-font-size: 16;" text="Mã dịch vụ" />
+                                        <TextField fx:id="maDichVuEditTextField" editable="false" style="-fx-background-color: #F1E6E6; -fx-background-radius: 5; -fx-font-size: 16;" />
+                                    </VBox>
+                                    <VBox spacing="5">
+                                        <Label style="-fx-text-fill: #555555; -fx-font-size: 16;" text="Tên dịch vụ" />
+                                        <TextField fx:id="tenDichVuEditTextField" style="-fx-background-color: #FFFFFF; -fx-border-color: #D0D0D0; -fx-background-radius: 5; -fx-border-radius: 5; -fx-font-size: 16;" />
+                                    </VBox>
+                                    <VBox spacing="5">
+                                        <Label style="-fx-text-fill: #555555; -fx-font-size: 16;" text="Giá dịch vụ" />
+                                        <TextField fx:id="giaDichVuEditTextField" style="-fx-background-color: #FFFFFF; -fx-border-color: #D0D0D0; -fx-background-radius: 5; -fx-border-radius: 5; -fx-font-size: 16;" />
+                                    </VBox>
+                                    <Button fx:id="updateServiceButton" onAction="#onUpdateService" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;" text="Cập nhật">
+                                        <VBox.margin>
+                                            <Insets top="10" />
+                                        </VBox.margin>
+                                    </Button>
+                                    <Button fx:id="cancelEditButton" onAction="#onCancelEdit" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: maroon; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;" text="Hủy" />
                                 </VBox>
-                                <VBox spacing="5">
-                                    <Label style="-fx-text-fill: #555555; -fx-font-size: 15;" text="Tên dịch vụ" />
-                                    <TextField fx:id="tenDichVuEditTextField" style="-fx-background-color: #F8F8F8; -fx-border-color: #D0D0D0; -fx-background-radius: 5; -fx-border-radius: 5; -fx-font-size: 15;" />
-                                </VBox>
-                                <VBox spacing="5">
-                                    <Label style="-fx-text-fill: #555555; -fx-font-size: 15;" text="Giá dịch vụ" />
-                                    <TextField fx:id="giaDichVuEditTextField" style="-fx-background-color: #F8F8F8; -fx-border-color: #D0D0D0; -fx-background-radius: 5; -fx-border-radius: 5; -fx-font-size: 15;" />
-                                </VBox>
-                                <Button fx:id="updateServiceButton" onAction="#onUpdateService" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;" text="Cập nhật">
-                                    <VBox.margin>
-                                        <Insets top="10" />
-                                    </VBox.margin>
-                                </Button>
-                                <Button fx:id="cancelEditButton" onAction="#onCancelEdit" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: maroon; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;" text="Hủy" />
-                            </VBox>
+                            </content>
                         </Tab>
-                        <Tab closable="false" text="Thêm dịch vụ">
-                            <VBox alignment="TOP_CENTER" spacing="15" style="-fx-background-color: white;">
-                                <padding>
-                                    <Insets bottom="20" left="20" right="20" top="20" />
-                                </padding>
-                                <ImageView fx:id="addServiceImageView" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-                                    <VBox.margin>
-                                        <Insets bottom="5.0" />
-                                    </VBox.margin>
-                                </ImageView>
-                                <HBox alignment="CENTER_LEFT" spacing="10">
-                                    <TextField fx:id="imageLinkAddTextField" HBox.hgrow="ALWAYS" promptText="Link ảnh" style="-fx-font-size: 14;" />
-                                    <Button fx:id="findImageAddButton" onAction="#onFindImageAdd" style="-fx-background-color: #701c1c; -fx-text-fill: white; -fx-font-size: 13;" text="Xem ảnh" />
-                                </HBox>
-                                <VBox spacing="5">
-                                    <Label style="-fx-text-fill: #555555; -fx-font-size: 15;" text="Tên dịch vụ" />
-                                    <TextField fx:id="tenDichVuAddTextField" style="-fx-background-color: #F8F8F8; -fx-border-color: #D0D0D0; -fx-background-radius: 5; -fx-border-radius: 5; -fx-font-size: 15;" />
+
+                        <!-- Tab Thêm dịch vụ -->
+                        <Tab closable="false">
+                            <graphic>
+                                <Label text="Thêm dịch vụ" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2563EB;" />
+                            </graphic>
+                            <content>
+                                <VBox alignment="TOP_CENTER" spacing="10" style="-fx-background-color: #F8F8F8;">
+                                    <padding>
+                                        <Insets bottom="20" left="20" right="20" top="20" />
+                                    </padding>
+                                    <ImageView fx:id="addServiceImageView" fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                        <VBox.margin>
+                                            <Insets bottom="5.0" />
+                                        </VBox.margin>
+                                    </ImageView>
+                                    <HBox alignment="CENTER_LEFT" spacing="10">
+                                        <TextField fx:id="imageLinkAddTextField" HBox.hgrow="ALWAYS" promptText="Link ảnh" style="-fx-font-size: 16;" />
+                                        <Button fx:id="findImageAddButton" onAction="#onFindImageAdd" style="-fx-background-color: #701c1c; -fx-text-fill: white; -fx-font-size: 15;" text="Xem ảnh" />
+                                    </HBox>
+                                    <VBox spacing="5">
+                                        <Label style="-fx-text-fill: #555555; -fx-font-size: 16;" text="Tên dịch vụ" />
+                                        <TextField fx:id="tenDichVuAddTextField" style="-fx-background-color: #FFFFFF; -fx-border-color: #D0D0D0; -fx-background-radius: 5; -fx-border-radius: 5; -fx-font-size: 16;" />
+                                    </VBox>
+                                    <VBox spacing="5">
+                                        <Label style="-fx-text-fill: #555555; -fx-font-size: 16;" text="Giá dịch vụ" />
+                                        <TextField fx:id="giaDichVuAddTextField" style="-fx-background-color: #FFFFFF; -fx-border-color: #D0D0D0; -fx-background-radius: 5; -fx-border-radius: 5; -fx-font-size: 16;" />
+                                    </VBox>
+                                    <Button fx:id="addServiceButton" onAction="#onAddService" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;" text="Thêm dịch vụ">
+                                        <VBox.margin>
+                                            <Insets top="10" />
+                                        </VBox.margin>
+                                    </Button>
+                                    <Button fx:id="cancelAddButton" onAction="#onCancelAdd" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: maroon; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;" text="Hủy" />
                                 </VBox>
-                                <VBox spacing="5">
-                                    <Label style="-fx-text-fill: #555555; -fx-font-size: 15;" text="Giá dịch vụ" />
-                                    <TextField fx:id="giaDichVuAddTextField" style="-fx-background-color: #F8F8F8; -fx-border-color: #D0D0D0; -fx-background-radius: 5; -fx-border-radius: 5; -fx-font-size: 15;" />
-                                </VBox>
-                                <Button fx:id="addServiceButton" onAction="#onAddService" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;" text="Thêm dịch vụ">
-                                    <VBox.margin>
-                                        <Insets top="10" />
-                                    </VBox.margin>
-                                </Button>
-                                <Button fx:id="cancelAddButton" onAction="#onCancelAdd" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: maroon; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;" text="Hủy" />
-                            </VBox>
+                            </content>
                         </Tab>
                     </tabs>
                 </TabPane>
+
             </VBox>
         </center>
     </BorderPane>

@@ -1,6 +1,7 @@
 package com.example.hotelmanagement.DAO;
 
 import com.example.hotelmanagement.DTO.Dashboard_ActivityItem;
+import com.example.hotelmanagement.Models.Reservation;
 import com.example.hotelmanagement.Models.Servicebooking;
 import com.example.hotelmanagement.Utils.HibernateUtils;
 import org.hibernate.Session;
@@ -134,5 +135,18 @@ public class ServiceBookingDAO {
         int roomNumber = booking.getReservationID().getRoomID().getRoomNumber();
         Instant timestamp = booking.getBookingDate().atZone(ZoneId.systemDefault()).toInstant();
         return new Dashboard_ActivityItem(description,roomNumber, timestamp);
+    }
+    public List<Servicebooking> getServiceBookingsWithDetails(Reservation reservation) {
+        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT sb FROM Servicebooking sb " +
+                                    "JOIN FETCH sb.reservationID r " +
+                                    "JOIN FETCH r.reservationguests rg " +
+                                    "JOIN FETCH rg.customerID " +
+                                    "JOIN FETCH r.roomID " +
+                                    "WHERE sb.reservationID = :reservation", Servicebooking.class)
+                    .setParameter("reservation", reservation)
+                    .list();
+        }
     }
 }

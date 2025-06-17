@@ -1,5 +1,6 @@
 package com.example.hotelmanagement.Views;
 
+import com.example.hotelmanagement.DAO.CustomerDAO;
 import com.example.hotelmanagement.DAO.InvoiceDAO;
 import com.example.hotelmanagement.Main;
 import com.example.hotelmanagement.Models.*;
@@ -22,6 +23,7 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -192,6 +194,7 @@ public class InvoiceDetailController {
 
         customerNameField.setEditable(true);
         customerAddressField.setEditable(true);
+        generatePaymentQRCode();
     }
 
 
@@ -259,7 +262,7 @@ public class InvoiceDetailController {
 
                 if (saveSuccessful) {
                     showAlert(Alert.AlertType.INFORMATION, "Thành công", "Hóa đơn đã được thanh toán.");
-                    updateButtonStates(); // Cập nhật trạng thái nút sau khi thanh toán
+                    updateButtonStates();
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu hoặc cập nhật hóa đơn vào cơ sở dữ liệu.");
                 }
@@ -293,7 +296,7 @@ public class InvoiceDetailController {
 
                 if (saveSuccessful) {
                     exportInvoiceToPdf(this.invoice, detailList, rootPane.getScene().getWindow());
-                    showAlert(Alert.AlertType.INFORMATION, "Thành công", "Hóa đơn đã được thanh toán và đang in.");
+                    showAlert(Alert.AlertType.INFORMATION, "Thành công", "Hóa đơn đã được thanh toán.");
                     updateButtonStates();
                 } else {
                     showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu hoặc cập nhật hóa đơn vào cơ sở dữ liệu.");
@@ -348,11 +351,18 @@ public class InvoiceDetailController {
             Customer customer = null;
             if (bookings != null && !bookings.isEmpty()) {
                 Servicebooking firstBooking = bookings.get(0);
-                room = firstBooking.getReservationID().getRoomID();
-                customer = firstBooking.getReservationID().getReservationguests().stream().findFirst().get().getCustomerID(); // <-- Đảm bảo phương thức getCustomer() tồn tại trong Servicebooking
-            }
+                if (firstBooking.getReservationID().getRoomID() != null) {
+                    room = firstBooking.getReservationID().getRoomID();
+                }
+                if (firstBooking.getReservationID().getReservationguests() != null && !firstBooking.getReservationID().getReservationguests().isEmpty()) {
+                    int customerId = firstBooking.getReservationID().getReservationguests().stream()
+                            .findFirst().get().getCustomerID().getId();
 
-            controller.setServiceDetails(room, customer, bookings);
+                    CustomerDAO customerDAO = new CustomerDAO();
+                    customer = customerDAO.findById(customerId); //
+                }
+            }
+            controller.setServiceDetails(room, customer, bookings); //
 
             Stage stage = new Stage();
             stage.setTitle("Chi tiết dịch vụ");
@@ -362,7 +372,6 @@ public class InvoiceDetailController {
 
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
     private void exportInvoiceToPdf(Invoice invoiceToPrint, List<InvoiceDetailViewModel> detailsToPrint, Window parentWindow) {
@@ -549,38 +558,35 @@ public class InvoiceDetailController {
             return;
         }
 
-        String bankBin = "970436"; // Mã BIN ngân hàng VIETCOMBANK
-        String accountNumber = "1038172542";
-        String accountName = "LE BUI QUOC HUY";
         String amount = totalDueLabel.getText()
                 .replace("₫", "")
                 .replace(".", "")
                 .replace(",", "")
                 .replaceAll("\\D", "");
-        String addInfo = "Thanh toan HD " + invoiceNoLabel.getText();
-
+        System.out.println(amount);
         try {
-            String qrData = createVietQR(bankBin, accountNumber, accountName, Long.parseLong(amount), addInfo);
-            QRCodeWriter qrCodeWriter = new QRCodeWriter();
-            int width = 300;
-            int height = 300;
+            String qrData = createVietQR(
+                    "970422",
+                    "56500824100585",
+                    "TRUONG DUC HUY",
+                    Long.parseLong(amount),
+                    "Thanh toan hoa don khach san"
+            );
 
-            BitMatrix bitMatrix = qrCodeWriter.encode(qrData, BarcodeFormat.QR_CODE, width, height);
-            BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bufferedImage.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
-                }
-            }
+            BufferedImage qrImageBuffer = generateQRCodeImage(qrData, 200, 200);
+            Image fxImage = SwingFXUtils.toFXImage(qrImageBuffer, null);
+            qrCodeImageView.setImage(fxImage);
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage, "png", baos);
-            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-            Image qrImage = new Image(bais);
-            qrCodeImageView.setImage(qrImage);
-
+        } catch (WriterException e) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi QR Code", "Không thể tạo mã QR: " + e.getMessage());
+            e.printStackTrace();
+            qrCodeImageView.setImage(null);
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Lỗi định dạng số tiền", "Không thể chuyển đổi số tiền để tạo mã QR: " + e.getMessage());
+            e.printStackTrace();
+            qrCodeImageView.setImage(null);
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi QR VietQR", "Không thể tạo mã QR VietQR: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Lỗi QR VietQR", "Đã xảy ra lỗi khi tạo mã QR VietQR: " + e.getMessage());
             e.printStackTrace();
             qrCodeImageView.setImage(null);
         }
@@ -592,29 +598,27 @@ public class InvoiceDetailController {
     private String createVietQR(String bankBin, String accountNumber, String name, long amount, String addInfo) {
         StringBuilder qrData = new StringBuilder();
 
-        qrData.append(buildTLV("00", "01")); // Payload Format Indicator
-        qrData.append(buildTLV("01", "12")); // Point of Initiation Method
+        qrData.append(buildTLV("00", "01"));
+        qrData.append(buildTLV("01", "12"));
 
         // Merchant Account Information - VietQR
         String guid = buildTLV("00", "A000000727");
         String service = buildTLV("01", "1");
-
         String binTag = buildTLV("02", bankBin);
         String accTag = buildTLV("03", accountNumber);
         String info38 = guid + service + binTag + accTag;
         qrData.append(buildTLV("38", info38));
 
         qrData.append(buildTLV("52", "QRIBFTTA"));
-        qrData.append(buildTLV("53", "704")); // VND
+        qrData.append(buildTLV("53", "704"));
         qrData.append(buildTLV("54", String.valueOf(amount)));
         qrData.append(buildTLV("58", "VN"));
         qrData.append(buildTLV("59", name.toUpperCase()));
-        qrData.append(buildTLV("60", "HANOI")); // hoặc HoChiMinh
+        qrData.append(buildTLV("60", "HANOI"));
 
         String purpose = buildTLV("05", addInfo.replace(" ", ""));
         qrData.append(buildTLV("62", purpose));
 
-        // CRC placeholder
         String dataWithoutCRC = qrData.toString() + "6304";
         String crc = calculateCRC16(dataWithoutCRC);
         return dataWithoutCRC + crc;
@@ -634,6 +638,17 @@ public class InvoiceDetailController {
         }
         crc &= 0xFFFF;
         return String.format("%04X", crc);
+    }
+
+    private BufferedImage generateQRCodeImage(String text, int width, int height) throws WriterException {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
+
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
+                image.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
+        return image;
     }
 
 }

@@ -63,7 +63,7 @@ public class StatisticViewModel {
         RevenueReport report = revenueReportDAO.getByMonth(month, year);
         if (report != null) {
             List<RevenueReportDetail> details = revenueReportDetailDAO.getByReportId(report.getId());
-            updateStatistics(report.getTotalRevenue(), report.getTotalRental(), details);
+            updateStatistics(report.getTotalService(), report.getTotalRental(), details);
             revenueDetails.setAll(details);
         }
     }
@@ -76,7 +76,7 @@ public class StatisticViewModel {
 
         if (!monthlyReports.isEmpty()) {
             BigDecimal totalYearRevenue = monthlyReports.stream()
-                    .map(RevenueReport::getTotalRevenue)
+                    .map(RevenueReport::getTotalService)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
             BigDecimal totalYearRental = monthlyReports.stream()
