@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE hibernate-configuration PUBLIC
-                "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-                "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
-
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
         <!-- Kết nối SQL Server -->
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-        <property name="hibernate.connection.url">jdbc:sqlserver://KIARH\MSSQLSERVER02:49926;databaseName=HotelManagement;integratedSecurity=true;encrypt=false</property>
+        <property name="hibernate.connection.url">jdbc:sqlserver://DUCHUY;database=JavaHotelManagement;encrypt=true;trustServerCertificate=true</property>
+        <property name="hibernate.connection.username">duchuy</property>
+        <property name="hibernate.connection.password">123456789</property>
+        <!-- Nho sua CSDL -->
 
         <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">none</property>
         <!-- Specify the JDBC driver class -->
         <property name="hibernate.current_session_context_class">thread</property>
-
         <!-- Mention annotated class -->
         <mapping class="com.example.hotelmanagement.Models.Amenity"/>
         <mapping class="com.example.hotelmanagement.Models.Customer"/>
