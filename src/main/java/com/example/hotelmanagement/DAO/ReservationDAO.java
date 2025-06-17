@@ -21,6 +21,10 @@ public class ReservationDAO {
                     "SELECT r FROM Reservation r " +
                             "JOIN FETCH r.roomID ro " +
                             "JOIN FETCH ro.roomTypeID rt " +
+                            "LEFT JOIN FETCH r.servicebookings sb " +
+                            "LEFT JOIN FETCH sb.serviceID " +
+                            "LEFT JOIN FETCH r.reservationguests rg " +
+                            "LEFT JOIN FETCH rg.customerID " +
                             "WHERE r.isDeleted = false", Reservation.class
             ).list();
 

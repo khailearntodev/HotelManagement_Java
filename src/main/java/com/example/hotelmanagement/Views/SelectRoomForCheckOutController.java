@@ -110,12 +110,7 @@ public class SelectRoomForCheckOutController implements Initializable {
         }
 
         try {
-            List<Reservation> reservations = viewModel.getSelectedRooms().stream()
-                    .map(room -> {
-                        ReservationDAO reservationDAO = new ReservationDAO();
-                        return reservationDAO.findByIdForServiceBK(room.getId());
-                    })
-                    .collect(Collectors.toList());
+            List<Reservation> reservations = viewModel.getSelectedRooms();
             ReservationDAO reservationDAO = new ReservationDAO();
             for (Reservation res : reservations) {
                 res.setCheckOutDate(java.time.Instant.now());
@@ -130,7 +125,7 @@ public class SelectRoomForCheckOutController implements Initializable {
             Parent root = fxmlLoader.load();
 
             InvoiceDetailController controller = fxmlLoader.getController();
-            controller.setViewModelForCreation(invoiceDetailVM); // Sử dụng phương thức mới
+            controller.setViewModelForCreation(invoiceDetailVM);
 
             Stage stage = new Stage();
             stage.initStyle(StageStyle.UNDECORATED);
@@ -139,7 +134,7 @@ public class SelectRoomForCheckOutController implements Initializable {
 
             handleClose(null);
 
-            stage.showAndWait();
+            stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();

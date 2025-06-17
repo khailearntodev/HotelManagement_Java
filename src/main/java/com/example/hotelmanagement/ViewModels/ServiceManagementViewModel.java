@@ -44,10 +44,14 @@ public class ServiceManagementViewModel {
         loadServices();
     }
 
-    public void deleteService(ServiceDisplay sd) {
-        dao.softDelete(sd.getMaDichVu());
-        loadServices();
+    public boolean deleteService(ServiceDisplay sd) {
+        boolean success = dao.softDelete(sd.getMaDichVu());
+        if (success) {
+            loadServices();
+        }
+        return success;
     }
+
 
     public boolean updateService(ServiceDisplay sd) {
         Service s = dao.findById(sd.getMaDichVu());

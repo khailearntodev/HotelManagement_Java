@@ -359,16 +359,16 @@ public class InvoiceDetailController {
                             .findFirst().get().getCustomerID().getId();
 
                     CustomerDAO customerDAO = new CustomerDAO();
-                    customer = customerDAO.findById(customerId); //
+                    customer = customerDAO.findById(customerId);
                 }
             }
-            controller.setServiceDetails(room, customer, bookings); //
+            controller.setServiceDetails(room, customer, bookings);
 
             Stage stage = new Stage();
             stage.setTitle("Chi tiết dịch vụ");
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root));
-            stage.show();
+            stage.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -502,18 +502,6 @@ public class InvoiceDetailController {
                     .setFontSize(14)
                     .setTextAlignment(TextAlignment.RIGHT)
                     .setMarginBottom(30));
-
-            // --- KÝ TÊN ---
-            document.add(new Paragraph("Khách hàng                                  Nhân viên lập hóa đơn")
-                    .setFont(boldFont)
-                    .setFontSize(12)
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setMarginBottom(60)); // Khoảng cách cho chữ ký
-
-            document.add(new Paragraph("(Ký và ghi rõ họ tên)                       (Ký và ghi rõ họ tên)")
-                    .setFont(vietnameseFont)
-                    .setFontSize(10)
-                    .setTextAlignment(TextAlignment.CENTER));
 
 
             document.close();

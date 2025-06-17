@@ -8,10 +8,7 @@ import com.example.hotelmanagement.Main;
 import com.example.hotelmanagement.Models.Invoice;
 import com.example.hotelmanagement.Models.Reservation;
 import com.example.hotelmanagement.ViewModels.InvoiceViewModel;
-import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.MFXDatePicker;
-import io.github.palexdev.materialfx.controls.MFXSlider;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,7 +36,6 @@ import java.util.Locale; // Import this
 public class InvoiceController {
 
     @FXML private MFXComboBox<String> nCustomCombo;
-    @FXML private MFXComboBox<String> ComboBox;
     @FXML private MFXDatePicker startDay;
     @FXML private MFXDatePicker endDay;
 
@@ -48,6 +44,7 @@ public class InvoiceController {
     private TextField minPriceField, maxPriceField;
     @FXML private MFXSlider minValue;
     @FXML private MFXSlider maxValue;
+    @FXML private MFXButton refreshButton;
 
     @FXML private MFXTextField filterTextField;
 
@@ -162,10 +159,6 @@ public class InvoiceController {
             }
         });
 
-        ComboBox.getItems().addAll("Tất cả trạng thái", "Đã thanh toán", "Chưa thanh toán");
-        ComboBox.getSelectionModel().selectFirst();
-        ComboBox.valueProperty().addListener((obs, oldVal, newVal) -> viewModel.filterByPaymentStatus(newVal));
-
         minValue.valueProperty().addListener((obs, oldVal, newVal) -> {applyAmountFilter();
             minPriceField.setText(String.format("%,.0f₫", newVal.doubleValue()));});
         maxValue.valueProperty().addListener((obs, oldVal, newVal) -> {applyAmountFilter();
@@ -175,6 +168,24 @@ public class InvoiceController {
 
         startDay.valueProperty().addListener((obs, oldVal, newVal) -> applyDateFilter());
         endDay.valueProperty().addListener((obs, oldVal, newVal) -> applyDateFilter());
+        refreshButton.setOnAction(event -> {
+            nCustomCombo.getSelectionModel().selectFirst();
+            minValue.setValue(0);
+            maxValue.setValue(100000000);
+
+            minPriceField.setText("0₫");
+            maxPriceField.setText("100.000.000₫");
+
+            startDay.setValue(null);
+            endDay.setValue(null);
+
+            filterTextField.clear();
+
+            viewModel.loadInvoices();
+
+            invoiceTable.setItems(viewModel.getInvoiceList());
+        });
+
     }
 
     private void applyAmountFilter() {

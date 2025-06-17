@@ -60,9 +60,10 @@
         </BorderPane>
         <TableView fx:id="serviceTableView" prefHeight="560.0" VBox.vgrow="ALWAYS" style="-fx-font-size: 14px;">
             <columns>
-                <TableColumn fx:id="colMaDichVu" prefWidth="120" text="Mã dịch vụ" />
-                <TableColumn fx:id="colTenDichVu" prefWidth="220" text="Tên dịch vụ" />
-                <TableColumn fx:id="colGiaDichVu" prefWidth="130" text="Giá dịch vụ" />
+                <TableColumn fx:id="colMaDichVu" reorderable="false" resizable="false" prefWidth="110" text="Mã dịch vụ" />
+                <TableColumn fx:id="colTenDichVu" reorderable="false" resizable="false"  prefWidth="220" text="Tên dịch vụ" />
+                <TableColumn fx:id="colGiaDichVu" reorderable="false" resizable="false" prefWidth="130" text="Giá dịch vụ" />
+                <TableColumn fx:id="colXoaDichVu" reorderable="false" resizable="false" prefWidth="100" text="Thao tác" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
