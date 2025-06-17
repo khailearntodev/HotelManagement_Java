@@ -53,6 +53,7 @@ public class ReservationDAO {
             return session.createQuery(
                             "SELECT r FROM Reservation r " +
                                     "LEFT JOIN FETCH r.roomID ro " +
+                                    "LEFT JOIN FETCH r.reservationguests " +
                                     "LEFT JOIN FETCH ro.roomTypeID " +
                                     "LEFT JOIN FETCH r.servicebookings sb " +
                                     "LEFT JOIN FETCH sb.serviceID " +
@@ -217,15 +218,27 @@ public class ReservationDAO {
     public List<Dashboard_BookingDisplay> getRecentBookingDisplays() {
         try (Session session = HibernateUtils.getSession()) {
             String sql = """
-                        SELECT TOP (10) r.ReservationID, c.FullName, rm.RoomNumber, rmt.TypeName, rm.Status, r.CheckInDate, r.CheckOutDate, 'Reservation'
-                        FROM RESERVATION r
-                        JOIN RESERVATIONGUEST rg ON r.ReservationID = rg.ReservationID
-                        JOIN CUSTOMER c ON rg.CustomerID = c.CustomerID
-                        JOIN ROOM rm ON r.RoomID = rm.RoomID
-                        JOIN ROOMTYPE rmt ON rmt.RoomTypeID = rm.RoomTypeID
-                        WHERE r.IsDeleted = 0
-                        ORDER BY r.CheckInDate DESC
-                    """;
+                        SELECT TOP (10)
+                                                       r.ReservationID,
+                                                       c.FullName,
+                                                       rm.RoomNumber,
+                                                       rmt.TypeName,
+                                                       rm.Status,
+                                                       r.CheckInDate,
+                                                       r.CheckOutDate,
+                                                       'Reservation'
+                                                   FROM RESERVATION r
+                                                   OUTER APPLY (
+                                                       SELECT TOP 1 c.FullName
+                                                       FROM RESERVATIONGUEST rg
+                                                       JOIN CUSTOMER c ON rg.CustomerID = c.CustomerID
+                                                       WHERE rg.ReservationID = r.ReservationID
+                                                   ) AS c
+                                                   JOIN ROOM rm ON r.RoomID = rm.RoomID
+                                                   JOIN ROOMTYPE rmt ON rmt.RoomTypeID = rm.RoomTypeID
+                                                   WHERE r.IsDeleted = 0
+                                                   ORDER BY r.CheckInDate DESC
+                        """;
             List<Object[]> rows = session.createNativeQuery(sql).list();
             List<Dashboard_BookingDisplay> result = new ArrayList<>();
 

@@ -42,4 +42,13 @@ public class RoomService {
         // Add any business logic here
         return roomDAO.countAvailableRoomsByRoomTypeId(roomTypeId);
     }
+    public boolean isRoomNumberUnique(Integer roomNumber, Integer currentRoomId) {
+        if (currentRoomId == null) {
+            // For new rooms, check if any existing room has this number
+            return roomDAO.findByRoomNumber(roomNumber).isEmpty();
+        } else {
+            // For existing rooms (updates), check if any OTHER room has this number
+            return roomDAO.findByRoomNumberExcludingId(roomNumber, currentRoomId).isEmpty();
+        }
+    }
 }

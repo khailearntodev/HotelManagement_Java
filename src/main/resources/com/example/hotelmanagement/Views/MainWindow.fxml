@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import org.kordamp.ikonli.javafx.*?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="820.0" prefWidth="1360.0" style="-fx-background-color: #FFF3F3F3; -fx-border-radius: 10; -fx-border-color: black; -fx-border-width: 1;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.MainWindowController">
+<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<AnchorPane prefHeight="820.0" prefWidth="1360.0" style="-fx-background-color: #FFF3F3F3; -fx-border-radius: 10; -fx-border-color: black; -fx-border-width: 1;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.MainWindowController">
    <children>
 
       <HBox layoutX="287.0" prefHeight="59.0" prefWidth="1208.0" style="-fx-background-color: #fff; -fx-padding: 5 10; -fx-alignment: center-left; -fx-spacing: 10;" AnchorPane.leftAnchor="270.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
@@ -21,7 +27,7 @@
                <padding>
                   <Insets left="10.0" />
                </padding></Label>
-            <Label fx:id="employeeName" onMouseClicked="#handleEmployeeNameClick" alignment="CENTER_RIGHT" prefHeight="35.0" prefWidth="200" textAlignment="CENTER">
+            <Label fx:id="employeeName" alignment="CENTER_RIGHT" onMouseClicked="#handleEmployeeNameClick" prefHeight="35.0" prefWidth="200" textAlignment="CENTER">
                <HBox.margin>
                   <Insets left="350.0" />
                </HBox.margin>
@@ -35,9 +41,15 @@
 
             <Region HBox.hgrow="ALWAYS" />
 
-               <MFXButton fx:id="btnMinimize" mnemonicParsing="false" onAction="#onButtonMinimize" style="-fx-font-size: 18;" text="—" />
+               <MFXButton fx:id="btnMinimize" mnemonicParsing="false" onAction="#onButtonMinimize" style="-fx-font-size: 18;" text="—">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></MFXButton>
 
-            <MFXButton fx:id="btnClose" mnemonicParsing="false" onAction="#onCloseButtonClicked" style="-fx-font-size: 18;" text="X" />
+            <MFXButton fx:id="btnClose" mnemonicParsing="false" onAction="#onCloseButtonClicked" style="-fx-font-size: 18;" text="X">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></MFXButton>
          </children>
       </HBox>
 

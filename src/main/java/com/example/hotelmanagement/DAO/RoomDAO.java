@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public class RoomDAO {
 
@@ -89,7 +90,19 @@ public class RoomDAO {
             return false;
         }
     }
-
+    public Optional<Room> findByRoomNumber(Integer roomNumber) {
+        try (Session session = HibernateUtils.getSession()) {
+            // Ensure we only find active rooms (not deleted)
+            Query<Room> query = session.createQuery(
+                    "SELECT r FROM Room r WHERE r.roomNumber = :roomNumber AND r.isDeleted = false", Room.class);
+            query.setParameter("roomNumber", roomNumber);
+            return query.uniqueResultOptional();
+        } catch (Exception e) {
+            System.err.println("Error finding Room by Room Number: " + e.getMessage());
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
     // Tìm phòng theo trạng thái (ví dụ status hoặc cleaningStatus)
     public List<Room> findByStatus(int status) {
         try (Session session = HibernateUtils.getSession()) {
@@ -149,6 +162,19 @@ public class RoomDAO {
         try (Session session = HibernateUtils.getSession()) {
             String hql = "SELECT COUNT(*) FROM Room WHERE isDeleted = false";
             return session.createQuery(hql, Long.class).uniqueResult();
+        }
+    }
+    public Optional<Room> findByRoomNumberExcludingId(Integer roomNumber, Integer excludeId) {
+        try (Session session = HibernateUtils.getSession()) {
+            Query<Room> query = session.createQuery(
+                    "SELECT r FROM Room r WHERE r.roomNumber = :roomNumber AND r.isDeleted = false AND r.id != :excludeId", Room.class);
+            query.setParameter("roomNumber", roomNumber);
+            query.setParameter("excludeId", excludeId);
+            return query.uniqueResultOptional();
+        } catch (Exception e) {
+            System.err.println("Error finding Room by room number excluding ID: " + e.getMessage());
+            e.printStackTrace();
+            return Optional.empty();
         }
     }
 }
