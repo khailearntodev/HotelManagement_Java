@@ -333,6 +333,11 @@ public class BookingController implements Initializable {
             return;
         }
         viewModel.addReservation(bookingNoteTextField.getText());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(null);
+        alert.setContentText("Đặt phòng thành công");
+        alert.showAndWait();
         Stage stage = (Stage) closeIcon.getScene().getWindow();
         stage.close();
     }

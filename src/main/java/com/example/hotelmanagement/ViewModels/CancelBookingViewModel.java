@@ -25,7 +25,7 @@ public class CancelBookingViewModel {
         PrebookingDAO preBookingDAO = new PrebookingDAO();
         List<Prebooking> prebookingList = preBookingDAO.getAll();
         Prebooking preBooking = prebookingList.stream()
-                .filter(e -> Objects.equals(e.getBookingCode(), code) && !e.getIsDeleted()).findFirst()
+                .filter(e -> Objects.equals(e.getBookingCode(), code) && !e.getIsDeleted() && e.getReservationID() == null).findFirst()
                 .orElse(null);
         if (preBooking == null) {
             this.room = null;
@@ -44,17 +44,22 @@ public class CancelBookingViewModel {
         preBooking.setIsDeleted(true);
         PrebookingDAO preBookingDAO = new PrebookingDAO();
         preBookingDAO.update(preBooking);
+
         if (room.getStatus() == 3) {
             room.setStatus(1);
             RoomDAO roomDAO = new RoomDAO();
             roomDAO.update(room);
-            for (int i = 0; i < parent.getRooms().size(); i++) {
-                if (parent.getMasterRooms().get(i).getId() == room.getId()) {
-                    parent.getMasterRooms().set(i, new Reservation_RoomDisplay(room));
+            for (int i = 0; i < parent.getMasterRooms().size(); i++) {
+                Reservation_RoomDisplay roomDisplay = parent.getMasterRooms().get(i);
+                if (roomDisplay.getId() == room.getId()) {
+                    roomDisplay.setStatus(room.getStatus());
+                    parent.getMasterRooms().remove(i);
+                    parent.getMasterRooms().add(i, new Reservation_RoomDisplay(room));
                     break;
                 }
             }
-            parent.setRooms(new FilteredList<>(parent.getMasterRooms(), p -> true));
+            parent.getRooms().setPredicate(null);
+            parent.getRooms().setPredicate(p -> true);
         }
     }
 }

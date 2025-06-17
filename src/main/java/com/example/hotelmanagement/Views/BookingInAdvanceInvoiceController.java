@@ -103,7 +103,7 @@ public class BookingInAdvanceInvoiceController implements Initializable {
                     Long.parseLong(viewModel.getPreBookingInvoiceDisplay().getTotalPrice().toString()),
                     "Thanh toan dat truoc phong" + viewModel.getPreBookingInvoiceDisplay().getRoomNumber()
             );
-            BufferedImage qrImage = generateQRCodeImage(qrData, 200, 200);
+            BufferedImage qrImage = generateQRCodeImage(qrData, 175, 175);
             Image fxImage = SwingFXUtils.toFXImage(qrImage, null);
             QRCodeImage.setImage(fxImage);
 
