@@ -4,6 +4,7 @@ import com.example.hotelmanagement.ViewModels.CancelBookingViewModel;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -67,6 +68,11 @@ public class CancelBookingController implements Initializable {
 
     public void handleDeletePreBooking(MouseEvent mouseEvent) {
         viewModel.deletePrebooking();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(null);
+        alert.setContentText("Xóa đặt phòng thành công");
+        alert.showAndWait();
         Stage stage = (Stage) cancelBookingVBox.getScene().getWindow();
         stage.close();
     }
