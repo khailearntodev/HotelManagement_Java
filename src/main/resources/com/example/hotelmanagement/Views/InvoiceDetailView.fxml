@@ -80,7 +80,7 @@
             <TableView fx:id="detailTable" maxHeight="Infinity" prefHeight="400.0" styleClass="table-view" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="soThuTuColumn" reorderable="false" resizable="false" prefWidth="50.0" text="STT" />
-                    <TableColumn fx:id="soPhongColumn" reorderable="false" resizable="false" prefWidth="70.0" text="Số phòng" />
+                    <TableColumn fx:id="soPhongColumn" reorderable="false" resizable="false" prefWidth="80.0" text="Số phòng" />
                     <TableColumn fx:id="soNgayThueColumn" reorderable="false" resizable="false" prefWidth="120.0" text="Số ngày thuê" />
                     <TableColumn fx:id="donGiaPhongColumn" reorderable="false" resizable="false" prefWidth="120.0" text="Đơn giá thuê" />
                     <TableColumn fx:id="tienPhongColumn"  reorderable="false" resizable="false" prefWidth="120.0" text="Thành tiền" />

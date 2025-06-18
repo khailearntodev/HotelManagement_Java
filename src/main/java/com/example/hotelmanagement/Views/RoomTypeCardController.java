@@ -74,7 +74,7 @@ public class RoomTypeCardController {
                 Image image = new Image(new ByteArrayInputStream(decodedBytes));
                 roomTypeImageView.setImage(image);
             } catch (IllegalArgumentException e) {
-                System.err.println("Invalid Base64 image string for Roomtype: " + viewModel.getTypeName());
+                //System.err.println("Invalid Base64 image string for Roomtype: " + viewModel.getTypeName());
                 roomTypeImageView.setImage(null);
             }
         } else {
