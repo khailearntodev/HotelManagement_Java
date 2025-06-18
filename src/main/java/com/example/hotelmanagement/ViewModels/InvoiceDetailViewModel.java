@@ -87,7 +87,7 @@ public class InvoiceDetailViewModel {
 
         BigDecimal phiDV = reservation.getServicebookings().stream()
                 .filter(sb -> "Đã xử lý".equals(sb.getStatus()))
-                .map(sb -> sb.getServiceID().getPrice().multiply(BigDecimal.valueOf(sb.getQuantity())))
+                .map(sb -> sb.getServiceprice().multiply(BigDecimal.valueOf(sb.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         this.phiDichVu.set(phiDV);
         BigDecimal coc = new InvoiceDAO().findDepositAmountByReservationId(reservation.getId());
