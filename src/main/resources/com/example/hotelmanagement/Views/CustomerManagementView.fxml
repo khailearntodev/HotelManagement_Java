@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
 
-<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<AnchorPane maxHeight="660.0" maxWidth="1060.0" minHeight="660" minWidth="1060" prefHeight="660" prefWidth="1060" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.CustomerManagementController">
+<AnchorPane maxHeight="660.0" maxWidth="1060.0" minHeight="660" minWidth="1060" prefHeight="660" prefWidth="1060" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.CustomerManagementController">
     <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="1060.0" spacing="20">
         <!-- HEADER -->
         <HBox alignment="CENTER_LEFT" spacing="15">
@@ -40,41 +33,42 @@
 
         <!-- FILTER SECTION -->
         <HBox prefHeight="43.0" prefWidth="1060.0" spacing="10.0" style="-fx-border-radius: 5;">
-            <MFXComboBox fx:id="statusComboBox" alignment="CENTER" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="120" promptText="Trạng thái" />
-            <MFXComboBox fx:id="customerTypeComboBox" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="120" promptText="Loại khách" />
+            <MFXComboBox fx:id="statusComboBox" alignment="CENTER" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="130" promptText="Trạng thái" />
+            <MFXComboBox fx:id="customerTypeComboBox" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="130" promptText="Loại khách" />
             <MFXComboBox fx:id="yearComboBox" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="90" promptText="Năm" />
             <MFXComboBox fx:id="monthComboBox" floatMode="ABOVE" minHeight="-Infinity" prefHeight="35.0" prefWidth="90" promptText="Tháng" />
 
-            <!-- BUTTON: Xuất PDF -->
-            <MFXButton fx:id="btnExportPdf" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35" prefWidth="120" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-border-color: gray; -fx-border-radius: 5;" text="Xuất PDF">
+            <!-- BUTTON: Làm mới -->
+            <MFXButton fx:id="btnRefresh" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35" prefWidth="150.0" style="-fx-background-color: Maroon; -fx-text-fill: white; -fx-border-color: Maroon; -fx-border-radius: 5;" text="Đặt lại bộ lọc">
                 <graphic>
-                    <StackedFontIcon iconSize="18" prefHeight="36.0" prefWidth="31.0">
-                        <FontIcon iconLiteral="fa-print" StackedFontIcon.iconSize="0.7" />
+                    <StackedFontIcon iconSize="22">
+                        <FontIcon fill="WHITE" iconLiteral="fa-rotate-right" wrappingWidth="20.928571701049805" StackedFontIcon.iconSize="0.7" />
                     </StackedFontIcon>
                 </graphic>
-            <font>
-               <Font size="14.0" />
-            </font>
-            <HBox.margin>
-               <Insets left="270.0" />
-            </HBox.margin>
+                <HBox.margin>
+                    <Insets left="180.0" right="10.0" />
+                </HBox.margin>
+                <font>
+                    <Font size="14.0" />
+                </font>
             </MFXButton>
 
-            <!-- BUTTON: Làm mới -->
-            <MFXButton fx:id="btnRefresh" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35" prefWidth="120" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-border-color: gray; -fx-border-radius: 5;" text="Refresh">
+            <!-- BUTTON: Xuất PDF -->
+            <MFXButton fx:id="btnExportPdf" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35" prefWidth="150.0" style="-fx-background-color: #2563EB; -fx-text-fill: white; -fx-border-color: gray; -fx-border-radius: 5;" text="Xuất PDF">
                 <graphic>
-                    <StackedFontIcon iconSize="18" prefHeight="37.0" prefWidth="26.0">
-                        <FontIcon iconLiteral="fa-rotate-right" wrappingWidth="28.0" StackedFontIcon.iconSize="0.7" />
+                    <StackedFontIcon iconSize="22">
+                        <FontIcon fill="WHITE" iconLiteral="fa-print" wrappingWidth="20.928571701049805" StackedFontIcon.iconSize="0.7" />
                     </StackedFontIcon>
                 </graphic>
-            <HBox.margin>
-               <Insets right="20.0" />
-            </HBox.margin>
-            <font>
-               <Font size="14.0" />
-            </font>
+                <font>
+                    <Font size="14.0" />
+                </font>
+                <HBox.margin>
+                    <Insets left="10.0" />
+                </HBox.margin>
             </MFXButton>
-         <padding>
+
+            <padding>
             <Insets left="10.0" />
          </padding>
         </HBox>
@@ -82,13 +76,13 @@
         <!-- TABLE -->
         <TableView fx:id="customerTable" minHeight="-Infinity" minWidth="1060.0" prefHeight="535.0" prefWidth="1060.0" style="-fx-font-size: 14px;">
             <columns>
-                <TableColumn fx:id="idNumberColumn" reorderable="false" resizable="false" prefWidth="130" text="Mã khách hàng" />
-                <TableColumn fx:id="nameColumn" reorderable="false" resizable="false" prefWidth="200" text="Tên khách hàng" />
-                <TableColumn fx:id="typeColumn" reorderable="false" resizable="false" prefWidth="160" text="Loại khách" />
-                <TableColumn fx:id="birthdayColumn" reorderable="false" resizable="false" prefWidth="120" text="Ngày sinh" />
-                <TableColumn fx:id="identifyColumn" reorderable="false" resizable="false" prefWidth="170" text="CCCD / Passport" />
-                <TableColumn fx:id="phoneColumn" reorderable="false" resizable="false" prefWidth="130" text="SĐT" />
-                <TableColumn fx:id="statusColumn" reorderable="false" resizable="false" prefWidth="160" text="Trạng thái" />
+                <TableColumn fx:id="idNumberColumn" prefWidth="130" reorderable="false" resizable="false" text="Mã khách hàng" />
+                <TableColumn fx:id="nameColumn" prefWidth="200" reorderable="false" resizable="false" text="Tên khách hàng" />
+                <TableColumn fx:id="typeColumn" prefWidth="160" reorderable="false" resizable="false" text="Loại khách" />
+                <TableColumn fx:id="birthdayColumn" prefWidth="120" reorderable="false" resizable="false" text="Ngày sinh" />
+                <TableColumn fx:id="identifyColumn" prefWidth="170" reorderable="false" resizable="false" text="CCCD / Passport" />
+                <TableColumn fx:id="phoneColumn" prefWidth="130" reorderable="false" resizable="false" text="SĐT" />
+                <TableColumn fx:id="statusColumn" prefWidth="160" reorderable="false" resizable="false" text="Trạng thái" />
             </columns>
         </TableView>
     </VBox>
