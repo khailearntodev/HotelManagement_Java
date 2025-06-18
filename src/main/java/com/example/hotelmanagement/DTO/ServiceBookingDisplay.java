@@ -2,7 +2,9 @@ package com.example.hotelmanagement.DTO;
 
 import com.example.hotelmanagement.Models.Servicebooking;
 import javafx.beans.property.*;
-        import java.time.Instant;
+
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +20,7 @@ public class ServiceBookingDisplay {
 
     private final IntegerProperty serviceBookingId;
     private final StringProperty serviceName;
+    private final ObjectProperty<BigDecimal> giaDichVu;
     private final IntegerProperty quantity;
     private final ObjectProperty<LocalDate> bookingDate;
     private final StringProperty status;
@@ -38,6 +41,7 @@ public class ServiceBookingDisplay {
         }
 
         this.quantity = new SimpleIntegerProperty(booking.getQuantity());
+        this.giaDichVu=new SimpleObjectProperty<>(booking.getServiceprice());
         this.bookingDate = new SimpleObjectProperty<>(
                 booking.getBookingDate() != null ? booking.getBookingDate().atZone(ZoneId.systemDefault()).toLocalDate() : null
         );
@@ -68,6 +72,7 @@ public class ServiceBookingDisplay {
     public StringProperty statusProperty() { return status; }
     public BooleanProperty canProcessProperty() { return canProcess; }
     public BooleanProperty canCancelProperty() { return canCancel; }
+    public BigDecimal getGiaDichVu() { return giaDichVu.get(); }
 
     // Getters for values
     public int getServiceBookingId() { return serviceBookingId.get(); }

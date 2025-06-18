@@ -2,6 +2,7 @@ package com.example.hotelmanagement.ViewModels;
 
 import com.example.hotelmanagement.Models.Servicebooking;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -25,14 +26,13 @@ public class ServiceUsageDetailViewModel {
         this.id = new SimpleIntegerProperty(servicebooking.getId());
         this.serviceName = new SimpleStringProperty(servicebooking.getServiceID().getServiceName());
         this.quantity = new SimpleIntegerProperty(servicebooking.getQuantity());
-
         Instant bookingInstant = servicebooking.getBookingDate();
         LocalDateTime bookingLocalDateTime = null;
         if (bookingInstant != null) {
             bookingLocalDateTime = LocalDateTime.ofInstant(bookingInstant, ZoneId.systemDefault());
         }
         this.date = new SimpleStringProperty(formatDateTime(bookingLocalDateTime));
-        BigDecimal price = servicebooking.getServiceID().getPrice();
+        BigDecimal price = servicebooking.getServiceprice();
         this.formattedPrice = new SimpleStringProperty(formatCurrency(price));
         BigDecimal total = price.multiply(BigDecimal.valueOf(servicebooking.getQuantity()));
         this.totalPrice = total;

@@ -6,6 +6,7 @@ import com.example.hotelmanagement.Models.Service;
 import com.example.hotelmanagement.ViewModels.RoomServiceViewModel;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -14,6 +15,7 @@ import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter; // Import này
 import java.text.NumberFormat;             // Import này
@@ -36,6 +38,7 @@ public class RoomServiceController {
     @FXML private TableColumn<ServiceBookingDisplay, LocalDate> colOrderDate;
     @FXML private TableColumn<ServiceBookingDisplay, String> colStatus;
     @FXML private TableColumn<ServiceBookingDisplay, Void> colActions;
+    @FXML private TableColumn<ServiceBookingDisplay, String> colServicePrice;
 
     private RoomServiceViewModel viewModel;
     private Reservation currentReservation;
@@ -75,6 +78,9 @@ public class RoomServiceController {
         if (colServiceBookingId != null) colServiceBookingId.setCellValueFactory(data->data.getValue().serviceBookingIdProperty().asObject());
         colServiceName.setCellValueFactory(data->data.getValue().serviceNameProperty());
         colQuantity.setCellValueFactory(data->data.getValue().quantityProperty().asObject());
+        colServicePrice.setCellValueFactory(data ->
+                new SimpleStringProperty(formatCurrency(data.getValue().getGiaDichVu()))
+        );
         if (colOrderDate != null) {
             colOrderDate.setCellValueFactory(data -> data.getValue().bookingDateProperty());
             colOrderDate.setCellFactory(column -> new TableCell<ServiceBookingDisplay, LocalDate>() {
@@ -89,6 +95,7 @@ public class RoomServiceController {
                 }
             });
         }
+        colStatus.setCellValueFactory(data -> data.getValue().statusProperty());
         colStatus.setCellFactory(column -> new TableCell<ServiceBookingDisplay, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -175,6 +182,10 @@ public class RoomServiceController {
 
         btnAddService.setOnAction(event -> viewModel.addNewService());
         btnClearForm.setOnAction(event -> viewModel.clearForm());
+    }
+    private String formatCurrency(BigDecimal amount) {
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return currencyFormatter.format(amount);
     }
     private void configureActionsColumn() {
         colActions.setCellFactory(param -> new TableCell<ServiceBookingDisplay, Void>() {

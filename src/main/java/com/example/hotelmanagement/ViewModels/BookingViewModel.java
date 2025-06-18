@@ -122,6 +122,7 @@ public class BookingViewModel {
                 serviceBooking.setQuantity(item.getQuantity());
                 serviceBooking.setServiceID(item.getService());
                 serviceBooking.setStatus("Chưa xử lý");
+                serviceBooking.setServiceprice(item.getPrice());
                 serviceBookingDAO.save(serviceBooking);
             }
         }

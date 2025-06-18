@@ -74,7 +74,7 @@ public class RevenueReportService {
             BigDecimal totalServiceRevenue = reservationsInPeriod.stream()
                     .flatMap(reservation -> serviceBookingDAO.findByReservationId(reservation.getId()).stream())
                     .filter(sb -> "Đã xử lý".equals(sb.getStatus()))
-                    .map(sb -> sb.getServiceID().getPrice().multiply(BigDecimal.valueOf(sb.getQuantity())))
+                    .map(sb -> sb.getServiceprice().multiply(BigDecimal.valueOf(sb.getQuantity())))
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
 // Tính tổng doanh thu thuê phòng
