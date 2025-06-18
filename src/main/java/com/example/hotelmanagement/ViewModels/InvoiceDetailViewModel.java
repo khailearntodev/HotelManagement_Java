@@ -39,17 +39,17 @@ public class InvoiceDetailViewModel {
     public InvoiceDetailViewModel(Prebooking prebooking) {
         this.reservation = null;
         this.soPhong.set(prebooking.getRoomID().getRoomNumber());
-        long days = ChronoUnit.DAYS.between(prebooking.getCheckInDate(), prebooking.getCheckOutDate());
+        long days = ChronoUnit.DAYS.between(prebooking.getCheckInDate(), prebooking.getCheckOutDate())+1;
         if (days <= 0) days = 1;
         this.soNgayThue.set((int) days);
 
         BigDecimal giaPhong = prebooking.getPrice();
         this.donGiaPhong.set(giaPhong);
         this.phiDichVu.set(BigDecimal.ZERO);
-        this.tienCoc.set(prebooking.getInvoiceID().getTotalAmount());
+        this.tienCoc.set(BigDecimal.ZERO);
         BigDecimal tienThuePhong = giaPhong.multiply(BigDecimal.valueOf(days));
         this.tienPhong.set(tienThuePhong);
-        this.tongCong.set(tienThuePhong.subtract(this.tienCoc.get()));
+        this.tongCong.set(tienThuePhong);
         if(tongCong.get().compareTo(BigDecimal.ZERO)<0){
             tongCong.set(BigDecimal.ZERO);
         }
@@ -78,7 +78,7 @@ public class InvoiceDetailViewModel {
 
     private void initializeSingleReservation(Reservation reservation) {
         this.soPhong.set(reservation.getRoomID().getRoomNumber());
-        long days = ChronoUnit.DAYS.between(reservation.getCheckInDate(), reservation.getCheckOutDate());
+        long days = ChronoUnit.DAYS.between(reservation.getCheckInDate(), reservation.getCheckOutDate())+1;
         if (days <= 0) days = 1;
         this.soNgayThue.set((int) days);
 
