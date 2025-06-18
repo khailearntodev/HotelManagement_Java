@@ -36,6 +36,24 @@ public class InvoiceDetailViewModel {
         this.reservation = reservation;
         initializeSingleReservation(reservation);
     }
+    public InvoiceDetailViewModel(Prebooking prebooking) {
+        this.reservation = null;
+        this.soPhong.set(prebooking.getRoomID().getRoomNumber());
+        long days = ChronoUnit.DAYS.between(prebooking.getCheckInDate(), prebooking.getCheckOutDate());
+        if (days <= 0) days = 1;
+        this.soNgayThue.set((int) days);
+
+        BigDecimal giaPhong = prebooking.getPrice();
+        this.donGiaPhong.set(giaPhong);
+        this.phiDichVu.set(BigDecimal.ZERO);
+        this.tienCoc.set(prebooking.getInvoiceID().getTotalAmount());
+        BigDecimal tienThuePhong = giaPhong.multiply(BigDecimal.valueOf(days));
+        this.tienPhong.set(tienThuePhong);
+        this.tongCong.set(tienThuePhong.subtract(this.tienCoc.get()));
+        if(tongCong.get().compareTo(BigDecimal.ZERO)<0){
+            tongCong.set(BigDecimal.ZERO);
+        }
+    }
 
     public InvoiceDetailViewModel(List<Reservation> reservations) {
         this.reservation = null;

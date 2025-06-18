@@ -59,7 +59,7 @@ public class EmployeeAccountInformationController {
             return;
         }
         if (viewModel.getSelectedRole() == null) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn Role cho tài khoản.");
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn vai trò cho tài khoản.");
             return;
         }
         viewModel.saveAccount();
@@ -70,6 +70,7 @@ public class EmployeeAccountInformationController {
         usernameField.clear();
         passwordField.clear();
         confirmPasswordField.clear();
+        roleComboBox.setValue(null);
     }
 
     private void showAlert(Alert.AlertType type, String title, String content) {

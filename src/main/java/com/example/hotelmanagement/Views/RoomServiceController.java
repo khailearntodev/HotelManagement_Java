@@ -89,7 +89,31 @@ public class RoomServiceController {
                 }
             });
         }
-        colStatus.setCellValueFactory(data->data.getValue().statusProperty());
+        colStatus.setCellFactory(column -> new TableCell<ServiceBookingDisplay, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setText(null);
+                } else {
+                    ServiceBookingDisplay bookingItem = getTableRow().getItem();
+                    if (bookingItem.isDeleted()) {
+                        setText("Dịch vụ không hỗ trợ");
+                        setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                    } else if(bookingItem.getStatus()=="Đã hủy"){
+                        setText(bookingItem.getStatus());
+                        setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                    }
+                    else {
+                        setText(bookingItem.getStatus());
+                        setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                    }
+
+
+                }
+            }
+        });
+
     }
 
     public void setupBindingsAndData() {
@@ -193,7 +217,15 @@ public class RoomServiceController {
                     btnCancel.disableProperty().unbind();
                     btnProcess.setDisable(true);
                     btnCancel.setDisable(true);
-                } else {
+                }
+                else if(getTableRow().getItem().isDeleted()){
+                    btnProcess.disableProperty();
+                    btnCancel.disableProperty();
+                    btnProcess.setDisable(true);
+                    btnCancel.setDisable(true);
+                    setGraphic(pane);
+                }
+                else {
                     ServiceBookingDisplay bookingItem = (ServiceBookingDisplay) getTableRow().getItem();
                     btnProcess.disableProperty().bind(bookingItem.canProcessProperty().not());
                     btnCancel.disableProperty().bind(bookingItem.canCancelProperty().not());

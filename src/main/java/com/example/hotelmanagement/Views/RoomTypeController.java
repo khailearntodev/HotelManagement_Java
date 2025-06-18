@@ -137,7 +137,11 @@ public class RoomTypeController implements Initializable {
 
     private void handleDeleteRoom(RoomViewModel item) {
         System.out.println("Attempting to delete Room: " + item.getRoomNumber() + " (ID: " + item.getId() + ")");
-
+        if(!item.getDisplayStatus().equals("Còn trống")){
+            String message = item.getDisplayStatus().equals("Đang được thuê")?"phòng đang được thuê":"phòng được đặt trước";
+            showAlert(Alert.AlertType.ERROR, "Không xóa được phòng " + item.getRoomNumber(), "Không xóa được phòng " + item.getRoomNumber() + " vì " + message);
+            return;
+        }
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle("Xác nhận xóa phòng");
         confirmationAlert.setHeaderText("Bạn có chắc chắn muốn xóa phòng này?");
@@ -212,6 +216,9 @@ public class RoomTypeController implements Initializable {
      */
     private void loadRoomTypeCards() {
         currentlyHighlightedCardController = null;
+        RoomTypeCardController firstCard = null;
+        RoomTypeViewModel firstViewModel = null;
+
         roomCardsContainer.getChildren().clear(); // Clear existing cards before loading new ones
 
         try {
@@ -249,10 +256,17 @@ public class RoomTypeController implements Initializable {
 
                     // Add the loaded card to our container (FlowPane)
                     roomCardsContainer.getChildren().add(roomCardNode);
+                    if (firstCard == null && firstViewModel == null) {
+                        firstCard = cardController;
+                        firstViewModel = viewModel;
+                    }
                 } catch (IOException e) {
                     System.err.println("Error loading RoomtypeCard.fxml: " + e.getMessage());
                     e.printStackTrace();
                 }
+            }
+            if (firstCard != null && firstViewModel != null) {
+                handleRoomTypeCardClick(firstViewModel, firstCard);
             }
             System.out.println("Successfully loaded " + roomTypeViewModels.size() + " Roomtype cards.");
 
@@ -342,8 +356,11 @@ public class RoomTypeController implements Initializable {
                 roomTypeImageView.setImage(image);
             } catch (IllegalArgumentException e) {
                 System.err.println("Invalid Base64 image string for Roomtype: " + roomType.getTypeName());
-                roomTypeImageView.setImage(null);
+                roomTypeImageView.setImage(new Image(getClass().getResource("/Images/icon.png").toExternalForm()));
             }
+        }
+        else{
+            roomTypeImageView.setImage(new Image(getClass().getResource("/Images/icon.png").toExternalForm()));
         }
         priceTextField.setText(roomType.getBasePrice() + "");
         maxOccupancyTextField.setText(roomType.getMaxOccupancy() + "");
@@ -382,6 +399,9 @@ public class RoomTypeController implements Initializable {
         roomListTable.setItems(FXCollections.observableArrayList());
 
         this.currentlyDisplayedRoomType = null;
+        if(roomTypeImageView != null){
+            roomTypeImageView.setImage(new Image(getClass().getResource("/Images/icon.png").toExternalForm()));
+        }
     }
     public void handleEditClick() {
         if (this.currentlyDisplayedRoomType == null) {
