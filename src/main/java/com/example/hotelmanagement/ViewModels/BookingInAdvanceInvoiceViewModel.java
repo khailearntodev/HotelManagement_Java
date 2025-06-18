@@ -85,7 +85,7 @@ public class BookingInAdvanceInvoiceViewModel {
         p.setCheckInDate(preBookingInvoiceDisplay.getStartDate().atStartOfDay(ZoneOffset.UTC).toInstant());
         p.setCheckOutDate(preBookingInvoiceDisplay.getEndDate().atStartOfDay(ZoneOffset.UTC).toInstant());
         p.setBookingDate(preBookingInvoiceDisplay.getInvoiceDate().atZone(ZoneOffset.UTC).toInstant());
-        p.setPrice(preBookingInvoiceDisplay.getTotalPrice());
+        p.setPrice(preBookingInvoiceDisplay.getPrice());
         p.setIsDeleted(false);
         PrebookingDAO pDao = new PrebookingDAO();
         pDao.save(p);
