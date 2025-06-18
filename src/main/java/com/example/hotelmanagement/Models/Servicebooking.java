@@ -3,9 +3,11 @@ package com.example.hotelmanagement.Models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.poi.hpsf.Decimal;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Getter
@@ -25,6 +27,9 @@ public class Servicebooking {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ServiceID", nullable = false)
     private Service serviceID;
+
+    @Column(name = "ServicePrice", nullable = false, precision = 20)
+    private BigDecimal serviceprice;
 
     @Column(name = "Quantity", nullable = false)
     private Integer quantity;

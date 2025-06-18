@@ -8,7 +8,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXComboBox?>
 <?import javafx.scene.text.Text?>
-<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.RoomServiceController">
+<AnchorPane prefHeight="800.0" prefWidth="830.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.RoomServiceController">
     <VBox layoutX="14.0" layoutY="14.0" prefHeight="772.0" prefWidth="772.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
         <HBox alignment="CENTER_LEFT" prefHeight="50.0" style="-fx-background-color: #FFE0C7C7;">
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quản lý dịch vụ phòng">
@@ -67,10 +67,11 @@
                 <Insets bottom="10.0" top="20.0" />
             </VBox.margin>
         </Label>
-        <TableView fx:id="tvRoomServices" prefHeight="400.0" prefWidth="772.0" VBox.vgrow="ALWAYS" style="-fx-font-size: 14px;">
+        <TableView fx:id="tvRoomServices" prefHeight="400.0" prefWidth="810.0" VBox.vgrow="ALWAYS" style="-fx-font-size: 14px;">
             <columns>
                 <TableColumn fx:id="colServiceBookingId" reorderable="false" resizable="false"  prefWidth="110.0" text="Mã CT Dịch vụ" />
-                <TableColumn fx:id="colServiceName" reorderable="false" resizable="false" prefWidth="200.0" text="Tên Dịch vụ" />
+                <TableColumn fx:id="colServiceName" reorderable="false" resizable="false" prefWidth="150.0" text="Tên Dịch vụ" />
+                <TableColumn fx:id="colServicePrice" reorderable="false" resizable="false" prefWidth="100" text="Giá đặt"/>
                 <TableColumn fx:id="colQuantity" reorderable="false" resizable="false" prefWidth="80.0" text="Số lượng" />
                 <TableColumn fx:id="colOrderDate"  reorderable="false" resizable="false" prefWidth="150.0" text="Ngày đặt" />
                 <TableColumn fx:id="colStatus" reorderable="false" resizable="false" prefWidth="100.0" text="Trạng thái" />

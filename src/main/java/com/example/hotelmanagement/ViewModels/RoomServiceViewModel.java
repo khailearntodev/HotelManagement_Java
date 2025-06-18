@@ -93,6 +93,7 @@ public class RoomServiceViewModel {
         newBooking.setServiceID(selectedService.get());
         newBooking.setQuantity(quantity.get());
         newBooking.setBookingDate(Instant.now());
+        newBooking.setServiceprice(selectedService.get().getPrice());
         newBooking.setStatus(ServiceBookingDisplay.STATUS_PENDING);
         newBooking.setIsDeleted(false);
 
