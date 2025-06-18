@@ -119,7 +119,7 @@ public class StatisticViewModel {
                 .ifPresent(d -> popularRoomType.set(d.getRoomTypeID().getTypeName()));
 
         if (totalReservations > 0) {
-            BigDecimal avgRevenue = revenue.divide(new BigDecimal(totalReservations), 2, RoundingMode.HALF_UP);
+            BigDecimal avgRevenue = rental.divide(new BigDecimal(totalReservations), 2, RoundingMode.HALF_UP);
             averageRevenue.set(String.format("%,.0f VNĐ", avgRevenue));
         } else {
             averageRevenue.set("0 VNĐ");
