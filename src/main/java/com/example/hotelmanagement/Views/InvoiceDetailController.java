@@ -128,8 +128,10 @@ public class InvoiceDetailController {
             {
                 viewButton.setOnAction(event -> {
                     InvoiceDetailViewModel detail = getTableView().getItems().get(getIndex());
-                    List<Servicebooking> bookings = detail.getReservation().getServicebookings().stream().toList();
-                    openServiceDetail(bookings);
+                    if (detail != null && detail.getReservation() != null) {
+                        List<Servicebooking> bookings = detail.getReservation().getServicebookings().stream().toList();
+                        openServiceDetail(bookings);
+                    }
                 });
             }
 
@@ -140,6 +142,9 @@ public class InvoiceDetailController {
                     setGraphic(null);
                 } else {
                     setGraphic(viewButton);
+                    if (invoice != null && invoice.getInvoiceType() == 1){
+                        viewButton.setDisable(true);
+                    }
                 }
             }
         });
@@ -328,13 +333,22 @@ public class InvoiceDetailController {
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
     }
-
     private void loadInvoiceDetails() {
-        if (invoice != null && invoice.getReservations() != null) {
+        if (invoice == null) {
+            return;
+        }
+        detailList.clear();
+        // 1 = Hóa đơn đặt trước (Prebooking)
+        // 2 = Hóa đơn thanh toán (Reservation)
+        if (invoice.getInvoiceType() == 1 && invoice.getPrebookings() != null) {
+            List<InvoiceDetailViewModel> viewModels = invoice.getPrebookings().stream()
+                    .map(InvoiceDetailViewModel::new)
+                    .toList();
+            detailList.setAll(viewModels);
+        } else if (invoice.getInvoiceType() == 2 && invoice.getReservations() != null) {
             List<InvoiceDetailViewModel> viewModels = invoice.getReservations().stream()
                     .map(InvoiceDetailViewModel::new)
                     .toList();
-
             detailList.setAll(viewModels);
         }
     }

@@ -119,7 +119,7 @@ public class InvoiceDAO {
     }
 
 
-    public Invoice getInvoiceWithDetails(int id) {
+/*    public Invoice getInvoiceWithDetails(int id) {
         try (Session session = HibernateUtils.getSession()) {
             return session.createQuery(
                             "SELECT DISTINCT i FROM Invoice i " +
@@ -132,6 +132,26 @@ public class InvoiceDAO {
                                     "LEFT JOIN FETCH r.reservationguests rg " + // Tải ReservationGuests của mỗi Reservation
                                     "LEFT JOIN FETCH rg.customerID c " + // Tải Customer của mỗi ReservationGuest
                                     "WHERE i.id = :id AND i.isDeleted = false", // Đảm bảo điều kiện xóa mềm nếu có
+                            Invoice.class)
+                    .setParameter("id", id)
+                    .uniqueResultOptional().orElse(null);
+        }
+    }*/
+    public Invoice getInvoiceWithDetails(int id) {
+        try (Session session = HibernateUtils.getSession()) {
+            return session.createQuery(
+                            "SELECT DISTINCT i FROM Invoice i " +
+                                    "LEFT JOIN FETCH i.employeeID " +
+                                    "LEFT JOIN FETCH i.reservations r " +
+                                    "LEFT JOIN FETCH r.roomID ro " +
+                                    "LEFT JOIN FETCH ro.roomTypeID rt " +
+                                    "LEFT JOIN FETCH r.servicebookings sb " +
+                                    "LEFT JOIN FETCH sb.serviceID s " +
+                                    "LEFT JOIN FETCH r.reservationguests rg " +
+                                    "LEFT JOIN FETCH rg.customerID c " +
+                                    "LEFT JOIN FETCH i.prebookings p " +
+                                    "LEFT JOIN FETCH p.roomID pr " +
+                                    "WHERE i.id = :id AND i.isDeleted = false",
                             Invoice.class)
                     .setParameter("id", id)
                     .uniqueResultOptional().orElse(null);
