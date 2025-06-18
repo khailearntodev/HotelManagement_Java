@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
-<?import io.github.palexdev.materialfx.controls.MFXTableView?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="1060.0" style="-fx-background-color: white;" stylesheets="@../../../../CSS/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.RoomTypeController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="1060.0" style="-fx-background-color: white;" stylesheets="@../../../../CSS/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelmanagement.Views.RoomTypeController">
    <children>
       <SplitPane fx:id="splitPane1" dividerPositions="0.51" prefHeight="160.0" prefWidth="200.0" style="-fx-background-color: white;">
          <items>
@@ -128,7 +120,7 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </HBox>
-                              <Label fx:id="emptyRoomsLabel">
+                              <Label fx:id="emptyRoomsLabel" text=" ">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
@@ -139,17 +131,9 @@
                                     <Insets bottom="10.0" right="10.0" top="10.0" />
                                  </padding>f
                               </Label>
-                              <HBox>
+                              <HBox prefHeight="188.0" prefWidth="520.0">
                                  <children>
-                                    <ImageView fx:id="roomTypeImageView" fitHeight="161.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-                                       <HBox.margin>
-                                          <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                                       </HBox.margin>
-                                       <image>
-                                          <Image url="@../../../../Images/icon.png" />
-                                       </image>
-                                    </ImageView>
-                                    <VBox HBox.hgrow="ALWAYS">
+                                    <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="183.0" prefWidth="228.0" HBox.hgrow="ALWAYS">
                                        <children>
                                           <HBox alignment="CENTER_LEFT">
                                              <children>
@@ -174,6 +158,9 @@
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
+                                                   <HBox.margin>
+                                                      <Insets top="5.0" />
+                                                   </HBox.margin>
                                                 </Label>
                                                 <Label fx:id="maxOccupancyTextField" style="-fx-background-color: transparent;" text="0 người">
 
@@ -204,9 +191,20 @@
                                           </Label>
                                        </children>
                                        <padding>
-                                          <Insets left="10.0" right="5.0" />
+                                          <Insets left="15.0" right="5.0" top="15.0" />
                                        </padding>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
                                     </VBox>
+                                    <ImageView fx:id="roomTypeImageView" fitHeight="170.0" fitWidth="250.0" pickOnBounds="true">
+                                       <HBox.margin>
+                                          <Insets left="10.0" right="10.0" top="5.0" />
+                                       </HBox.margin>
+                                       <image>
+                                          <Image url="@../../../../Images/icon.png" />
+                                       </image>
+                                    </ImageView>
                                  </children>
                               </HBox>
                            </children>
@@ -239,7 +237,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </HBox>
-                              <MFXTableView footerVisible="false" fx:id="roomListTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="245.0" prefWidth="520.0" VBox.vgrow="ALWAYS" />
+                              <MFXTableView fx:id="roomListTable" footerVisible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="245.0" prefWidth="520.0" VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
                      </children>

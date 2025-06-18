@@ -216,6 +216,9 @@ public class RoomTypeController implements Initializable {
      */
     private void loadRoomTypeCards() {
         currentlyHighlightedCardController = null;
+        RoomTypeCardController firstCard = null;
+        RoomTypeViewModel firstViewModel = null;
+
         roomCardsContainer.getChildren().clear(); // Clear existing cards before loading new ones
 
         try {
@@ -253,10 +256,17 @@ public class RoomTypeController implements Initializable {
 
                     // Add the loaded card to our container (FlowPane)
                     roomCardsContainer.getChildren().add(roomCardNode);
+                    if (firstCard == null && firstViewModel == null) {
+                        firstCard = cardController;
+                        firstViewModel = viewModel;
+                    }
                 } catch (IOException e) {
                     System.err.println("Error loading RoomtypeCard.fxml: " + e.getMessage());
                     e.printStackTrace();
                 }
+            }
+            if (firstCard != null && firstViewModel != null) {
+                handleRoomTypeCardClick(firstViewModel, firstCard);
             }
             System.out.println("Successfully loaded " + roomTypeViewModels.size() + " Roomtype cards.");
 

@@ -64,7 +64,27 @@ public class ConfigController {
 
         // Sự kiện thêm quyền mới
         btnAddRole.setOnAction(e -> {
+            String newRoleName = roleNameField.getText();
+            if (newRoleName == null || newRoleName.trim().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Tên quyền không được để trống.");
+                return;
+            }
+
+            String normalizedNew = normalize(newRoleName);
+
+            boolean isDuplicate = viewModel.getRoles().stream()
+                    .map(role -> normalize(role.getRoleName()))
+                    .anyMatch(normalizedExisting -> normalizedExisting.equals(normalizedNew));
+
+            if (isDuplicate) {
+                showAlert(Alert.AlertType.WARNING, "Quyền tương tự đã tồn tại. Vui lòng nhập quyền có ý nghĩa khác với các quyền đã có!");
+                return;
+            }
+
             viewModel.addRole();
+            refreshRoleTable();
+            refreshRoleSelector();
+
             refreshRoleTable();
             refreshRoleSelector();
         });
@@ -134,7 +154,10 @@ public class ConfigController {
             private final Button deleteButton = new Button("X");
             private final StackPane centeredPane = new StackPane(deleteButton);
             {
+
                 deleteButton.setOnAction(event -> {
+                    Role role = getTableView().getItems().get(getIndex());
+                    rolesTable.getSelectionModel().select(role);
                     Role selectedRole = rolesTable.getSelectionModel().getSelectedItem();
                     if (selectedRole == null) {
                         showAlert(Alert.AlertType.WARNING, "Chưa chọn vai trò nào để xóa.");
@@ -169,12 +192,17 @@ public class ConfigController {
 
                             if (deletedRole) {
                                 showAlert(Alert.AlertType.INFORMATION, "Xóa vai trò thành công.");
-                                roleDAO = new RoleDAO();
-                                List<Role> roles = roleDAO.getAll();
-                                rolesTable.getItems().setAll(roles);
+
+                                loadInitialRoles();
+                                refreshRoleTable();
+                                refreshRoleSelector();
+                                viewModel.selectedRoleNameProperty().set(null);
+                                viewsCheckboxContainer.getChildren().clear();
+
                             } else {
                                 showAlert(Alert.AlertType.ERROR, "Xóa vai trò thất bại.");
                             }
+
                         }
                     });
                 });
@@ -199,6 +227,14 @@ public class ConfigController {
         rolesTable.getColumns().setAll(roleNameColumn, deleteColumn);
         rolesTable.setItems(viewModel.getRoles());
     }
+
+    private String normalize(String input) {
+        if (input == null) return "";
+        String normalized = java.text.Normalizer.normalize(input, java.text.Normalizer.Form.NFD);
+        normalized = normalized.replaceAll("[\\p{InCombiningDiacriticalMarks}]", ""); // bỏ dấu
+        return normalized.toLowerCase().replaceAll("\\s+", ""); // thường hóa + bỏ khoảng trắng
+    }
+
 
     private void refreshRoleTable() {
         rolesTable.setItems(null);

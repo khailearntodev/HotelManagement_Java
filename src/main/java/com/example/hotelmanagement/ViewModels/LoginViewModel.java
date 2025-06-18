@@ -30,8 +30,8 @@ public class LoginViewModel
 
     // Regex ví dụ: username 3-20 ký tự, password ít nhất 6 ký tự
     private final Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9._-]{3,20}$");
-    //private final Pattern passwordPattern = Pattern.compile("^.{6,}$");
-    private final Pattern passwordPattern = Pattern.compile("^.+$");
+    private final Pattern passwordPattern = Pattern.compile("^.{6,}$");
+    //private final Pattern passwordPattern = Pattern.compile("^.+$");
 
     public LoginViewModel() {
         loginDisabled.bind(

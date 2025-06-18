@@ -156,10 +156,12 @@ public class BookingInAdvanceInvoiceViewModel {
                 doc.add(bookingCode);
 
                 DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                NumberFormat currencyFormat = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
 
                 doc.add(new Paragraph("THÔNG TIN ĐẶT PHÒNG:").setFont(boldFont));
                 doc.add(new Paragraph("Phòng số: " + preBookingInvoiceDisplay.getRoomNumber()).setFont(vietnameseFont).setMarginLeft(20));
                 doc.add(new Paragraph("Loại phòng: " + preBookingInvoiceDisplay.getRoomTypeName()).setFont(vietnameseFont).setMarginLeft(20));
+                doc.add(new Paragraph("Đơn giá: " + currencyFormat.format(preBookingInvoiceDisplay.getPrice()) + " VNĐ/đêm").setFont(vietnameseFont).setMarginLeft(20));
                 doc.add(new Paragraph("Ngày nhận: " + preBookingInvoiceDisplay.getStartDate().format(dateFormatter))
                         .setFont(vietnameseFont).setMarginLeft(20));
                 doc.add(new Paragraph("Ngày trả: " + preBookingInvoiceDisplay.getEndDate().format(dateFormatter))
@@ -197,7 +199,6 @@ public class BookingInAdvanceInvoiceViewModel {
                 infoBox.add(infoTable);
                 doc.add(infoBox);
 
-                NumberFormat currencyFormat = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
                 Paragraph summary = new Paragraph()
                         .add("Tổng tiền hóa đơn: ")
                         .add(new Text(currencyFormat.format(preBookingInvoiceDisplay.getTotalPrice()) + " VNĐ")
