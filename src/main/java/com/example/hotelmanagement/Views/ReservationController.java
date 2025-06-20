@@ -612,6 +612,7 @@ public class ReservationController implements Initializable {
 
                 Stage stage = new Stage();
                 stage.initStyle(StageStyle.UNDECORATED);
+                stage.initModality(Modality.APPLICATION_MODAL);
                 stage.setScene(new Scene(root));
                 stage.showAndWait();
                 System.out.println("Booking Service Booked");

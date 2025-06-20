@@ -20,6 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -224,6 +225,7 @@ public class InvoiceController {
 
             Stage stage = new Stage();
             stage.setTitle("Chi tiết hóa đơn #" + invoice.getId());
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(new Scene(root));
             stage.show();
